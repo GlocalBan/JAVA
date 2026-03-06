@@ -91,6 +91,10 @@ public class MainFrame extends JFrame {
         btn.setBorder(BorderFactory.createEmptyBorder(0, 24, 0, 0));
 
         btn.addActionListener(e -> {
+
+            if(activeButton != null) // fix color painted
+                activeButton.repaint();
+
             activeButton = btn;
             btn.repaint();
             cardLayout.show(contentArea, card);
