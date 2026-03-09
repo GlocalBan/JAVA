@@ -2,8 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package GUI;
+package GUI.dialog;
 
+import GUI.panel.CTHoaDon;
+import GUI.NhapCTHD;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.InputVerifier;

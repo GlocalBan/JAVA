@@ -71,9 +71,9 @@ public class MainFrame extends JFrame {
         contentArea.add(new LoaiTourPanel(), "LoaiTour");
         contentArea.add(new KeHoachTourPanel(), "KeHoachTour");
         
-        contentArea.add(new GUI.HoaDon(),"HoaDon");
-        contentArea.add(new GUI.DiaDiem(),"DiaDiem");
-        contentArea.add(new GUI.CTHoaDon(),"CtHoaDon");
+        contentArea.add(new GUI.panel.HoaDon(),"HoaDon");
+        contentArea.add(new GUI.panel.DiaDiem(),"DiaDiem");
+        contentArea.add(new GUI.panel.CTHoaDon(),"CtHoaDon");
         return contentArea;
     }
 

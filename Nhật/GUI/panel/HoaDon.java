@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package GUI;
+package GUI.panel;
 
 import BUS.HoaDonBus;
 import java.awt.FlowLayout;
@@ -195,12 +195,12 @@ public class HoaDon extends javax.swing.JPanel {
                 
                 if(choice==0){
                     DTO.HoaDon hd=new DTO.HoaDon(tblhoadon.getValueAt(row, 0).toString(), tblhoadon.getValueAt(row, 1).toString(), tblhoadon.getValueAt(row, 2).toString(), tblhoadon.getValueAt(row, 3).toString(), Integer.parseInt(tblhoadon.getValueAt(row, 4).toString()),Float.parseFloat(tblhoadon.getValueAt(row, 5).toString()));
-                    GUI.HoaDonDialog hdd =new GUI.HoaDonDialog(hd);
+                    GUI.dialog.HoaDonDialog hdd =new GUI.dialog.HoaDonDialog(hd);
                     hdd.setModal(true);
                     hdd.setVisible(true);
                     loadData();
                 }else if(choice==1){
-                    GUI.CTHoaDon cthd=new GUI.CTHoaDon(ma);
+                    GUI.panel.CTHoaDon cthd=new GUI.panel.CTHoaDon(ma);
                     
                     int result=JOptionPane.showConfirmDialog(null, cthd,"Chi tiết hóa đơn",JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE);
                     loadData();
@@ -216,7 +216,7 @@ public class HoaDon extends javax.swing.JPanel {
 
     private void btnthemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnthemActionPerformed
         // TODO add your handling code here:
-        GUI.HoaDonDialog hdd=new GUI.HoaDonDialog();
+        GUI.dialog.HoaDonDialog hdd=new GUI.dialog.HoaDonDialog();
         hdd.setModal(true);
         hdd.setVisible(true);
         loadData();
@@ -285,7 +285,7 @@ public class HoaDon extends javax.swing.JPanel {
         String ma =tblhoadon.getValueAt(row, 0).toString().trim();
         DTO.HoaDon hd=bus.timHd(ma);
         if(hd!=null){
-            GUI.HoaDonDialog hdd=new GUI.HoaDonDialog(hd);
+            GUI.dialog.HoaDonDialog hdd=new GUI.dialog.HoaDonDialog(hd);
             hdd.setModal(true);
             hdd.setVisible(true);
             loadData();
