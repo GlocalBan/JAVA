@@ -1,0 +1,224 @@
+package org.example.gui.panel;
+
+import com.toedter.calendar.JDateChooser;
+import org.example.bus.TourBUS;
+
+import javax.swing.*;
+import java.awt.*;
+import java.time.LocalDate;
+
+import static java.sql.Date.valueOf;
+
+public class StatisticsPanel extends JPanel {
+    private JDateChooser dateFrom;
+    private JDateChooser dateTo;
+
+    //define BUSs => Take statistic
+    private TourBUS tourBUS;
+
+    private JPanel cardsPanel;
+    private JPanel chartsPanel;
+    private JButton btnFilter;
+
+    public StatisticsPanel(){
+        tourBUS = new TourBUS();
+        setLayout(new BorderLayout());
+        init();
+    }
+
+    private void init() {
+        // Title Panel
+        JPanel titlePanel = new JPanel(new BorderLayout());
+        titlePanel.setBackground(Color.WHITE);
+        titlePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
+
+        //Title
+        JLabel lblTitle = new JLabel("THỐNG KÊ");
+        lblTitle.setFont(new Font("SansSerif", Font.BOLD, 24));
+        lblTitle.setForeground(new Color(0, 150, 136));
+        titlePanel.add(lblTitle, BorderLayout.WEST);
+
+        // Date Filter Panel
+        JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        filterPanel.setBackground(Color.WHITE);
+
+        // Start Date
+        filterPanel.add(new JLabel("Ngày bắt đầu:"));
+        dateFrom = new JDateChooser();
+        dateFrom.setDateFormatString("dd/MM/yyyy");
+        dateFrom.setDate(valueOf(LocalDate.now().minusMonths(1)));
+        filterPanel.add(dateFrom);
+
+        // To Date
+        filterPanel.add(new JLabel("Đến ngày:"));
+        dateTo = new JDateChooser();
+        dateTo.setDateFormatString("dd/MM/yyyy");
+        dateTo.setDate(valueOf(LocalDate.now()));
+        filterPanel.add(dateTo);
+
+        filter();
+//        btnFilter.addActionListener(e -> loadStatistics());
+        filterPanel.add(btnFilter);
+
+        titlePanel.add(filterPanel, BorderLayout.EAST);
+
+        // Statistics Cards
+        cardsPanel = new JPanel(new GridLayout(2, 3, 15, 15));
+        cardsPanel.setBackground(Color.WHITE);
+        cardsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Charts Panel
+        chartsPanel = new JPanel(new GridLayout(1, 2, 15, 15));
+        chartsPanel.setBackground(Color.WHITE);
+        chartsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Load initial statistics
+        loadStatistics();
+
+        // Main layout
+        add(titlePanel, BorderLayout.NORTH);
+
+        JPanel centerPanel = new JPanel(new BorderLayout(10, 10));
+        centerPanel.setBackground(Color.WHITE);
+        centerPanel.add(cardsPanel, BorderLayout.NORTH);
+        centerPanel.add(chartsPanel, BorderLayout.CENTER);
+
+        add(centerPanel, BorderLayout.CENTER);
+    }
+
+    private JButton createBtn(String text, Color color){
+        JButton btn = new JButton(text);
+        btn.setBackground(color);
+        btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false);
+        btn.setFont(new Font("SansSerif", Font.BOLD, 13));
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR)); // in south panel
+
+        btn.setContentAreaFilled(true);
+        btn.setOpaque(true);
+        btn.setBorderPainted(false);
+
+        return btn;
+    }
+
+    private void filter(){
+        btnFilter = createBtn("Lọc", new Color(33, 150, 243));
+        btnFilter.addActionListener(e ->  loadStatistics());
+    }
+
+    private void loadStatistics() {
+        cardsPanel.removeAll();
+        chartsPanel.removeAll();
+
+//        try {
+            long totalIncome = 1;
+            long totalExpenditure =1;
+            long profit = 1;
+
+            cardsPanel.add(createStatCard("Tổng chi", String.valueOf(totalIncome), Color.YELLOW));
+            cardsPanel.add(createStatCard("Tổng thu", String.valueOf(totalExpenditure), Color.GREEN));
+            cardsPanel.add(createStatCard("Lợi nhuận", String.valueOf(profit), Color.CYAN));
+
+//        }
+//        catch (SQLException e) {
+//            JOptionPane.showMessageDialog(this,
+//                    "Lỗi khi tải thống kê: " + e.getMessage(),
+//                    "Lỗi",
+//                    JOptionPane.ERROR_MESSAGE);
+//        }
+
+        // Add chart panels
+        chartsPanel.add(createIncomeStatisticsChartByMonth());
+
+        cardsPanel.revalidate();
+        cardsPanel.repaint();
+        chartsPanel.revalidate();
+        chartsPanel.repaint();
+    }
+
+    private JPanel createStatCard(String title, String value, Color color) {
+        JPanel card = new JPanel(new BorderLayout());
+        card.setBackground(color);
+        card.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(color.darker(), 2),
+                BorderFactory.createEmptyBorder(20, 20, 20, 20)
+        ));
+
+        JLabel lblTitle = new JLabel(title);
+        lblTitle.setFont(new Font("SansSerif", Font.BOLD, 16));
+        lblTitle.setForeground(Color.WHITE);
+
+        JLabel lblValue = new JLabel(value);
+        lblValue.setFont(new Font("SansSerif", Font.BOLD, 36));
+        lblValue.setForeground(Color.WHITE);
+        lblValue.setHorizontalAlignment(SwingConstants.CENTER);
+
+        card.add(lblTitle, BorderLayout.NORTH);
+        card.add(lblValue, BorderLayout.CENTER);
+
+        return card;
+    }
+
+    private JPanel createIncomeStatisticsChartByMonth() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(33, 150, 243), 2),
+                BorderFactory.createEmptyBorder(15, 15, 15, 15)
+        ));
+
+        JLabel lblTitle = new JLabel("Thống Kê Doanh Thu Theo Tháng");
+        lblTitle.setFont(new Font("SansSerif", Font.BOLD, 14));
+        lblTitle.setForeground(new Color(33, 150, 243));
+        lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Simple bar chart representation
+        JPanel chartArea = new JPanel(new GridLayout(1, 5, 10, 10));
+        chartArea.setBackground(Color.WHITE);
+
+        String[] months = {
+                "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5",
+                "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10",
+                "Tháng 11", "Tháng 12",
+        };
+        int[] values = {25, 40, 35, 50, 45, 25, 40, 35, 50, 45, 11, 12}; // Sample data
+
+        for (int i = 0; i < months.length; i++) {
+            chartArea.add(createBarChart(months[i], values[i]));
+        }
+
+        panel.add(lblTitle, BorderLayout.NORTH);
+        panel.add(chartArea, BorderLayout.CENTER);
+        return panel;
+    }
+
+    private JPanel createBarChart(String label, int value) {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(Color.WHITE);
+
+        JPanel barPanel = new JPanel();
+        barPanel.setLayout(new BoxLayout(barPanel, BoxLayout.Y_AXIS));
+        barPanel.setBackground(Color.WHITE);
+
+        // Create bar with height proportional to value
+        JPanel bar = new JPanel();
+        bar.setBackground(new Color(33, 150, 243));
+        bar.setPreferredSize(new java.awt.Dimension(40, value * 2));
+        bar.setBorder(BorderFactory.createLineBorder(new Color(33, 150, 243).darker(), 1));
+
+        JLabel lblValue = new JLabel(String.valueOf(value), SwingConstants.CENTER);
+        lblValue.setFont(new Font("SansSerif", Font.BOLD, 12));
+
+        JLabel lblLabel = new JLabel(label, SwingConstants.CENTER);
+        lblLabel.setFont(new Font("SansSerif", Font.PLAIN, 10));
+
+        barPanel.add(javax.swing.Box.createVerticalGlue());
+        barPanel.add(bar);
+
+        panel.add(lblValue, BorderLayout.NORTH);
+        panel.add(barPanel, BorderLayout.CENTER);
+        panel.add(lblLabel, BorderLayout.SOUTH);
+
+        return panel;
+    }
+}

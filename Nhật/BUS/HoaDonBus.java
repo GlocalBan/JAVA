@@ -56,7 +56,7 @@ public class HoaDonBus {
         if(dao.timHoaDon(mahd)!=null){
             for(HoaDon hd: ds){
                 if(hd.getMaHD().equals(mahd)){
-                    return hd;
+                    return dao.timHoaDon(mahd);
                 }
             }
         }
@@ -96,16 +96,22 @@ public class HoaDonBus {
             return false;
         }
         if(dao.timHoaDon(hd.getMaHD())!=null){
-            dao.suaHd(hd);
-            for(int i=0;i<ds.size();i++){
+            boolean kt=dao.suaHd(hd);
+
+            if(kt==true){
+                for(int i=0;i<ds.size();i++){
                 if(hd.getMaHD().equals(ds.get(i).getMaHD())){
                     ds.set(i, hd);
                 }
             }
+            }else return false;
             return true;
         }
         return false;
     }
+    
+
+    
     public ArrayList<DTO.HoaDon> timNangcao(String loai, String key){
         if(key.trim().isEmpty()){
             return getDs();

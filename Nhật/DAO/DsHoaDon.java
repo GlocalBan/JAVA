@@ -110,7 +110,7 @@ public class DsHoaDon {
 }
     
     public boolean xoaHd(HoaDon hd){
-            String sqlct = "Delete from ctiethd where mahd=?";
+            String sqlct = "Delete from cthoadon where mahd=?";
             String sql="Delete from hoadon where mahd=?";
             
             Connection connection=null;
@@ -155,7 +155,6 @@ public class DsHoaDon {
     
     public boolean suaHd(HoaDon hd){
         String sqlhd ="Update hoadon set makhtour=?,makhangdat=?,tongtien=?,manv=?,soluong=? where mahd=?";
-        String sqlcthd ="Update ctiethd set  mahd=?,makhang=?,giave=? where mahd=?";
         
         try(Connection conn=KetNoiCSDL.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sqlhd)){
@@ -163,7 +162,7 @@ public class DsHoaDon {
             ps.setString(2, hd.getMaKHDat());
             ps.setFloat(3, hd.getTongTien());
             ps.setString(4, hd.getMaNV());
-            ps.setFloat(5, hd.getSoluong());
+            ps.setInt(5, hd.getSoluong());
             ps.setString(6, hd.getMaHD());
             return ps.executeUpdate()>0;
         }catch(SQLException e){
@@ -206,4 +205,18 @@ public class DsHoaDon {
     }
         return ds;
     }
+    public boolean xoaCt(String mahd, String makh) {
+        String sql = "DELETE FROM cthoadon WHERE mahd = ? AND makhang = ?";
+        try (Connection conn = KetNoiCSDL.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, mahd);
+            ps.setString(2, makh);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+
 }

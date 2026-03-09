@@ -8,12 +8,16 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
+import org.apache.poi.hpsf.GUID;
 /**
  *
  * @author Nhat
  */
 public class HoaDonDialog extends javax.swing.JDialog {
     private BUS.HoaDonBus bus;
+    private int soluong=0;
+    private BUS.CTHoaDonBus busct;
+    
     /**
      * Creates new form HoaDonDialog
      */
@@ -23,20 +27,154 @@ public class HoaDonDialog extends javax.swing.JDialog {
         this.setTitle("Hóa đơn");
         this.setLocationRelativeTo(null);
         
-        txtmahd.setInputVerifier(new InputVerifier(){
+       txtmahd.setInputVerifier(new InputVerifier(){
        @Override 
        public boolean verify(JComponent input){
         String ma=txtmahd.getText().trim();
         
-       if(!ma.matches("^HD\\d{3}$")){
-            JOptionPane.showMessageDialog(null, "Mã hóa đơn phải có dạng HDxxx!");
+       if(!ma.matches("^HD\\d{3}$") && bus.timHd(ma)==null){
+            JOptionPane.showMessageDialog(null, "Mã hóa đơn phải có dạng HDxx!");
+            return false;
+        }
+       return true;
+    }
+       
+    });
+       
+       txtmakht.setInputVerifier(new InputVerifier(){
+       @Override 
+       public boolean verify(JComponent input){
+        String ma=txtmakht.getText().trim();
+        
+       if(!ma.matches("^KHT\\d{2}$")){
+            JOptionPane.showMessageDialog(null, "Mã kế hoạch tour phải có dạng KHTxx!");
             return false;
         }
        return true;
     }
     });
+       
+       txtmakhdat.setInputVerifier(new InputVerifier(){
+       @Override 
+       public boolean verify(JComponent input){
+        String ma=txtmakhdat.getText().trim();
+        
+       if(!ma.matches("^KH\\d{2}$")){
+            JOptionPane.showMessageDialog(null, "Mã khách hàng phải có dạng KHxxx!");
+            return false;
+        }
+       return true;
+    }   
+    });
+    
+       txtmanv.setInputVerifier(new InputVerifier(){
+       @Override 
+       public boolean verify(JComponent input){
+        String ma=txtmanv.getText().trim();
+        
+       if(!ma.matches("^NV\\d{2}$")){
+            JOptionPane.showMessageDialog(null, "Mã nhân viên phải có dạng NVxxx!");
+            return false;
+        }
+       return true;
+    }   
+    });
+       txtsoluong.setInputVerifier(new InputVerifier(){
+       @Override 
+       public boolean verify(JComponent input){
+        int sl=Integer.parseInt(txtsoluong.getText().trim());
+        
+       if(sl<=0){
+            JOptionPane.showMessageDialog(null, "Số lượng không được bé hơn 0");
+            return false;
+        }
+       return true;
+    }   
+    });
+       
     }
 
+    
+    public HoaDonDialog(DTO.HoaDon hd) {
+        initComponents();
+        this.bus=new BUS.HoaDonBus();
+        this.setTitle("Hóa đơn");
+        this.setLocationRelativeTo(null);
+        
+        this.soluong=hd.getSoluong();
+        txtmahd.setText(hd.getMaHD());
+        txtmakhdat.setText(hd.getMaKHDat());
+        txtmakht.setText(hd.getMaKHTour());
+        txtmanv.setText(hd.getMaNV());
+        txtsoluong.setText(String.valueOf(hd.getSoluong()));
+        txttongtien.setText(String.format("%.0f", hd.getTongTien()));
+       txtmahd.setInputVerifier(new InputVerifier(){
+       @Override 
+       public boolean verify(JComponent input){
+        String ma=txtmahd.getText().trim();
+        
+       if(!ma.matches("^HD\\d{3}$") && bus.timHd(ma)==null){
+            JOptionPane.showMessageDialog(null, "Mã hóa đơn phải có dạng HDxx!");
+            return false;
+        }
+       return true;
+    }
+       
+    });
+       
+       txtmakht.setInputVerifier(new InputVerifier(){
+       @Override 
+       public boolean verify(JComponent input){
+        String ma=txtmakht.getText().trim();
+        
+       if(!ma.matches("^KHT\\d{2}$")){
+            JOptionPane.showMessageDialog(null, "Mã kế hoạch tour phải có dạng KHTxx!");
+            return false;
+        }
+       return true;
+    }
+    });
+       
+       txtmakhdat.setInputVerifier(new InputVerifier(){
+       @Override 
+       public boolean verify(JComponent input){
+        String ma=txtmakhdat.getText().trim();
+        
+       if(!ma.matches("^KH\\d{2}$")){
+            JOptionPane.showMessageDialog(null, "Mã khách hàng phải có dạng KHxxx!");
+            return false;
+        }
+       return true;
+    }   
+    });
+    
+       txtmanv.setInputVerifier(new InputVerifier(){
+       @Override 
+       public boolean verify(JComponent input){
+        String ma=txtmanv.getText().trim();
+        
+       if(!ma.matches("^NV\\d{2}$")){
+            JOptionPane.showMessageDialog(null, "Mã nhân viên phải có dạng NVxxx!");
+            return false;
+        }
+       return true;
+    }   
+    });
+       txtsoluong.setInputVerifier(new InputVerifier(){
+       @Override 
+       public boolean verify(JComponent input){
+        int sl=Integer.parseInt(txtsoluong.getText().trim());
+        
+       if(sl<=0){
+            JOptionPane.showMessageDialog(null, "Số lượng không được bé hơn 0");
+            return false;
+        }
+       return true;
+    }   
+    });
+       
+    }
+    
     public void resetField(){
                     txtmahd.setText("");
                     txtmakhdat.setText("");
@@ -68,6 +206,7 @@ public class HoaDonDialog extends javax.swing.JDialog {
         btnluu = new javax.swing.JButton();
         txtsoluong = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
+        btnxoa = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -132,78 +271,75 @@ public class HoaDonDialog extends javax.swing.JDialog {
 
         jLabel6.setText("Số lượng");
 
+        btnxoa.setText("Làm mới");
+        btnxoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnxoaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 216, Short.MAX_VALUE)
-                        .addComponent(txttongtien, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(241, 241, 241)
-                        .addComponent(btnluu, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtsoluong, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel4)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel3))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 216, Short.MAX_VALUE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtmakhdat, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(txtmahd, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
-                        .addComponent(txtmakht)
-                        .addComponent(txtmakhdat)
-                        .addComponent(txtmanv))
-                    .addContainerGap()))
+                        .addComponent(txtmakht))
+                    .addComponent(txtmanv, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtsoluong, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txttongtien, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(18, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(69, 69, 69)
+                .addComponent(btnluu, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnxoa, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(72, 72, 72))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(228, Short.MAX_VALUE)
+                .addContainerGap(24, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtmahd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtmakht, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtmakhdat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(13, 13, 13)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtmanv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtsoluong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txttongtien)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txttongtien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addGap(23, 23, 23)
-                .addComponent(btnluu)
-                .addContainerGap())
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(38, 38, 38)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(txtmahd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(txtmakht, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel1)
-                            .addGap(32, 32, 32)
-                            .addComponent(jLabel2)
-                            .addGap(31, 31, 31)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel4)
-                                .addComponent(txtmakhdat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(33, 33, 33)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel3)
-                                .addComponent(txtmanv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addContainerGap(138, Short.MAX_VALUE)))
+                    .addComponent(btnluu)
+                    .addComponent(btnxoa))
+                .addGap(64, 64, 64))
         );
 
         pack();
@@ -233,57 +369,74 @@ public class HoaDonDialog extends javax.swing.JDialog {
 
     private void btnluuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnluuActionPerformed
         // TODO add your handling code here:
-        try{
-            String ma=txtmahd.getText().trim();
-            int soluong=Integer.parseInt(txtsoluong.getText().toString().trim());
-            if(ma.isEmpty()){
-                JOptionPane.showMessageDialog(this, "Lỗi chưa nhập mã hóa đơn");
-                return;
-            }
-            DTO.HoaDon hd=new DTO.HoaDon(ma, txtmakht.getText().trim(), txtmakhdat.getText().trim(), txtmanv.getText().trim(), soluong,Float.parseFloat(txttongtien.getText().trim()));
+       try {
+        String ma = txtmahd.getText().trim();
+
+        int newSl = Integer.parseInt(txtsoluong.getText().trim());
+        float tongTien = Float.parseFloat(txttongtien.getText().trim());
         
-        DTO.HoaDon kt=bus.timHd(ma);
-        
-        if(kt!=null){
-            if(bus.suaHoaDon(hd)){
-                resetField();
-                JOptionPane.showMessageDialog(this, "Cập nhật hóa đơn thành công");
-                this.dispose();
+        if (ma.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Lỗi chưa nhập mã hóa đơn");
+            return;
+        }
+
+        DTO.HoaDon kt = bus.timHd(ma); 
+
+        if (kt != null) { 
+        DTO.HoaDon hd = new DTO.HoaDon(ma, txtmakht.getText().trim(), txtmakhdat.getText().trim(), txtmanv.getText().trim(), kt.getSoluong(), kt.getTongTien());
+
+            if (bus.suaHoaDon(hd)) {
+            
+                if (newSl > this.soluong) { 
+
+                    int canThem = newSl - this.soluong;
+                    JOptionPane.showMessageDialog(this, "Số lượng tăng. Vui lòng nhập thêm " + canThem + " vé.");
+                    NhapCTHD nhap = new NhapCTHD(null, true, ma, canThem);
+                    nhap.setVisible(true);
+                    
+                } else if (newSl < this.soluong) { 
+                    int veDu = this.soluong - newSl;
+                    JOptionPane.showMessageDialog(this, "Số lượng giảm. Vui lòng chọn " + veDu + " vé để xóa.");
+                    CTHoaDon panelXoa = new CTHoaDon(ma, veDu); 
+                    JOptionPane.showConfirmDialog(null, panelXoa, "Xóa chi tiết thừa", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE);
+                    
+                } else {
+                    JOptionPane.showMessageDialog(this, "Cập nhật hóa đơn thành công!");
+                }
+                this.dispose(); 
+            } else {
+                JOptionPane.showMessageDialog(this, "Cập nhật thất bại!");
             }
-            else{
-                JOptionPane.showMessageDialog(this, "Cập nhật thất bại");
-                return;
-            }
-        }else{
-            ArrayList<DTO.CTietHD> ds=new ArrayList<>();
-            if(bus.themHoaDon(hd, ds)){
-                resetField();
-                JOptionPane.showMessageDialog(this, "Thêm thành công");
-                NhapCTHD nhapCTHD=new NhapCTHD(null, true, ma, soluong);
+            
+        } else { 
+            DTO.HoaDon hdmoi = new DTO.HoaDon(ma, txtmakht.getText().trim(), txtmakhdat.getText().trim(), txtmanv.getText().trim(), 0, 0.0f);
+
+            ArrayList<DTO.CTietHD> ds = new ArrayList<>();
+            if (bus.themHoaDon(hdmoi, ds)) {
+                JOptionPane.showMessageDialog(this, "Thêm thành công! Hãy nhập thông tin chi tiết.");
+                
+                NhapCTHD nhapCTHD = new NhapCTHD(null, true, ma, newSl);
                 nhapCTHD.setVisible(true);
                 this.dispose();
-        }else{
-                JOptionPane.showMessageDialog(this, "Thêm thất bại");
-                return;
+            } else {
+                JOptionPane.showMessageDialog(this, "Thêm thất bại!");
             }
         }   
-        }catch(Exception e){
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Lỗi");
-        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Lỗi định dạng dữ liệu hoặc tính toán!");
+    }
     }//GEN-LAST:event_btnluuActionPerformed
 
     private void txtsoluongFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtsoluongFocusLost
         // TODO add your handling code here:
-                String makht=txtmakht.getText().trim();
+        String makht=txtmakht.getText().trim();
         int sl=Integer.parseInt(txtsoluong.getText().trim());
         if(!makht.isEmpty()){
             DAO.DsHoaDon dao =new DAO.DsHoaDon();
             float gia=dao.laygia(makht);
-            System.out.println("--> Tìm thấy giá: " + gia);
             if(gia>0){
                 txttongtien.setText(String.format("%.0f", gia*sl));
-                System.out.println("--> Tìm thấy giá: " + gia);
             }
             else{
                 txttongtien.setText("0");
@@ -294,7 +447,13 @@ public class HoaDonDialog extends javax.swing.JDialog {
 
     private void txtmahdInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_txtmahdInputMethodTextChanged
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_txtmahdInputMethodTextChanged
+
+    private void btnxoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnxoaActionPerformed
+        // TODO add your handling code here:
+        resetField();
+    }//GEN-LAST:event_btnxoaActionPerformed
 
     
     /**
@@ -341,6 +500,7 @@ public class HoaDonDialog extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnluu;
+    private javax.swing.JButton btnxoa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

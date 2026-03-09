@@ -1,8 +1,9 @@
+package GUI;
 
-import GUI.CTHoaDon;
-import GUI.DiaDiem;
-import GUI.GiaoDien;
-import GUI.HoaDon;
+import GUI.panel.KeHoachTourPanel;
+import GUI.panel.LoaiTourPanel;
+import GUI.panel.TourPanel;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -19,11 +20,13 @@ public class MainFrame extends JFrame {
         setSize(1000, 600);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
+
         try {
             javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+                
         add(buildSideBar(), BorderLayout.WEST);
         add(buildContentArea(), BorderLayout.CENTER);
 
@@ -47,7 +50,6 @@ public class MainFrame extends JFrame {
                 {"Hóa đơn","HoaDon"},
                 {"Địa điểm", "DiaDiem"},
                 {"Chi tiết hóa đơn","CtHoaDon"}
-
         };
 
         for(String[] m : menus){
@@ -65,9 +67,9 @@ public class MainFrame extends JFrame {
         contentArea = new JPanel(cardLayout);
         contentArea.setBackground(Color.cyan);
 
-        contentArea.add(new GUI.HoaDon(),"Tour");
-        contentArea.add(new GUI.CTHoaDon(), "LoaiTour");
-        contentArea.add(new GUI.DiaDiem(), "KeHoachTour");
+        contentArea.add(new TourPanel(), "Tour");
+        contentArea.add(new LoaiTourPanel(), "LoaiTour");
+        contentArea.add(new KeHoachTourPanel(), "KeHoachTour");
         
         contentArea.add(new GUI.HoaDon(),"HoaDon");
         contentArea.add(new GUI.DiaDiem(),"DiaDiem");
@@ -101,34 +103,22 @@ public class MainFrame extends JFrame {
         btn.setBorder(BorderFactory.createEmptyBorder(0, 24, 0, 0));
 
         btn.addActionListener(e -> {
+
+            if(activeButton != null) // fix color painted
+                activeButton.repaint();
+
             activeButton = btn;
             btn.repaint();
             cardLayout.show(contentArea, card);
         });
         return btn;
     }
-    public static void main(String args[]) {
+        public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GiaoDien.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GiaoDien.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GiaoDien.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GiaoDien.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
         //</editor-fold>
 
         /* Create and display the form */
@@ -138,5 +128,4 @@ public class MainFrame extends JFrame {
             }
         });
     }
-
 }

@@ -72,6 +72,11 @@ public class NhapCTHD extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        tblnhapct.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblnhapctKeyPressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblnhapct);
 
         jButton1.setText("Lưu");
@@ -128,13 +133,17 @@ public class NhapCTHD extends javax.swing.JDialog {
                 break;
         }
     }//GEN-LAST:event_jButton1ActionPerformed
-    if(!loi){
+        if(!loi){
         JOptionPane.showMessageDialog(this, "Lưu thành công");
         this.dispose();
     }else{
         JOptionPane.showMessageDialog(this, "Lỗi");
     }
-    }
+    }    
+    private void tblnhapctKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblnhapctKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblnhapctKeyPressed
+
     /**
      * @param args the command line arguments
      */
