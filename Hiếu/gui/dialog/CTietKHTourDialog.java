@@ -5,6 +5,8 @@ import org.example.dto.CTietKHTourDTO;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class CTietKHTourDialog extends JDialog {
     private JLabel jlbMaCTietKHTour, jlbNgayThucHien, jlbTongChi, jlbTienO, jlbTienAn, jlbTienDiLai, jlbDiemDi, jlbDiemDen, jlbMaKHtour;
@@ -13,11 +15,14 @@ public class CTietKHTourDialog extends JDialog {
     private CTietKHTourBUS cTietKHTourBUS;
     private CTietKHTourDTO cTietKHTourDTO;
     private String maKHTour;
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private LocalDate today;
 
     public CTietKHTourDialog(CTietKHTourBUS cTietKHTourBUS, CTietKHTourDTO cTietKHTourDTO, String maKHTour){
         this.cTietKHTourBUS = cTietKHTourBUS;
         this.cTietKHTourDTO = cTietKHTourDTO;
         this.maKHTour = maKHTour;
+        today = LocalDate.now();
 
         setTitle(cTietKHTourDTO == null ? "Thêm chi tiết kế hoạch tour" : "Sửa chi tiết kế hoạch Tour");
         setSize(300, 440);
@@ -57,6 +62,7 @@ public class CTietKHTourDialog extends JDialog {
         jlbNgayThucHien.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
         formPanel.add(jlbNgayThucHien);
         txtNgayThucHien = new JTextField();
+        txtNgayThucHien.setText(today.format(formatter));
         formPanel.add(txtNgayThucHien);
 
         //row TongChi
