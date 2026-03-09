@@ -10,6 +10,7 @@ import org.example.gui.dialog.KeHoachTourDialog;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class KeHoachTourPanel extends JPanel {
@@ -22,12 +23,19 @@ public class KeHoachTourPanel extends JPanel {
     private JTable table;
     private JScrollPane scrollPane;
     private ArrayList<KeHoachTourDTO> lsKeHoachTours;
+    private DefaultComboBoxModel<TourDTO> toursModel;
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public KeHoachTourPanel(){
         keHoachTourBUS = new KeHoachTourBUS();
         tourBUS = new TourBUS();
         cbTour = new JComboBox<>();
         init();
+
+        // first load table
+        TourDTO selectedTour = (TourDTO) cbTour.getSelectedItem();
+        if(selectedTour != null)
+            loadTable(selectedTour.getMaTour());
         hasSelectedRow();
     }
 
@@ -45,16 +53,11 @@ public class KeHoachTourPanel extends JPanel {
         jlbChonTour = new JLabel("Chọn Tour");
         filterPanel.add(jlbChonTour);
 
-        // Load tours
-        ArrayList<TourDTO> lsTours = tourBUS.getAllTours();
-        DefaultComboBoxModel<TourDTO> toursModel = new DefaultComboBoxModel<>();
-        for (TourDTO t : lsTours){
-            toursModel.addElement(t);
-        }
+        // Load combo tours
+        toursModel = new DefaultComboBoxModel<>();
+        toursModel = CBTourPresent();
         cbTour.setModel(toursModel);
         filterPanel.add(cbTour); // center panel add combobox tours
-
-        initTable(); // init table kehoachtour
 
         cbTour.addActionListener(e -> {
             TourDTO selectedTour = (TourDTO) cbTour.getSelectedItem();
@@ -62,8 +65,10 @@ public class KeHoachTourPanel extends JPanel {
                 loadTable(selectedTour.getMaTour());
             }
         });
-
         northPanel.add(filterPanel, BorderLayout.CENTER);
+
+        // init table kehoachtour
+        initTable();
 
         //South Panel contain buttons
         JPanel southPanel = new JPanel(new FlowLayout());
@@ -83,8 +88,8 @@ public class KeHoachTourPanel extends JPanel {
         add(southPanel, BorderLayout.SOUTH);
     }
 
-    public void initTable(){
-        String[] columns = {"Mã kế hoạch Tour", "Ngày khởi hành", "Ngày kết thúc", "Tổng số người", "Tổng số vé", "Tổng chi", "Tổng thu", "Mã Tour", "Mã nhân viên hướng dẫn"};
+    private void initTable(){
+        String[] columns = {"Mã kế hoạch Tour", "Ngày khởi hành", "Ngày kết thúc", "Tổng số vé", "Tổng chi", "Tổng thu", "Mã Tour", "Mã nhân viên hướng dẫn"};
 
         tableModel = new DefaultTableModel(columns, 0);
         table = new JTable(tableModel);
@@ -99,9 +104,8 @@ public class KeHoachTourPanel extends JPanel {
         for (KeHoachTourDTO kt : lsKeHoachTours){
             tableModel.addRow(new Object[]{
                     kt.getMaKHTour(),
-                    kt.getNgayKhoiHanh(),
-                    kt.getNgayKetThuc(),
-                    kt.getTongSoNguoi(),
+                    kt.getNgayKhoiHanh().format(formatter),
+                    kt.getNgayKetThuc().format(formatter),
                     kt.getTongSoVe(),
                     kt.getTongChi(),
                     kt.getTongThu(),
@@ -109,6 +113,16 @@ public class KeHoachTourPanel extends JPanel {
                     kt.getMaNVHD()
             });
         }
+    }
+
+    private DefaultComboBoxModel<TourDTO> CBTourPresent(){
+        DefaultComboBoxModel<TourDTO> model;
+        model = new DefaultComboBoxModel<>();
+        ArrayList<TourDTO> lsTours = tourBUS.getAllTours();
+        for (TourDTO t : lsTours){
+            model.addElement(t);
+        }
+        return model;
     }
 
     private JButton createBtn(String text, Color color){
@@ -158,11 +172,11 @@ public class KeHoachTourPanel extends JPanel {
             String maKHTour = tableModel.getValueAt(row, 0).toString();
             int confirm = JOptionPane.showConfirmDialog(this, "Xác nhận xóa?");
             if(confirm == JOptionPane.YES_OPTION){
-                Boolean result = keHoachTourBUS.removeKeHoachTour(maKHTour);
+                boolean result = keHoachTourBUS.removeKeHoachTour(maKHTour);
                 if(result)
                     JOptionPane.showMessageDialog(null, "Đã xóa kế hoạch tour có mã: " + maKHTour);
                 else
-                    JOptionPane.showMessageDialog(null, "Mã kế hoạch tour không tồn tại: " + maKHTour);
+                    JOptionPane.showMessageDialog(null, "Không thể xóa kế hoạch tour này");
                 TourDTO selectedTour = (TourDTO) cbTour.getSelectedItem();
                 loadTable(selectedTour.getMaTour());
             }
@@ -203,6 +217,13 @@ public class KeHoachTourPanel extends JPanel {
     private void refresh(){
         refreshBtn = createBtn("Làm mới", Color.BLUE);
         refreshBtn.addActionListener(e -> {
+            //load tours when press refresh
+            toursModel = new DefaultComboBoxModel<>();
+            toursModel = CBTourPresent();
+            cbTour.setModel(toursModel);
+            CBTourPresent();
+
+            // get selected tour
             TourDTO selectedTour = (TourDTO) cbTour.getSelectedItem();
             loadTable(selectedTour.getMaTour());
         });
