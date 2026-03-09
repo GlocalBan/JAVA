@@ -25,6 +25,10 @@ public class TourBUS {
     public boolean addTour(TourDTO t){
         if(t == null) return false;
 
+        if(t.getSoNgay() <= 0 || t.getSoCho() < 0){
+            return false;
+        }
+
         boolean success = tourDAO.addTour(t);
         if(success) lsTour.add(t);
 
@@ -32,6 +36,9 @@ public class TourBUS {
     }
 
     public boolean editTour(TourDTO t){
+        if(t.getSoNgay() <= 0 || t.getSoCho() < 0)
+            return false;
+
         return tourDAO.editTour(t);
     }
 
@@ -40,12 +47,16 @@ public class TourBUS {
     }
 
     public long totalCost(String maTour){
-        return tourDAO.totalCost(maTour);
+        ArrayList<TourDTO> lsTour = getAllTours();
+        for (TourDTO t : lsTour) {
+            if (t.getMaTour().equalsIgnoreCase(maTour))
+                return t.getSoNgay() * t.getDonGia();
+        }
+        return 0;
     }
 
     public ArrayList<TourDTO> search(String keyWord){
         ArrayList<TourDTO> list = new ArrayList<>();
-
         for (TourDTO lt : lsTour){
             if(lt.getTen().trim().toLowerCase().contains(keyWord)){
                 list.add(lt);
