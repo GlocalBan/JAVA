@@ -2,8 +2,6 @@ package org.example.bus;
 
 import org.example.dao.KeHoachTourDAO;
 import org.example.dto.KeHoachTourDTO;
-import org.example.dto.LoaiTourDTO;
-import org.example.dto.TourDTO;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -31,20 +29,50 @@ public class KeHoachTourBUS {
                 lsKeHoachToursID.add(kt);
             }
         }
-
         return lsKeHoachToursID;
     }
 
     public boolean addKeHoachTour(KeHoachTourDTO t){
         if(t == null) return false;
+        if(t.getNgayKhoiHanh() == null || t.getNgayKetThuc() == null) {
+            JOptionPane.showMessageDialog(null, "Ngày không được để trống");
+            return false;
+        }
+        if(t.getNgayKetThuc().isBefore(t.getNgayKhoiHanh())) {
+            JOptionPane.showMessageDialog(null, "Ngày kết thúc phải sau ngày khởi hành");
+            return false;
+        }
 
         boolean success = keHoachTourDAO.addKeHoachTour(t);
-        if(success) lsKeHoachTour.add(t);
+
+        if(success)
+            lsKeHoachTour.add(t);
         return success;
     }
 
-    public void editKeHoachTour(KeHoachTourDTO t){
-        keHoachTourDAO.editKeHoachTour(t);
+    public String validateKeHoachTour(KeHoachTourDTO t){
+        if(t == null) return "Dữ liệu không hợp lệ";
+
+        if(t.getNgayKhoiHanh() == null || t.getNgayKetThuc() == null)
+            return "Ngày không được để trống";
+
+        if(t.getNgayKetThuc().isBefore(t.getNgayKhoiHanh()))
+            return "Ngày kết thúc phải sau ngày khởi hành";
+
+        if(t.getTongChi() < 0)
+            return "Tổng chi không hợp lệ";
+
+        if(t.getTongThu() < 0)
+            return "Tổng thu không hợp lệ";
+
+        if(t.getTongSoVe() < 0)
+            return "Tổng số vé không hợp lệ";
+
+        return null;
+    }
+
+    public boolean editKeHoachTour(KeHoachTourDTO t){
+        return keHoachTourDAO.editKeHoachTour(t);
     }
 
     public boolean removeKeHoachTour(String matour){

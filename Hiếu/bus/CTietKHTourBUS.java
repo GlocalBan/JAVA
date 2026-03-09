@@ -29,8 +29,8 @@ public class CTietKHTourBUS {
         return success;
     }
 
-    public void editCTietKHTour(CTietKHTourDTO t){
-        cTietKHTourDAO.editCTietKHTour(t);
+    public boolean editCTietKHTour(CTietKHTourDTO t){
+        return cTietKHTourDAO.editCTietKHTour(t);
     }
 
     public boolean removeCTietKHTour(String maCTietKHTour){

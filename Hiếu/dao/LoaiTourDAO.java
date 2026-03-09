@@ -60,23 +60,25 @@ public class LoaiTourDAO {
             int rows = ps.executeUpdate();
             return rows > 0;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            return false;
         }
     }
 
     //edit
-    public void editLoaiTour(LoaiTourDTO t){
+    public boolean editLoaiTour(LoaiTourDTO t){
         String id = t.getMaLoaiTour();
 
         try{
             String qry = "update loaitour set ";
-            qry += "theloai = " + "'" + t.getTheLoai() + "'";
+            qry += "theloai = '" + t.getTheLoai() + "'";
             qry += "where maloaitour = '" + id + "';";
             st = c.createStatement();
             st.executeUpdate(qry);
+            return true;
         }catch (SQLException e){
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Lỗi cập nhật loại tour!");
+            return false;
         }
     }
 }

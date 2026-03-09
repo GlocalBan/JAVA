@@ -10,8 +10,8 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class TourDiaLog extends JDialog {
-    private JLabel jlbMaTour, jlbTen, jlbSoNgay, jlbDonGia, jlbSoNguoi, jlbDiaDiemKhoiHanh, jlbMaLoaiTour;
-    private JTextField txtMaTour, txtTen, txtSoNgay, txtDonGia, txtSoNguoi, txtDiaDiemKhoiHanh;
+    private JLabel jlbMaTour, jlbTen, jlbSoNgay, jlbDonGia, jlbSoCho, jlbDiaDiemKhoiHanh, jlbMaLoaiTour;
+    private JTextField txtMaTour, txtTen, txtSoNgay, txtDonGia, txtSoCho, txtDiaDiemKhoiHanh;
     private TourDTO tourDTO;
     private TourBUS tourBUS;
     private JButton saveBtn, cancelBtn;
@@ -82,11 +82,11 @@ public class TourDiaLog extends JDialog {
         formPanel.add(txtDonGia);
 
         //row soNguoi
-        jlbSoNguoi = new JLabel("Số người");
-        jlbSoNguoi.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
-        formPanel.add(jlbSoNguoi);
-        txtSoNguoi = new JTextField();
-        formPanel.add(txtSoNguoi);
+        jlbSoCho = new JLabel("Số chỗ");
+        jlbSoCho.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
+        formPanel.add(jlbSoCho);
+        txtSoCho = new JTextField();
+        formPanel.add(txtSoCho);
 
         // row ddkhoihanh
         jlbDiaDiemKhoiHanh = new JLabel("Địa điểm khởi hành");
@@ -118,7 +118,7 @@ public class TourDiaLog extends JDialog {
         txtTen.setText(tourDTO.getTen());
         txtSoNgay.setText(tourDTO.getSoNgay() + "");
         txtDonGia.setText(tourDTO.getDonGia() + "");
-        txtSoNguoi.setText(tourDTO.getSoNguoi() + "");
+        txtSoCho.setText(tourDTO.getSoCho() + "");
         txtDiaDiemKhoiHanh.setText(tourDTO.getDiaDiemKhoiHanh());
 
         //field maLoaiTour
@@ -146,19 +146,19 @@ public class TourDiaLog extends JDialog {
     private void save(){
         saveBtn = createBtn("Lưu", Color.GREEN);
         saveBtn.addActionListener(e -> {
-            if(isEmpty(txtMaTour, txtTen, txtSoNgay, txtDonGia, txtSoNguoi, txtDiaDiemKhoiHanh)){
+            if(isEmpty(txtMaTour, txtTen, txtSoNgay, txtDonGia, txtSoCho, txtDiaDiemKhoiHanh)){
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin");
                 return;
             }
-
+            
             //validate numbers
             int soNgay;
             long donGia;
-            int soNguoi;
+            int soCho;
             try {
                 soNgay = Integer.parseInt(txtSoNgay.getText().trim());
                 donGia = Long.parseLong(txtDonGia.getText().trim());
-                soNguoi = Integer.parseInt(txtSoNguoi.getText().trim());
+                soCho = Integer.parseInt(txtSoCho.getText().trim());
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng số");
                 return;
@@ -173,7 +173,7 @@ public class TourDiaLog extends JDialog {
 
                     TourDTO tourMoi = new TourDTO(
                             txtMaTour.getText(), txtTen.getText(),
-                            soNgay, donGia, soNguoi,
+                            soNgay, donGia, soCho,
                             txtDiaDiemKhoiHanh.getText(), maLoaiTour
                     );
                     boolean result = tourBUS.addTour(tourMoi);
@@ -188,7 +188,7 @@ public class TourDiaLog extends JDialog {
                 tourDTO.setTen(txtTen.getText());
                 tourDTO.setSoNgay(soNgay);
                 tourDTO.setDonGia(donGia);
-                tourDTO.setSoNguoi(soNguoi);
+                tourDTO.setSoCho(soCho);
                 tourDTO.setDiaDiemKhoiHanh(txtDiaDiemKhoiHanh.getText());
 
                 // field maLoaiTour

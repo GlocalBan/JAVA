@@ -1,23 +1,30 @@
 package org.example.gui.dialog;
 
+import com.toedter.calendar.JDateChooser;
 import org.example.bus.KeHoachTourBUS;
 import org.example.dto.KeHoachTourDTO;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class KeHoachTourDialog extends JDialog {
-    private JLabel jlbMaKHTour, jlbNgayKhoiHanh, jlbNgayKetThuc, jlbTongSoNguoi, jlbTongSoVe, jlbTongChi, jlbTongThu, jlbMaTour, jlbMaNVHD;
-    private JTextField txtMaKHTour, txtNgayKhoiHanh, txtNgayKetThuc, txtTongSoNguoi, txtTongSoVe, txtTongChi, txtTongThu, txtMaTour, txtMaNVHD;
+    private JLabel jlbMaKHTour, jlbNgayKhoiHanh, jlbNgayKetThuc, jlbTongSoVe, jlbTongChi, jlbTongThu, jlbMaTour, jlbMaNVHD;
+    private JTextField txtMaKHTour, txtNgayKhoiHanh, txtNgayKetThuc, txtTongSoVe, txtTongChi, txtTongThu, txtMaTour, txtMaNVHD;
     private JButton saveBtn, cancelBtn;
     private KeHoachTourBUS keHoachTourBUS;
     private KeHoachTourDTO keHoachTourDTO;
     private String maTour;
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private LocalDate today;
 
     public KeHoachTourDialog(KeHoachTourBUS keHoachTourBUS, KeHoachTourDTO keHoachTourDTO, String maTour) {
         this.keHoachTourBUS = keHoachTourBUS;
         this.keHoachTourDTO = keHoachTourDTO;
         this.maTour = maTour;
+        today = LocalDate.now();
 
         setTitle(keHoachTourDTO == null ? "Thêm kế hoạch tour" : "Sửa kế hoạch Tour");
         setSize(300, 440);
@@ -56,22 +63,20 @@ public class KeHoachTourDialog extends JDialog {
         jlbNgayKhoiHanh = new JLabel("Ngày khơi hành");
         jlbNgayKhoiHanh.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
         formPanel.add(jlbNgayKhoiHanh);
+        // txt
         txtNgayKhoiHanh = new JTextField();
+        txtNgayKhoiHanh.setText(today.format(formatter));
         formPanel.add(txtNgayKhoiHanh);
 
         //row ngayKetThuc
         jlbNgayKetThuc = new JLabel("Ngày kết thúc");
         jlbNgayKetThuc.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
         formPanel.add(jlbNgayKetThuc);
+        //txt
         txtNgayKetThuc = new JTextField();
+        LocalDate endDate = today.plusDays(1);
+        txtNgayKetThuc.setText(endDate.format(formatter));
         formPanel.add(txtNgayKetThuc);
-
-        //row tongSoNguoi
-        jlbTongSoNguoi = new JLabel("Tổng số người");
-        jlbTongSoNguoi.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
-        formPanel.add(jlbTongSoNguoi);
-        txtTongSoNguoi = new JTextField();
-        formPanel.add(txtTongSoNguoi);
 
         //row tongSoVe
         jlbTongSoVe = new JLabel("Tổng số vé");
@@ -115,9 +120,8 @@ public class KeHoachTourDialog extends JDialog {
 
     private void loadData () {
         txtMaKHTour.setText(keHoachTourDTO.getMaKHTour());
-        txtNgayKhoiHanh.setText(keHoachTourDTO.getNgayKhoiHanh());
-        txtNgayKetThuc.setText(keHoachTourDTO.getNgayKetThuc());
-        txtTongSoNguoi.setText(keHoachTourDTO.getTongSoNguoi() + "");
+        txtNgayKhoiHanh.setText(keHoachTourDTO.getNgayKhoiHanh().toString());
+        txtNgayKetThuc.setText(keHoachTourDTO.getNgayKetThuc().toString());
         txtTongSoVe.setText(keHoachTourDTO.getTongSoVe() + "");
         txtTongChi.setText(keHoachTourDTO.getTongChi() + "");
         txtTongThu.setText(keHoachTourDTO.getTongThu() + "");
@@ -137,16 +141,17 @@ public class KeHoachTourDialog extends JDialog {
     public void save(){
         saveBtn = createBtn("Lưu", Color.GREEN);
         saveBtn.addActionListener(e -> {
-            if(isEmpty(txtMaKHTour, txtNgayKhoiHanh, txtNgayKetThuc, txtTongSoNguoi, txtTongSoVe, txtTongChi, txtTongThu)){
+            if(isEmpty(txtMaKHTour, txtNgayKhoiHanh, txtNgayKetThuc, txtTongSoVe, txtTongChi, txtTongThu)){
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin");
                 return;
             }
 
             //validate numbers
-            int tongSoNguoi, tongSoVe;
+            int tongSoVe;
             long tongChi, tongThu;
+            LocalDate ngayKhoiHanh;
+            LocalDate ngayKetThuc;
             try {
-                tongSoNguoi = Integer.parseInt(txtTongSoNguoi.getText().trim());
                 tongSoVe = Integer.parseInt(txtTongSoVe.getText().trim());
                 tongChi = Long.parseLong(txtTongChi.getText().trim());
                 tongThu = Long.parseLong(txtTongThu.getText().trim());
@@ -155,30 +160,44 @@ public class KeHoachTourDialog extends JDialog {
                 return;
             }
 
+            try {
+                ngayKhoiHanh = LocalDate.parse(txtNgayKhoiHanh.getText(), formatter);
+                ngayKetThuc = LocalDate.parse(txtNgayKetThuc.getText(), formatter);
+            } catch (DateTimeParseException ex) {
+                JOptionPane.showMessageDialog(this, "Ngày phải đúng định dạng dd/mm/yyyy");
+                return;
+            }
+
             if(keHoachTourDTO == null){
                 if(keHoachTourBUS.existedKeHoachTourWithID(txtMaKHTour.getText()))
                     JOptionPane.showMessageDialog(null, "Mã kế hoạch tour đã tồn tại, vui lòng nhập mã khác!");
-
                 else{
-                    KeHoachTourDTO keHoachTourMoi = new KeHoachTourDTO(
-                            txtMaKHTour.getText(), txtNgayKhoiHanh.getText(),
-                            txtNgayKetThuc.getText(), tongSoNguoi, tongSoVe,
+                    KeHoachTourDTO keHoachTourMoi = null;
+
+                    keHoachTourMoi = new KeHoachTourDTO(
+                            txtMaKHTour.getText(), ngayKhoiHanh,
+                            ngayKetThuc, tongSoVe,
                             tongChi, tongThu, txtMaTour.getText(), txtMaNVHD.getText()
                     );
 
-                    boolean result = keHoachTourBUS.addKeHoachTour(keHoachTourMoi);
-                    if(result) {
-                        JOptionPane.showMessageDialog(this, "Đã thêm");
-                        dispose();
+                    // validate before add
+                    String error = keHoachTourBUS.validateKeHoachTour(keHoachTourMoi);
+                    if(error == null){
+                        boolean result = keHoachTourBUS.addKeHoachTour(keHoachTourMoi);
+                        if(result) {
+                            JOptionPane.showMessageDialog(this, "Đã thêm");
+                            dispose();
+                        }else{
+                            JOptionPane.showMessageDialog(this, "Thêm thất bại");
+                        }
                     }else{
-                        JOptionPane.showMessageDialog(this, "Thêm thất bại");
+                        JOptionPane.showMessageDialog(this, error);
                     }
                 }
             }else{
                 keHoachTourDTO.setMaKHTour(txtMaKHTour.getText());
-                keHoachTourDTO.setNgayKhoiHanh(txtNgayKhoiHanh.getText());
-                keHoachTourDTO.setNgayKetThuc(txtNgayKetThuc.getText());
-                keHoachTourDTO.setTongSoNguoi(tongSoNguoi);
+                keHoachTourDTO.setNgayKhoiHanh(LocalDate.parse(txtNgayKhoiHanh.getText(), formatter));
+                keHoachTourDTO.setNgayKetThuc(LocalDate.parse(txtNgayKetThuc.getText(), formatter));
                 keHoachTourDTO.setTongSoVe(tongSoVe);
                 keHoachTourDTO.setTongChi(tongChi);
                 keHoachTourDTO.setTongThu(tongThu);

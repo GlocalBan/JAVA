@@ -143,11 +143,11 @@ public class LoaiTourPanel extends JPanel {
             String maLoaiTour = tableModel.getValueAt(row, 0).toString();
             int confirm = JOptionPane.showConfirmDialog(this, "Xác nhận xóa?");
             if(confirm == JOptionPane.YES_OPTION){
-                Boolean result = loaiTourBUS.removeLoaiTour(maLoaiTour);
+                boolean result = loaiTourBUS.removeLoaiTour(maLoaiTour);
                 if(result)
                     JOptionPane.showMessageDialog(null, "Đã xóa loại tour có mã: " + maLoaiTour);
                 else
-                    JOptionPane.showMessageDialog(null, "Mã loại tour không tồn tại: " + maLoaiTour);
+                    JOptionPane.showMessageDialog(null, "Lỗi! Xóa không thành công loại tour: " + maLoaiTour);
                 loadTable();
             }
         });

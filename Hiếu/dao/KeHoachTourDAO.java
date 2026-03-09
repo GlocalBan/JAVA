@@ -25,14 +25,13 @@ public class KeHoachTourDAO {
             while(rs.next()){
                 KeHoachTourDTO t = new KeHoachTourDTO(
                         rs.getString(1),
-                        rs.getString(2),
-                        rs.getString(3),
+                        rs.getDate(2).toLocalDate(),
+                        rs.getDate(3).toLocalDate(),
                         rs.getInt(4),
-                        rs.getInt(5),
+                        rs.getLong(5),
                         rs.getLong(6),
-                        rs.getLong(7),
-                        rs.getString(8),
-                        rs.getString(9)
+                        rs.getString(7),
+                        rs.getString(8)
                 );
                 lsKeHoachTour.add(t);
             }
@@ -49,7 +48,6 @@ public class KeHoachTourDAO {
             sql += "'" +  t.getMaKHTour() + "'";
             sql += ","  + "'" +  t.getNgayKhoiHanh() + "'";
             sql += ","  + "'" +  t.getNgayKetThuc() + "'";
-            sql += ","  + "'" +  t.getTongSoNguoi() + "'";
             sql += ","  + "'" +  t.getTongSoVe() + "'";
             sql += ","  + "'" +  t.getTongChi() + "'";
             sql += ","  + "'" +  t.getTongThu() + "'";
@@ -73,19 +71,18 @@ public class KeHoachTourDAO {
             int rows = ps.executeUpdate();
             return rows > 0;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return false;
         }
     }
 
     //edit
-    public void editKeHoachTour(KeHoachTourDTO t){
+    public boolean editKeHoachTour(KeHoachTourDTO t){
         String id = t.getMaKHTour();
 
         try{
             String qry = "update kehoachtour set ";
             qry += "ngaykhoihanh = " + "'" + t.getNgayKhoiHanh() + "'";
             qry += ",ngayketthuc = " + "'" + t.getNgayKetThuc() + "'";
-            qry += ",tongsonguoi = " + "'" + t.getTongSoNguoi() + "'";
             qry += ",tongsove = " + "'" + t.getTongSoVe() + "'";
             qry += ",tongchi = " + "'" + t.getTongChi() + "'";
             qry += ",tongthu = " + "'" + t.getTongThu() + "'";
@@ -94,9 +91,10 @@ public class KeHoachTourDAO {
             qry += "where makhtour = '" + id + "';";
             st = c.createStatement();
             st.executeUpdate(qry);
+            return true;
         }catch (SQLException e){
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Lỗi cập nhật kế hoạch tour!");
+            return false;
         }
     }
 }

@@ -33,7 +33,7 @@ public class TourPanel extends JPanel {
         northPanel = new JPanel(new BorderLayout());
         JLabel jlbTitle = new JLabel("QUẢN LÝ TOUR DU LỊCH", JLabel.CENTER);
         jlbTitle.setFont(new Font("Arial", Font.BOLD, 18));
-        northPanel.add(jlbTitle, BorderLayout.NORTH);
+        northPanel.add(jlbTitle, BorderLayout.NORTH); // northPanel add components
 
         // Search panel
         JPanel searchPanel = new JPanel();
@@ -66,7 +66,7 @@ public class TourPanel extends JPanel {
     }
 
     private void initTable(){
-        String[] columns = {"Mã tour", "Tên", "Số ngày", "Đơn giá", "Số người", "Địa điểm khởi hành", "Mã loại tour"};
+        String[] columns = {"Mã tour", "Tên", "Số ngày", "Đơn giá", "Số chỗ", "Địa điểm khởi hành", "Mã loại tour"};
         tableModel = new DefaultTableModel(columns, 0);
         table = new JTable(tableModel);
         table.setDefaultEditor(Object.class, null);
@@ -125,7 +125,7 @@ public class TourPanel extends JPanel {
             String maTour = tableModel.getValueAt(row, 0).toString();
             int confirm = JOptionPane.showConfirmDialog(this, "Xác nhận xóa?");
             if(confirm == JOptionPane.YES_OPTION){
-                Boolean result = tourBUS.removeTour(maTour);
+                boolean result = tourBUS.removeTour(maTour);
                 if(result)
                     JOptionPane.showMessageDialog(null, "Đã xóa tour có mã: " + maTour);
                 else
@@ -168,7 +168,7 @@ public class TourPanel extends JPanel {
                     t.getTen(),
                     t.getSoNgay(),
                     t.getDonGia(),
-                    t.getSoNguoi(),
+                    t.getSoCho(),
                     t.getDiaDiemKhoiHanh(),
                     t.getMaLoaiTour()
             });
@@ -184,7 +184,7 @@ public class TourPanel extends JPanel {
                     t.getTen(),
                     t.getSoNgay(),
                     t.getDonGia(),
-                    t.getSoNguoi(),
+                    t.getSoCho(),
                     t.getDiaDiemKhoiHanh(),
                     t.getMaLoaiTour()
             });

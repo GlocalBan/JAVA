@@ -30,14 +30,12 @@ public class LoaiTourBUS {
         return success;
     }
 
-    public void editLoaiTour(LoaiTourDTO cate){
-        loaiTourDAO.editLoaiTour(cate);
+    public boolean editLoaiTour(LoaiTourDTO cate){
+        return loaiTourDAO.editLoaiTour(cate);
     }
 
     public boolean removeLoaiTour(String maLoaiTour){
-        boolean result = loaiTourDAO.removeLoaiTour(maLoaiTour);
-        return result;
-
+        return loaiTourDAO.removeLoaiTour(maLoaiTour);
     }
 
     public ArrayList<LoaiTourDTO> search(String keyWord){

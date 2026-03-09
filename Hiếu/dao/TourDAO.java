@@ -34,7 +34,6 @@ public class TourDAO {
                 );
                 lsTour.add(t);
             }
-
         }catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -49,7 +48,7 @@ public class TourDAO {
             sql += ","  + "'" +  t.getTen() + "'";
             sql += ","  + "'" +  t.getSoNgay() + "'";
             sql += ","  + "'" +  t.getDonGia() + "'";
-            sql += ","  + "'" +  t.getSoNguoi() + "'";
+            sql += ","  + "'" +  t.getSoCho() + "'";
             sql += ","  + "'" +  t.getDiaDiemKhoiHanh() + "'";
             sql += ","  + "'" +  t.getMaLoaiTour() + "'";
             sql += ")";
@@ -70,7 +69,7 @@ public class TourDAO {
             int rows = ps.executeUpdate();
             return rows > 0;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return false;
         }
     }
 
@@ -83,7 +82,7 @@ public class TourDAO {
             qry += "ten = " + "'" + t.getTen() + "'";
             qry += ",songay = " + "'" + t.getSoNgay() + "'";
             qry += ",dongia = " + "'" + t.getDonGia() + "'";
-            qry += ",songuoi = " + "'" + t.getSoNguoi() + "'";
+            qry += ",socho = " + "'" + t.getSoCho() + "'";
             qry += ",ddkhoihanh = " + "'" + t.getDiaDiemKhoiHanh() + "'";
             qry += ",ddkhoihanh = " + "'" + t.getMaLoaiTour() + "'";
             qry += "where matour = '" + id + "';";
@@ -95,16 +94,4 @@ public class TourDAO {
             return false;
         }
     }
-
-    //total cost
-    public long totalCost(String matour) {
-        TourDTO tour;
-        ArrayList<TourDTO> lsTour = getAllTours();
-        for (TourDTO t : lsTour) {
-            if (t.getMaTour().equalsIgnoreCase(matour))
-                return t.getSoNgay() * t.getDonGia();
-        }
-        return 0;
-    }
-
 }

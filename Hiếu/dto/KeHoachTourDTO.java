@@ -1,22 +1,21 @@
 package org.example.dto;
 
+import java.time.LocalDate;
+
 public class KeHoachTourDTO {
     private String maKHTour;
-    private String ngayKhoiHanh;
-    private String ngayKetThuc;
-    private int tongSoNguoi;
+    private LocalDate ngayKhoiHanh;
+    private LocalDate ngayKetThuc;
     private int tongSoVe;
     private long tongChi;
     private long tongThu;
     private String maTour;
     private String maNVHD;
 
-
     public KeHoachTourDTO() {
         this.maKHTour = "";
-        this.ngayKhoiHanh = "";
-        this.ngayKetThuc = "";
-        this.tongSoNguoi = 0;
+        this.ngayKhoiHanh = null;
+        this.ngayKetThuc = null;
         this.tongSoVe = 0;
         this.tongChi = 0;
         this.tongThu = 0;
@@ -24,11 +23,10 @@ public class KeHoachTourDTO {
         this.maNVHD = "";
     }
 
-    public KeHoachTourDTO(String maKHTour, String ngayKhoiHanh, String ngayKetThuc, int tongSoNguoi, int tongSoVe, long tongChi, long tongThu, String maTour, String maNVHD) {
+    public KeHoachTourDTO(String maKHTour, LocalDate ngayKhoiHanh, LocalDate ngayKetThuc, int tongSoVe, long tongChi, long tongThu, String maTour, String maNVHD) {
         this.maKHTour = maKHTour;
         this.ngayKhoiHanh = ngayKhoiHanh;
         this.ngayKetThuc = ngayKetThuc;
-        this.tongSoNguoi = tongSoNguoi;
         this.tongSoVe = tongSoVe;
         this.tongChi = tongChi;
         this.tongThu = tongThu;
@@ -40,16 +38,12 @@ public class KeHoachTourDTO {
         this.maKHTour = maKHTour;
     }
 
-    public void setNgayKhoiHanh(String ngayKhoiHanh) {
+    public void setNgayKhoiHanh(LocalDate ngayKhoiHanh) {
         this.ngayKhoiHanh = ngayKhoiHanh;
     }
 
-    public void setNgayKetThuc(String ngayKetThuc) {
+    public void setNgayKetThuc(LocalDate ngayKetThuc) {
         this.ngayKetThuc = ngayKetThuc;
-    }
-
-    public void setTongSoNguoi(int tongSoNguoi) {
-        this.tongSoNguoi = tongSoNguoi;
     }
 
     public void setTongSoVe(int tongSoVe) {
@@ -77,16 +71,12 @@ public class KeHoachTourDTO {
         return maKHTour;
     }
 
-    public String getNgayKhoiHanh() {
+    public LocalDate getNgayKhoiHanh() {
         return ngayKhoiHanh;
     }
 
-    public String getNgayKetThuc() {
+    public LocalDate getNgayKetThuc() {
         return ngayKetThuc;
-    }
-
-    public int getTongSoNguoi() {
-        return tongSoNguoi;
     }
 
     public int getTongSoVe() {

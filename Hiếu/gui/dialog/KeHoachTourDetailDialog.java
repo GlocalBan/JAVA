@@ -165,5 +165,4 @@ public class KeHoachTourDetailDialog extends JDialog {
             editBtn.setEnabled(hadSelection);
         });
     }
-
 }
