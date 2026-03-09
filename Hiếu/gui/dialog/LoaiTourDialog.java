@@ -30,6 +30,7 @@ public class LoaiTourDialog extends JDialog{
 
     private void loadData(){
         txtMaLoaiTour.setText(loaiTourDTO.getMaLoaiTour());
+        txtMaLoaiTour.setEnabled(false);
         txtTheLoai.setText(loaiTourDTO.getTheLoai());
     }
 
