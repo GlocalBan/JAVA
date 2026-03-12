@@ -20,7 +20,6 @@ public class KetNoiCSDL {
             String password ="";
             
             conn=DriverManager.getConnection(url,user,password);
-            System.out.println("Kết nối thành công");
         }catch(ClassNotFoundException e){
             e.printStackTrace();
         }catch(SQLException e){

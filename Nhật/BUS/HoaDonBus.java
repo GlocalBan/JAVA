@@ -44,11 +44,19 @@ public class HoaDonBus {
         return false;
     }
     
+    public ArrayList docDS(){
+        if(ds==null)
+        {
+            ds=new ArrayList<HoaDon>();
+            ds=dao.getDsHoaDon();
+        }
+        return ds;
+    }
     public HoaDon timHd(String mahd){
         if(dao.timHoaDon(mahd)!=null){
             for(HoaDon hd: ds){
                 if(hd.getMaHD().equals(mahd)){
-                    return hd;
+                    return dao.timHoaDon(mahd);
                 }
             }
         }
@@ -88,14 +96,40 @@ public class HoaDonBus {
             return false;
         }
         if(dao.timHoaDon(hd.getMaHD())!=null){
-            dao.suaHd(hd);
-            for(int i=0;i<ds.size();i++){
+            boolean kt=dao.suaHd(hd);
+
+            if(kt==true){
+                for(int i=0;i<ds.size();i++){
                 if(hd.getMaHD().equals(ds.get(i).getMaHD())){
                     ds.set(i, hd);
                 }
             }
+            }else return false;
             return true;
         }
         return false;
     }
+    
+
+    
+    public ArrayList<DTO.HoaDon> timNangcao(String loai, String key){
+        if(key.trim().isEmpty()){
+            return getDs();
+    }
+        String tencot="";
+        if(loai.equals("Mã hóa đơn")){
+            tencot="mahd";
+        }
+        else if(loai.equals("Mã kế hoạch tour")){
+            tencot="makhtour";
+    }
+        else if(loai.equals("Mã khách hàng đặt")){
+            tencot="makhangdat";
+        }else if(loai.equals("Mã nhân viên")){
+            tencot="manv";
+        }
+        ArrayList<DTO.HoaDon> ds =dao.timNangcao(tencot, key);
+        return ds;
+}
+    
 }

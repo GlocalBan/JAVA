@@ -11,9 +11,9 @@ import javax.swing.JPanel;
  * @author Nhat
  */
 public class GiaoDien extends javax.swing.JFrame {
-    private GUI.HoaDon pnlhd;
+    private GUI.panel.HoaDon pnlhd;
     private JPanel pnlhome;
-    private GUI.DiaDiem pnldd;
+    private GUI.panel.DiaDiem pnldd;
     private java.awt.CardLayout cardLayout;
     /**
      * Creates new form GiaoDien
@@ -24,9 +24,9 @@ public class GiaoDien extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         
         cardLayout = (java.awt.CardLayout) pnlContent.getLayout();
-        pnlhd =new GUI.HoaDon();
+        pnlhd =new GUI.panel.HoaDon();
         pnlhome =new JPanel();
-        pnldd =new GUI.DiaDiem();
+        pnldd =new GUI.panel.DiaDiem();
         pnlhome.add(new JLabel("Hello"));
         
         pnlContent.add(pnlhome,"Home");

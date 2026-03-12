@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class DiaDiemBus {
     public static ArrayList<DiaDiem> ds;
-    public static DsDiaDiem dao;
+    public static DsDiaDiem dao=new DsDiaDiem();
     
     public DiaDiemBus(){
         if(ds==null){
@@ -37,6 +37,13 @@ public class DiaDiemBus {
             
     }
         return false;
+    }
+    
+    public DiaDiem timDiaDiem(String tendd){
+        if(tendd==null || tendd.trim().isEmpty()){
+            return null;
+        }
+        return dao.TimDiaDiem(tendd);
     }
     
     public boolean themDiaDiem(DiaDiem dd){
@@ -77,5 +84,14 @@ public class DiaDiemBus {
             }
         }
         return true;
+    }
+    
+    public ArrayList timdd(String tendd){
+        tendd=tendd.trim();
+        
+        if(tendd.isEmpty()){
+            return dao.getDs();  
+        }
+        return dao.timdd(tendd);
     }
 }

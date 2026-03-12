@@ -16,12 +16,10 @@ public class CTietHD {
     private String MaHD;
     private String MaKHDi;
     private float GiaVe;
-    private int Sl;
-    public CTietHD(String MaHD, String MaKHDi, float GiaVe,int Sl) {
+    public CTietHD(String MaHD, String MaKHDi, float GiaVe) {
         this.MaHD = MaHD;
         this.MaKHDi = MaKHDi;
         this.GiaVe = GiaVe;
-        this.Sl=Sl;
     }
 
     public String getMaHD() {
@@ -46,14 +44,6 @@ public class CTietHD {
 
     public void setGiaVe(float GiaVe) {
         this.GiaVe = GiaVe;
-    }
-
-    public int getSoLuong() {
-        return Sl;
-    }
-
-    public void setSoLuong(int SoLuong) {
-        this.Sl = SoLuong;
     }
     
     

@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package DTO;
+import java.time.LocalDate;
 import java.util.*;
 /**
  *
@@ -17,14 +18,42 @@ public class HoaDon {
     private String MaKHTour;
     private String MaKHDat;
     private String MaNV;
+    private LocalDate ngay;
+    private int soluong;
     private float TongTien;
-
-    public HoaDon(String MaHD, String MaKHTour, String MaKHDat, String MaNV, float TongTien) {
+    
+    public HoaDon(String MaHD, String MaKHTour, String MaKHDat, String MaNV,LocalDate ngay,int soluong, float TongTien) {
         this.MaHD = MaHD;
         this.MaKHTour = MaKHTour;
         this.MaKHDat = MaKHDat;
         this.MaNV = MaNV;
+        this.ngay=ngay;
+        this.soluong=soluong;
         this.TongTien = TongTien;
+    }
+
+    public void setNgay(LocalDate ngay) {
+        this.ngay = ngay;
+    }
+
+    public LocalDate getNgay() {
+        return ngay;
+    }
+
+    public static void setSc(Scanner sc) {
+        HoaDon.sc = sc;
+    }
+
+    public void setSoluong(int soluong) {
+        this.soluong = soluong;
+    }
+
+    public static Scanner getSc() {
+        return sc;
+    }
+
+    public int getSoluong() {
+        return soluong;
     }
 
     public String getMaHD() {
@@ -69,43 +98,6 @@ public class HoaDon {
     
     public void TinhTien(){
         
-    }
-    public void Nhap(){
-        while(true){
-           System.out.println("Nhap ma hoa don : ");
-           MaHD=sc.nextLine();
-           if(MaHD.matches("^HD\\d{3}$")){
-               break;
-           }
-        }
-        
-        while(true){
-           System.out.println("Nhap ma ke hoach tour : ");
-           MaKHTour=sc.nextLine();
-           if(MaKHTour.matches("^KHT\\d{3}$")){
-               break;
-           }
-        }
-        
-        while(true){
-           System.out.println("Nhap ma khach hang dat : ");
-           MaKHDat=sc.nextLine();
-           if(MaKHDat.matches("^KH\\d{3}$")){
-               break;
-           }
-        }
-        
-        while(true){
-           System.out.println("Nhap ma nhan vien : ");
-           MaNV=sc.nextLine();
-           if(MaNV.matches("^NV\\d{3}$")){
-               break;
-           }
-        }
-    }
-    public void Xuat(){
-        System.out.printf("%-10s %-10s %-10s %-10s %-10s\n","MaHD" ,"MaKHTour","MaKHDat","MaNV","TongTien");
-        System.out.printf("%-10s %-10s %-10s %-10s %,15.0f\n",MaHD,MaKHTour,MaKHDat,MaNV,TongTien);
     }
    
 }

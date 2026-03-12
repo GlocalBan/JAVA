@@ -91,7 +91,7 @@ public class DsDiaDiem {
     }
     
     public boolean suaDiaDiem(DiaDiem dd){
-        String sql ="Update DiaDiem set TenDiaDiem=?,NgayThucHien=?,TongChi=? Value(?,?,?)";
+        String sql ="Update DiaDiem set TenDiaDiem=?,NgayThucHien=?,TongChi=? where Tendiadiem=?";
         
         try(Connection conn=KetNoiCSDL.getConnection();
                 PreparedStatement ps=conn.prepareStatement(sql)){
@@ -100,11 +100,30 @@ public class DsDiaDiem {
                 ps.setDate(2, Date.valueOf(dd.getNgayThucHien()));
             }
             ps.setFloat(3, dd.getTongChi());
-            
+            ps.setString(4, dd.getTenDiaDiem());
             return ps.executeUpdate()>0;
         }catch(SQLException e){
             e.printStackTrace();
         }
         return false;
+    }
+    
+    public ArrayList timdd(String tendd){
+        ArrayList<DTO.DiaDiem> ds=new ArrayList<>();
+        String sql ="Select * from Diadiem where tendiadiem like ?";
+        try(Connection conn= KetNoiCSDL.getConnection();
+                PreparedStatement ps=conn.prepareStatement(sql)){
+            ps.setString(1, "%" + tendd + "%");
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){
+                DTO.DiaDiem dd=dd=maptoDiaDiem(rs);
+                ds.add(dd);
+            }   
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+        return ds;
     }
 }

@@ -20,6 +20,13 @@ public class DiaDiem {
         this.NgayThucHien = NgayThucHien;
         this.TongChi = TongChi;
     }
+    
+    public DiaDiem() {
+        this.TenDiaDiem = TenDiaDiem;
+        this.NgayThucHien = NgayThucHien;
+        this.TongChi = TongChi;
+    }
+    
     public String getTenDiaDiem() {
         return TenDiaDiem;
     }

@@ -7,6 +7,7 @@ package BUS;
 import DAO.DsCTietHD;
 import java.util.ArrayList;
 import DTO.CTietHD;
+import DAO.DsHoaDon;
 /**
  *
  * @author Nhat
@@ -52,21 +53,18 @@ public class CTHoaDonBus {
         return true;
     }
     
-    public boolean xoaCtietHd(CTietHD mact){
-        boolean flag=false;
-        if(timCtiethd(mact)==false){
-            flag=false;
-        } else{
-            ds.remove(mact);
-            flag=true;
+    public boolean xoaCtietHd(String mact,String makh){
+        DTO.CTietHD ct = timCt(mact, makh);
+                if (ct == null) {
+            return false;
         }
-        if(dao.TimHD(mact.getMaHD())==null){
-            flag=false;
-        }else {
-            dao.themCtietHD(mact);
-            flag=true;
+
+        if(dao.xoaCtietHd(mact, makh)) {
+            ds.remove(ct);
+            return true; 
         }
-        return flag;
+
+        return false;
     }
     
     public boolean suaCtiethd(CTietHD ct){
@@ -93,4 +91,24 @@ public class CTHoaDonBus {
         DAO.DsCTietHD dao=new DAO.DsCTietHD();
         return dao.getDstheoma(mahd);
     }
+    public float laygia(String mahd){
+        DAO.DsCTietHD daoCTietHD=new DAO.DsCTietHD();
+        return daoCTietHD.laygia(mahd);
+    }
+    
+    public ArrayList<DTO.CTietHD> timNangcao(String loai,String key){
+        ArrayList<DTO.CTietHD> ds =new ArrayList<>();
+        String tencot="";
+        if(loai.equals("Mã hóa đơn")){
+            tencot="mahd";
+        }
+        else if(loai.equals("Mã khách hàng")){
+            tencot="makhang";
+        }else{
+            return null;
+        }
+        return dao.timNangcao(tencot, key);
+    }
+    
+    
 }
