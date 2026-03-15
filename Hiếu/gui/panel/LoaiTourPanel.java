@@ -1,6 +1,5 @@
 package org.example.gui.panel;
 
-import org.apache.xmlbeans.impl.tool.StreamInstanceValidator;
 import org.example.bus._LoaiTourBUS;
 import org.example.dto._LoaiTourDTO;
 import org.example.gui.dialog._LoaiTourDialog;
@@ -26,7 +25,7 @@ public class _LoaiTourPanel extends JPanel {
     private TableRowSorter<DefaultTableModel> rowSorter;
 
     // define btn
-    private JButton addBtn, deleteBtn, editBtn, searchBtn, refreshBtn;
+    private JButton addBtn, deleteBtn, editBtn, refreshBtn;
 
     private ArrayList<_LoaiTourDTO> lsLoaiTour;
     private _LoaiTourBUS loaiTourBUS;
@@ -98,7 +97,7 @@ public class _LoaiTourPanel extends JPanel {
 
     public void initTable(){
         // columns of table
-        String[] columns = {"Mã loại tour", "Thể loại"};
+        String[] columns = {"Mã loại tour", "Thể loại", "Mô tả", "Trạng thái"};
 
         tableModel = new DefaultTableModel(columns, 0);
         table = new JTable(tableModel);
@@ -116,9 +115,17 @@ public class _LoaiTourPanel extends JPanel {
         lsLoaiTour = loaiTourBUS.getAllLoaiTour();
 
         for (_LoaiTourDTO lt : lsLoaiTour){
+            String trangThaiString;
+            if(lt.getTrangThai() == 1){
+                trangThaiString = "Đang hoạt đông";
+            }else{
+                trangThaiString = "Ngưng";
+            }
             tableModel.addRow(new Object[]{
                     lt.getMaLoaiTour(),
-                    lt.getTheLoai()
+                    lt.getTheLoai(),
+                    lt.getMoTa(),
+                    trangThaiString
             });
         }
     }
@@ -215,9 +222,17 @@ public class _LoaiTourPanel extends JPanel {
         tableModel.setRowCount(0);
 
         for(_LoaiTourDTO lt : list) {
+            String trangThaiString;
+            if(lt.getTrangThai() == 1){
+                trangThaiString = "Đang hoạt đông";
+            }else{
+                trangThaiString = "Ngưng";
+            }
             tableModel.addRow(new Object[]{
                     lt.getMaLoaiTour(),
-                    lt.getTheLoai()
+                    lt.getTheLoai(),
+                    lt.getMoTa(),
+                    trangThaiString
             });
         }
     }
