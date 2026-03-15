@@ -8,11 +8,14 @@ import java.awt.*;
 
 public class _LoaiTourDialog extends JDialog{
     // define label and txt
-    private JLabel jlbMaLoaiTour, jlbTheLoai;
-    private JTextField txtMaLoaiTour, txtTheLoai;
+    private JLabel jlbMaLoaiTour, jlbTheLoai, jlbMoTa, jlbTrangThai;
+    private JTextField txtMaLoaiTour, txtTheLoai, txtMoTa, txtTrangThai;
 
     // define btn
     private JButton saveBtn, cancelBtn;
+
+    // cmb trang thai
+    private JComboBox<String> cbTrangThai;
 
     private _LoaiTourDTO loaiTourDTO;
     private _LoaiTourBUS loaiTourBUS;
@@ -22,7 +25,7 @@ public class _LoaiTourDialog extends JDialog{
         this.loaiTourDTO = loaiTourDTO;
 
         setTitle(loaiTourDTO == null ? "Thêm loại Tour" : "Sửa loại Tour");
-        setSize(300, 140);
+        setSize(300, 240);
         setLocationRelativeTo(null);
         setModal(true);
 
@@ -41,7 +44,7 @@ public class _LoaiTourDialog extends JDialog{
     public void init(){
         setLayout(new BorderLayout());
 
-        JPanel panelForm = new JPanel(new GridLayout(2, 2, 10, 10));
+        JPanel panelForm = new JPanel(new GridLayout(4, 2, 10, 10));
 
         // Panel Buttons
         JPanel jpBtn = new JPanel(new FlowLayout());
@@ -68,6 +71,22 @@ public class _LoaiTourDialog extends JDialog{
         txtTheLoai = new JTextField();
         panelForm.add(txtTheLoai);
 
+        // row mo ta
+        jlbMoTa = new JLabel("Mô tả");
+        jlbMoTa.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
+        panelForm.add(jlbMoTa);
+        txtMoTa = new JTextField();
+        panelForm.add(txtMoTa);
+
+        // row trang thai
+        jlbTrangThai = new JLabel("Trạng thái");
+        jlbTrangThai.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
+        panelForm.add(jlbTrangThai);
+
+        String[] status = {"Đang hoạt động", "Ngưng"};
+        cbTrangThai = new JComboBox<>(status);
+        panelForm.add(cbTrangThai);
+
         add(panelForm, BorderLayout.CENTER);
         add(jpBtn, BorderLayout.SOUTH);
     }
@@ -93,13 +112,20 @@ public class _LoaiTourDialog extends JDialog{
                 if(loaiTourBUS.existedLoaiTourWithID(txtMaLoaiTour.getText()))
                     JOptionPane.showMessageDialog(null, "Mã loại tour đã tồn tại, vui lòng nhập mã khác!");
                 else {
-                    _LoaiTourDTO loaiMoi = new _LoaiTourDTO(txtMaLoaiTour.getText(), txtTheLoai.getText());
+                    // trang thai 
+                    int trangThaiValue = (cbTrangThai.getSelectedIndex() == 0) ? 1 : 0;
+                    
+                    _LoaiTourDTO loaiMoi = new _LoaiTourDTO(txtMaLoaiTour.getText(), txtTheLoai.getText(), txtMoTa.getText(), trangThaiValue);
                     loaiTourBUS.addLoaiTour(loaiMoi);
                     dispose();
                     JOptionPane.showMessageDialog(null, "Đã thêm");
                 }
             }else{
                 loaiTourDTO.setTheLoai(txtTheLoai.getText());
+                loaiTourDTO.setMoTa(txtMoTa.getText());
+                int trangThaiValue = (cbTrangThai.getSelectedIndex() == 0) ? 1 : 0;
+                loaiTourDTO.setTrangThai(trangThaiValue);
+
                 loaiTourBUS.editLoaiTour(loaiTourDTO);
                 dispose();
                 JOptionPane.showMessageDialog(this, "Chỉnh sửa thành công");
