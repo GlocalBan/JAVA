@@ -2,7 +2,7 @@ package org.example.dto;
 
 import java.time.LocalDate;
 
-public class KeHoachTourDTO {
+public class _KeHoachTourDTO {
     private String maKHTour;
     private LocalDate ngayKhoiHanh;
     private LocalDate ngayKetThuc;
@@ -12,7 +12,7 @@ public class KeHoachTourDTO {
     private String maTour;
     private String maNVHD;
 
-    public KeHoachTourDTO() {
+    public _KeHoachTourDTO() {
         this.maKHTour = "";
         this.ngayKhoiHanh = null;
         this.ngayKetThuc = null;
@@ -23,7 +23,7 @@ public class KeHoachTourDTO {
         this.maNVHD = "";
     }
 
-    public KeHoachTourDTO(String maKHTour, LocalDate ngayKhoiHanh, LocalDate ngayKetThuc, int tongSoVe, long tongChi, long tongThu, String maTour, String maNVHD) {
+    public _KeHoachTourDTO(String maKHTour, LocalDate ngayKhoiHanh, LocalDate ngayKetThuc, int tongSoVe, long tongChi, long tongThu, String maTour, String maNVHD) {
         this.maKHTour = maKHTour;
         this.ngayKhoiHanh = ngayKhoiHanh;
         this.ngayKetThuc = ngayKetThuc;
