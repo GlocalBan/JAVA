@@ -1,28 +1,26 @@
 package org.example.bus;
 
-import org.example.dao.TourDAO;
-import org.example.dto.LoaiTourDTO;
-import org.example.dto.TourDTO;
+import org.example.dao._TourDAO;
+import org.example.dto._TourDTO;
 
-import javax.swing.*;
 import java.util.ArrayList;
 
-public class TourBUS {
-    private ArrayList<TourDTO> lsTour;
-    private TourDAO tourDAO;
+public class _TourBUS {
+    private ArrayList<_TourDTO> lsTour;
+    private _TourDAO tourDAO;
 
     //constructor
-    public TourBUS(){
-        tourDAO = new TourDAO();
+    public _TourBUS(){
+        tourDAO = new _TourDAO();
         lsTour = new ArrayList<>();
     }
 
-    public ArrayList<TourDTO> getAllTours(){
+    public ArrayList<_TourDTO> getAllTours(){
         lsTour = tourDAO.getAllTours();
         return lsTour;
     }
 
-    public boolean addTour(TourDTO t){
+    public boolean addTour(_TourDTO t){
         if(t == null) return false;
 
         if(t.getSoNgay() <= 0 || t.getSoCho() < 0){
@@ -35,7 +33,7 @@ public class TourBUS {
         return success;
     }
 
-    public boolean editTour(TourDTO t){
+    public boolean editTour(_TourDTO t){
         if(t.getSoNgay() <= 0 || t.getSoCho() < 0)
             return false;
 
@@ -47,17 +45,17 @@ public class TourBUS {
     }
 
     public long totalCost(String maTour){
-        ArrayList<TourDTO> lsTour = getAllTours();
-        for (TourDTO t : lsTour) {
+        ArrayList<_TourDTO> lsTour = getAllTours();
+        for (_TourDTO t : lsTour) {
             if (t.getMaTour().equalsIgnoreCase(maTour))
                 return t.getSoNgay() * t.getDonGia();
         }
         return 0;
     }
 
-    public ArrayList<TourDTO> search(String keyWord){
-        ArrayList<TourDTO> list = new ArrayList<>();
-        for (TourDTO lt : lsTour){
+    public ArrayList<_TourDTO> search(String keyWord){
+        ArrayList<_TourDTO> list = new ArrayList<>();
+        for (_TourDTO lt : lsTour){
             if(lt.getTen().trim().toLowerCase().contains(keyWord)){
                 list.add(lt);
             }
@@ -65,9 +63,9 @@ public class TourBUS {
         return list;
     }
 
-    public TourDTO getByID(String maTour){
-        TourDTO tour = new TourDTO();
-        for (TourDTO t : lsTour){
+    public _TourDTO getByID(String maTour){
+        _TourDTO tour = new _TourDTO();
+        for (_TourDTO t : lsTour){
             if(t.getMaTour().trim().equalsIgnoreCase(maTour)){
                 tour = t;
                 break;
@@ -77,7 +75,7 @@ public class TourBUS {
     }
 
     public boolean existedTourWithID(String maTour){
-        for (TourDTO t : lsTour){
+        for (_TourDTO t : lsTour){
             if(t.getMaTour().trim().equalsIgnoreCase(maTour))
                 return true;
         }
