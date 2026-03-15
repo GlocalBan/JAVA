@@ -1,29 +1,28 @@
 package org.example.dao;
 
-import org.example.dto.KeHoachTourDTO;
+import org.example.dto._KeHoachTourDTO;
 
-import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class KeHoachTourDAO {
-    Connection c = MyConnection.getConnection();
+public class _KeHoachTourDAO {
+    Connection c = _MyConnection.getConnection();
     Statement st = null;
 
-    public KeHoachTourDAO(){
-        ArrayList<KeHoachTourDTO> lsKeHoachTour;
+    public _KeHoachTourDAO(){
+        ArrayList<_KeHoachTourDTO> lsKeHoachTour;
     }
 
     //get all ke hoach tours
-    public ArrayList<KeHoachTourDTO> getAllKeHoachTours(){
-        ArrayList<KeHoachTourDTO> lsKeHoachTour = new ArrayList<>();
+    public ArrayList<_KeHoachTourDTO> getAllKeHoachTours(){
+        ArrayList<_KeHoachTourDTO> lsKeHoachTour = new ArrayList<>();
         try {
             String sql = "select * from kehoachtour";
             PreparedStatement ps = c.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()){
-                KeHoachTourDTO t = new KeHoachTourDTO(
+                _KeHoachTourDTO t = new _KeHoachTourDTO(
                         rs.getString(1),
                         rs.getDate(2).toLocalDate(),
                         rs.getDate(3).toLocalDate(),
@@ -42,7 +41,7 @@ public class KeHoachTourDAO {
     }
 
     //add
-    public boolean addKeHoachTour(KeHoachTourDTO t){
+    public boolean addKeHoachTour(_KeHoachTourDTO t){
         try{
             String sql = "Insert into kehoachtour values(";
             sql += "'" +  t.getMaKHTour() + "'";
@@ -76,7 +75,7 @@ public class KeHoachTourDAO {
     }
 
     //edit
-    public boolean editKeHoachTour(KeHoachTourDTO t){
+    public boolean editKeHoachTour(_KeHoachTourDTO t){
         String id = t.getMaKHTour();
 
         try{
