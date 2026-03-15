@@ -1,36 +1,36 @@
 package org.example.dao;
 
-import org.example.dto.TourDTO;
+import org.example.dto._TourDTO;
 
-import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class TourDAO {
-    Connection c = MyConnection.getConnection();
+public class _TourDAO {
+    Connection c = _MyConnection.getConnection();
     Statement st = null;
 
-    public TourDAO(){
-        ArrayList<TourDTO> lsTour = new ArrayList<>();
+    public _TourDAO(){
+        ArrayList<_TourDTO> lsTour = new ArrayList<>();
     }
 
     //get all tours
-    public ArrayList<TourDTO> getAllTours(){
-        ArrayList<TourDTO> lsTour = new ArrayList<>();
+    public ArrayList<_TourDTO> getAllTours(){
+        ArrayList<_TourDTO> lsTour = new ArrayList<>();
         try {
             String sql = "select * from tour";
             PreparedStatement ps = c.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()){
-                TourDTO t = new TourDTO(
+                _TourDTO t = new _TourDTO(
                         rs.getString(1),
                         rs.getString(2),
                         rs.getInt(3),
                         rs.getLong(4),
                         rs.getInt(5),
                         rs.getString(6),
-                        rs.getString(7)
+                        rs.getString(7),
+                        rs.getString(8)
                 );
                 lsTour.add(t);
             }
@@ -41,21 +41,26 @@ public class TourDAO {
     }
 
     //add
-    public boolean addTour(TourDTO t){
-        try{
-            String sql = "Insert into tour values(";
-            sql += "'" +  t.getMaTour() + "'";
-            sql += ","  + "'" +  t.getTen() + "'";
-            sql += ","  + "'" +  t.getSoNgay() + "'";
-            sql += ","  + "'" +  t.getDonGia() + "'";
-            sql += ","  + "'" +  t.getSoCho() + "'";
-            sql += ","  + "'" +  t.getDiaDiemKhoiHanh() + "'";
-            sql += ","  + "'" +  t.getMaLoaiTour() + "'";
-            sql += ")";
-            st = c.createStatement();
-            st.executeUpdate(sql);
-            return true;
+    public boolean addTour(_TourDTO t){
+        String sql = "INSERT INTO tour (matour, ten, songay, dongia, socho, ddkhoihanh, imglink, maloaitour) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try {
+            PreparedStatement pst = c.prepareStatement(sql); // use PreparedStatement
+
+            pst.setString(1, t.getMaTour());
+            pst.setString(2, t.getTen());
+            pst.setInt(3, t.getSoNgay());
+            pst.setLong(4, t.getDonGia());
+            pst.setInt(5, t.getSoCho());
+            pst.setString(6, t.getDiaDiemKhoiHanh());
+            pst.setString(7, t.getImgLink());
+            pst.setString(8, t.getMaLoaiTour());
+
+            int rowAffected = pst.executeUpdate();
+            return rowAffected > 0;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -73,23 +78,22 @@ public class TourDAO {
         }
     }
 
-    //edit
-    public boolean editTour(TourDTO t){
-        String id = t.getMaTour();
+    // edit
+    public boolean editTour(_TourDTO t) {
+        String sql = "UPDATE tour SET ten=?, songay=?, dongia=?, socho=?, ddkhoihanh=?, imglink=?, maloaitour=? WHERE matour=?";
+        try {
+            PreparedStatement pst = c.prepareStatement(sql);
+            pst.setString(1, t.getTen());
+            pst.setInt(2, t.getSoNgay());
+            pst.setLong(3, t.getDonGia());
+            pst.setInt(4, t.getSoCho());
+            pst.setString(5, t.getDiaDiemKhoiHanh());
+            pst.setString(6, t.getImgLink());
+            pst.setString(7, t.getMaLoaiTour());
+            pst.setString(8, t.getMaTour());
 
-        try{
-            String qry = "update tour set ";
-            qry += "ten = " + "'" + t.getTen() + "'";
-            qry += ",songay = " + "'" + t.getSoNgay() + "'";
-            qry += ",dongia = " + "'" + t.getDonGia() + "'";
-            qry += ",socho = " + "'" + t.getSoCho() + "'";
-            qry += ",ddkhoihanh = " + "'" + t.getDiaDiemKhoiHanh() + "'";
-            qry += ",ddkhoihanh = " + "'" + t.getMaLoaiTour() + "'";
-            qry += "where matour = '" + id + "';";
-            st = c.createStatement();
-            st.executeUpdate(qry);
-            return true;
-        }catch (SQLException e){
+            return pst.executeUpdate() > 0;
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
