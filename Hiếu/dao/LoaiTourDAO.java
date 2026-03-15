@@ -25,7 +25,9 @@ public class _LoaiTourDAO {
             while(rs.next()){
                 _LoaiTourDTO t = new _LoaiTourDTO(
                         rs.getString(1),
-                        rs.getString(2)
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getInt(4)
                 );
                 lsCate.add(t);
             }
@@ -42,6 +44,8 @@ public class _LoaiTourDAO {
             String sql = "Insert into loaitour values(";
             sql += "'" +  t.getMaLoaiTour() + "'";
             sql += ","  + "'" +  t.getTheLoai() + "'";
+            sql += ","  + "'" +  t.getMoTa() + "'";
+            sql += ","  + "'" +  t.getTrangThai() + "'";
             sql += ")";
             st = c.createStatement();
             st.executeUpdate(sql);
@@ -67,10 +71,11 @@ public class _LoaiTourDAO {
     //edit
     public boolean editLoaiTour(_LoaiTourDTO t){
         String id = t.getMaLoaiTour();
-
         try{
             String qry = "update loaitour set ";
             qry += "theloai = '" + t.getTheLoai() + "'";
+            qry += ",mota = '" + t.getMoTa() + "'";
+            qry += ",trangthai = '" + t.getTrangThai() + "'";
             qry += "where maloaitour = '" + id + "';";
             st = c.createStatement();
             st.executeUpdate(qry);
