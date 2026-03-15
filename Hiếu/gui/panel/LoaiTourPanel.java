@@ -1,25 +1,38 @@
 package org.example.gui.panel;
 
-import org.example.bus.LoaiTourBUS;
-import org.example.dto.LoaiTourDTO;
-import org.example.gui.dialog.LoaiTourDialog;
+import org.apache.xmlbeans.impl.tool.StreamInstanceValidator;
+import org.example.bus._LoaiTourBUS;
+import org.example.dto._LoaiTourDTO;
+import org.example.gui.dialog._LoaiTourDialog;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class LoaiTourPanel extends JPanel {
-    private JTable table;
-    private LoaiTourBUS loaiTourBUS;
+public class _LoaiTourPanel extends JPanel {
+    // txt field
     private JTextField txtSearch;
-    private DefaultTableModel tableModel;
-    private JScrollPane scrollPane;
-    private JButton addBtn, deleteBtn, editBtn, searchBtn, refreshBtn;
-    private ArrayList<LoaiTourDTO> lsLoaiTour;
 
-    public LoaiTourPanel(){
-        loaiTourBUS = new LoaiTourBUS();
+    // define panel
+    private JPanel northPanel, southPanel, searchPanel;
+
+    // relate to table
+    private JTable table;
+    private JScrollPane scrollPane;
+    private DefaultTableModel tableModel;
+    private TableRowSorter<DefaultTableModel> rowSorter;
+
+    // define btn
+    private JButton addBtn, deleteBtn, editBtn, searchBtn, refreshBtn;
+
+    private ArrayList<_LoaiTourDTO> lsLoaiTour;
+    private _LoaiTourBUS loaiTourBUS;
+
+    public _LoaiTourPanel(){
+        loaiTourBUS = new _LoaiTourBUS();
         init();
         loadTable();
         hasSelectedRow();
@@ -29,20 +42,38 @@ public class LoaiTourPanel extends JPanel {
         setLayout(new BorderLayout());
 
         //North Panel
-        JPanel northPanel = new JPanel(new BorderLayout());
+        northPanel = new JPanel(new BorderLayout());
         JLabel lblTitle = new JLabel("QUẢN LÝ LOẠI TOUR", JLabel.CENTER);
         lblTitle.setFont(new Font("Arial", Font.BOLD, 18));
         northPanel.add(lblTitle, BorderLayout.NORTH);
 
+
         // Search panel
-        JPanel searchPanel = new JPanel();
+        searchPanel = new JPanel();
 
-        txtSearch = new JTextField(20);
-        searchPanel.add(new JLabel("Tìm kiếm theo thể loại:"));
-        searchPanel.add(txtSearch);
+        // titleBorder
+        TitledBorder titleSearch = BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(Color.CYAN, 2), " TÌM KIẾM LOẠI TOUR "
+        );
+        titleSearch.setTitleFont(new Font("Arial", Font.BOLD, 14));
+        titleSearch.setTitleColor(new Color(0, 102, 204));
+        searchPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createEmptyBorder(20, 10, 20, 10),
+                titleSearch)
+        );
 
-        search(); // search button
-        searchPanel.add(searchBtn);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10); // Khoảng cách giữa các ô
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // column 1 : type label
+        gbc.gridx = 0; gbc.gridy = 0;
+        searchPanel.add(new JLabel("Tìm kiếm theo thể loại:"), gbc);
+
+        txtSearch = new JTextField(15);
+        txtSearch.addCaretListener(e -> searchByType());
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        searchPanel.add(txtSearch, gbc);
 
         northPanel.add(searchPanel, BorderLayout.CENTER);
 
@@ -50,7 +81,7 @@ public class LoaiTourPanel extends JPanel {
         initTable();
 
         //South Panel
-        JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
+        southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
         add(); // add button
         southPanel.add(addBtn);
         delete(); // delete button
@@ -66,19 +97,25 @@ public class LoaiTourPanel extends JPanel {
     }
 
     public void initTable(){
+        // columns of table
         String[] columns = {"Mã loại tour", "Thể loại"};
 
         tableModel = new DefaultTableModel(columns, 0);
         table = new JTable(tableModel);
         table.setDefaultEditor(Object.class, null);
+
+        rowSorter = new TableRowSorter<>(tableModel);
+        table.setRowSorter(rowSorter);
+
         scrollPane = new JScrollPane(table);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
     }
 
     private void loadTable(){
         tableModel.setRowCount(0);
         lsLoaiTour = loaiTourBUS.getAllLoaiTour();
 
-        for (LoaiTourDTO lt : lsLoaiTour){
+        for (_LoaiTourDTO lt : lsLoaiTour){
             tableModel.addRow(new Object[]{
                     lt.getMaLoaiTour(),
                     lt.getTheLoai()
@@ -101,22 +138,19 @@ public class LoaiTourPanel extends JPanel {
         return btn;
     }
 
-    private void search(){
-        searchBtn = createBtn("Tìm", Color.CYAN);
-        searchBtn.addActionListener(e -> {
-            // Tìm kiếm theo thể loại
-            String keyWord = txtSearch.getText().trim().toLowerCase();
-            ArrayList<LoaiTourDTO> list = loaiTourBUS.search(keyWord);
+    private void searchByType(){
+        String keyWord = txtSearch.getText().trim().toLowerCase();
 
-            tableModel.setRowCount(0);
+        RowFilter<DefaultTableModel, Object> rf = new RowFilter<DefaultTableModel, Object>() {
+            @Override
+            public boolean include(Entry<? extends DefaultTableModel, ? extends Object> entry) {
+                boolean found = false;
+                found = entry.getStringValue(1).toLowerCase().contains(keyWord);
 
-            for (LoaiTourDTO lt : list){
-                tableModel.addRow(new Object[]{
-                        lt.getMaLoaiTour(),
-                        lt.getTheLoai()
-                });
+                return found;
             }
-        });
+        };
+        rowSorter.setRowFilter(rf);
     }
 
     private void add(){
@@ -124,8 +158,8 @@ public class LoaiTourPanel extends JPanel {
         addBtn.addActionListener(e -> openDiaLog(null));
     }
 
-    private void openDiaLog(LoaiTourDTO loaiTourDTO){
-        LoaiTourDialog loaiTourDialog = new LoaiTourDialog(loaiTourBUS, loaiTourDTO);
+    private void openDiaLog(_LoaiTourDTO loaiTourDTO){
+        _LoaiTourDialog loaiTourDialog = new _LoaiTourDialog(loaiTourBUS, loaiTourDTO);
         loaiTourDialog.setVisible(true);
         loadTable();
     }
@@ -163,7 +197,7 @@ public class LoaiTourPanel extends JPanel {
                 return;
             }
             String maLoaiTour = tableModel.getValueAt(row, 0).toString();
-            LoaiTourDTO lt = loaiTourBUS.getById(maLoaiTour);
+            _LoaiTourDTO lt = loaiTourBUS.getById(maLoaiTour);
             openDiaLog(lt);
         });
     }
@@ -172,15 +206,15 @@ public class LoaiTourPanel extends JPanel {
         refreshBtn = createBtn("Làm mới", Color.BLUE);
         refreshBtn.addActionListener(e -> {
             String keyWord = txtSearch.getText().trim().toLowerCase();
-            ArrayList<LoaiTourDTO> lsCate = loaiTourBUS.search(keyWord);
+            ArrayList<_LoaiTourDTO> lsCate = loaiTourBUS.search(keyWord);
             loadTableByName(lsCate);
         });
     }
 
-    private void loadTableByName(ArrayList<LoaiTourDTO> list){
+    private void loadTableByName(ArrayList<_LoaiTourDTO> list){
         tableModel.setRowCount(0);
 
-        for(LoaiTourDTO lt : list) {
+        for(_LoaiTourDTO lt : list) {
             tableModel.addRow(new Object[]{
                     lt.getMaLoaiTour(),
                     lt.getTheLoai()
