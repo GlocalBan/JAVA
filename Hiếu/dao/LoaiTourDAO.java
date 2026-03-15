@@ -1,30 +1,29 @@
 package org.example.dao;
 
-import org.example.dto.LoaiTourDTO;
-import org.example.dto.TourDTO;
+import org.example.dto._LoaiTourDTO;
+import org.example.dto._TourDTO;
 
-import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class LoaiTourDAO {
-    Connection c = MyConnection.getConnection();
+public class _LoaiTourDAO {
+    Connection c = _MyConnection.getConnection();
     Statement st = null;
 
-    public LoaiTourDAO(){
-        ArrayList<TourDTO> lsTour = new ArrayList<>();
+    public _LoaiTourDAO(){
+        ArrayList<_TourDTO> lsTour = new ArrayList<>();
     }
 
     //get all tours
-    public ArrayList<LoaiTourDTO> getAllLoaiTour(){
-        ArrayList<LoaiTourDTO> lsCate = new ArrayList<>();
+    public ArrayList<_LoaiTourDTO> getAllLoaiTour(){
+        ArrayList<_LoaiTourDTO> lsCate = new ArrayList<>();
         try {
             String sql = "select * from loaitour";
             PreparedStatement ps = c.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()){
-                LoaiTourDTO t = new LoaiTourDTO(
+                _LoaiTourDTO t = new _LoaiTourDTO(
                         rs.getString(1),
                         rs.getString(2)
                 );
@@ -38,7 +37,7 @@ public class LoaiTourDAO {
     }
 
     //add
-    public boolean addLoaiTour(LoaiTourDTO t){
+    public boolean addLoaiTour(_LoaiTourDTO t){
         try{
             String sql = "Insert into loaitour values(";
             sql += "'" +  t.getMaLoaiTour() + "'";
@@ -66,7 +65,7 @@ public class LoaiTourDAO {
     }
 
     //edit
-    public boolean editLoaiTour(LoaiTourDTO t){
+    public boolean editLoaiTour(_LoaiTourDTO t){
         String id = t.getMaLoaiTour();
 
         try{
