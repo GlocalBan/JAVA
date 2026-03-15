@@ -1,8 +1,7 @@
 package org.example.gui.dialog;
 
-import com.toedter.calendar.JDateChooser;
-import org.example.bus.KeHoachTourBUS;
-import org.example.dto.KeHoachTourDTO;
+import org.example.bus._KeHoachTourBUS;
+import org.example.dto._KeHoachTourDTO;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,17 +9,24 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class KeHoachTourDialog extends JDialog {
+public class _KeHoachTourDialog extends JDialog {
+    // define jlabel and txt
     private JLabel jlbMaKHTour, jlbNgayKhoiHanh, jlbNgayKetThuc, jlbTongSoVe, jlbTongChi, jlbTongThu, jlbMaTour, jlbMaNVHD;
     private JTextField txtMaKHTour, txtNgayKhoiHanh, txtNgayKetThuc, txtTongSoVe, txtTongChi, txtTongThu, txtMaTour, txtMaNVHD;
-    private JButton saveBtn, cancelBtn;
-    private KeHoachTourBUS keHoachTourBUS;
-    private KeHoachTourDTO keHoachTourDTO;
-    private String maTour;
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private LocalDate today;
 
-    public KeHoachTourDialog(KeHoachTourBUS keHoachTourBUS, KeHoachTourDTO keHoachTourDTO, String maTour) {
+    // define btn
+    private JButton saveBtn, cancelBtn;
+
+    private _KeHoachTourBUS keHoachTourBUS;
+    private _KeHoachTourDTO keHoachTourDTO;
+
+    private String maTour;
+
+    // formatter
+    private LocalDate today;
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+    public _KeHoachTourDialog(_KeHoachTourBUS keHoachTourBUS, _KeHoachTourDTO keHoachTourDTO, String maTour) {
         this.keHoachTourBUS = keHoachTourBUS;
         this.keHoachTourDTO = keHoachTourDTO;
         this.maTour = maTour;
@@ -172,9 +178,9 @@ public class KeHoachTourDialog extends JDialog {
                 if(keHoachTourBUS.existedKeHoachTourWithID(txtMaKHTour.getText()))
                     JOptionPane.showMessageDialog(null, "Mã kế hoạch tour đã tồn tại, vui lòng nhập mã khác!");
                 else{
-                    KeHoachTourDTO keHoachTourMoi = null;
+                    _KeHoachTourDTO keHoachTourMoi = null;
 
-                    keHoachTourMoi = new KeHoachTourDTO(
+                    keHoachTourMoi = new _KeHoachTourDTO(
                             txtMaKHTour.getText(), ngayKhoiHanh,
                             ngayKetThuc, tongSoVe,
                             tongChi, tongThu, txtMaTour.getText(), txtMaNVHD.getText()
