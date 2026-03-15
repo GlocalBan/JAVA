@@ -1,27 +1,25 @@
 package org.example.bus;
 
-import org.example.dao.LoaiTourDAO;
-import org.example.dto.LoaiTourDTO;
-import org.example.dto.TourDTO;
+import org.example.dao._LoaiTourDAO;
+import org.example.dto._LoaiTourDTO;
 
-import javax.swing.*;
 import java.util.ArrayList;
 
-public class LoaiTourBUS {
-    private ArrayList<LoaiTourDTO> lsCate;
-    private LoaiTourDAO loaiTourDAO;
+public class _LoaiTourBUS {
+    private ArrayList<_LoaiTourDTO> lsCate;
+    private _LoaiTourDAO loaiTourDAO;
 
-    public LoaiTourBUS(){
+    public _LoaiTourBUS(){
+        loaiTourDAO = new _LoaiTourDAO();
         lsCate = new ArrayList<>();
-        loaiTourDAO = new LoaiTourDAO();
     }
 
-    public ArrayList<LoaiTourDTO> getAllLoaiTour(){
+    public ArrayList<_LoaiTourDTO> getAllLoaiTour(){
         lsCate = loaiTourDAO.getAllLoaiTour();
         return lsCate;
     }
 
-    public boolean addLoaiTour(LoaiTourDTO cate){
+    public boolean addLoaiTour(_LoaiTourDTO cate){
         if(cate == null) return false;
 
         boolean success = loaiTourDAO.addLoaiTour(cate);
@@ -30,7 +28,7 @@ public class LoaiTourBUS {
         return success;
     }
 
-    public boolean editLoaiTour(LoaiTourDTO cate){
+    public boolean editLoaiTour(_LoaiTourDTO cate){
         return loaiTourDAO.editLoaiTour(cate);
     }
 
@@ -38,10 +36,10 @@ public class LoaiTourBUS {
         return loaiTourDAO.removeLoaiTour(maLoaiTour);
     }
 
-    public ArrayList<LoaiTourDTO> search(String keyWord){
-        ArrayList<LoaiTourDTO> list = new ArrayList<>();
+    public ArrayList<_LoaiTourDTO> search(String keyWord){
+        ArrayList<_LoaiTourDTO> list = new ArrayList<>();
 
-        for (LoaiTourDTO lt : lsCate){
+        for (_LoaiTourDTO lt : lsCate){
             if(lt.getTheLoai().trim().toLowerCase().contains(keyWord)){
                 list.add(lt);
             }
@@ -49,9 +47,10 @@ public class LoaiTourBUS {
         return list;
     }
 
-    public LoaiTourDTO getById(String maLoaiTour){
-        LoaiTourDTO result = new LoaiTourDTO();
-        for (LoaiTourDTO lt : lsCate){
+    public _LoaiTourDTO getById(String maLoaiTour){
+        _LoaiTourDTO result = null;
+        lsCate = loaiTourDAO.getAllLoaiTour();
+        for (_LoaiTourDTO lt : lsCate){
             if(lt.getMaLoaiTour().trim().equalsIgnoreCase(maLoaiTour)) {
                 result = lt;
                 break;
@@ -61,7 +60,7 @@ public class LoaiTourBUS {
     }
 
     public boolean existedLoaiTourWithID(String maLoaiTour){
-        for (LoaiTourDTO lt : lsCate){
+        for (_LoaiTourDTO lt : lsCate){
             if(lt.getMaLoaiTour().trim().equalsIgnoreCase(maLoaiTour))
                 return true;
         }
