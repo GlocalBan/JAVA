@@ -33,7 +33,6 @@ public class CalendarKMPanel extends JPanel {
 
         bus = new CTrinhKMBUS();
 
-        // ===== HEADER =====
         JPanel header = new JPanel(new BorderLayout());
 
         JPanel top = new JPanel(new BorderLayout());
@@ -42,8 +41,7 @@ public class CalendarKMPanel extends JPanel {
 
         lblMonth = new JLabel("", JLabel.CENTER);
         lblMonth.setFont(new Font("Arial", Font.BOLD, 18));
-
-        // Panel control (Today + Next KM + Prev KM)
+        //control
         JPanel controlPanel = new JPanel();
 
         JButton btnToday = new JButton("Today");
@@ -58,7 +56,6 @@ public class CalendarKMPanel extends JPanel {
         top.add(lblMonth, BorderLayout.CENTER);
         top.add(btnNext, BorderLayout.EAST);
 
-        // SEARCH
         txtSearch = new JTextField();
         txtSearch.setBorder(BorderFactory.createTitledBorder("🔍 Tìm theo mã, tên, trạng thái"));
 
@@ -68,19 +65,16 @@ public class CalendarKMPanel extends JPanel {
 
         add(header, BorderLayout.NORTH);
 
-        // ===== CALENDAR =====
         calendarPanel = new JPanel(new GridLayout(7,7,5,5));
         calendarPanel.setBackground(Color.WHITE);
         add(calendarPanel, BorderLayout.CENTER);
 
-        // INIT DATE
         LocalDate now = LocalDate.now();
         month = now.getMonthValue();
         year = now.getYear();
 
         loadCalendar();
 
-        // ===== EVENTS =====
         btnPrev.addActionListener(e -> changeMonth(-1));
         btnNext.addActionListener(e -> changeMonth(1));
 
@@ -128,7 +122,6 @@ public class CalendarKMPanel extends JPanel {
         });
     }
 
-    // ===== ĐỔI THÁNG =====
     private void changeMonth(int delta){
         month += delta;
 
@@ -138,7 +131,6 @@ public class CalendarKMPanel extends JPanel {
         loadCalendar();
     }
 
-    // ===== LOAD CALENDAR =====
     private void loadCalendar(){
 
         bus.docDsCTrinhKM();
@@ -218,7 +210,6 @@ public class CalendarKMPanel extends JPanel {
         calendarPanel.repaint();
     }
 
-    // ===== PANEL NGÀY =====
     private JPanel createDayPanel(int day){
 
         JPanel panel = new JPanel(new BorderLayout());
@@ -299,14 +290,12 @@ public class CalendarKMPanel extends JPanel {
         return panel;
     }
 
-    // ===== NHẢY KM =====
     private void jumpToKM(CTrinhKMDTO km){
         month = km.getNgayBD().getMonthValue();
         year = km.getNgayBD().getYear();
         loadCalendar();
     }
 
-    // ===== NORMALIZE =====
     private String normalize(String s){
         if(s == null) return "";
         return Normalizer.normalize(s, Normalizer.Form.NFD)
@@ -314,12 +303,10 @@ public class CalendarKMPanel extends JPanel {
                 .toLowerCase();
     }
 
-    // ===== CHECK DATE =====
     private boolean isInRange(LocalDate d, LocalDate s, LocalDate e){
         return (!d.isBefore(s) && !d.isAfter(e));
     }
 
-    // ===== DETAIL =====
     private void showDetail(LocalDate date){
 
         StringBuilder detail = new StringBuilder("📅 Khuyến mãi ngày " + date + ":\n\n");
