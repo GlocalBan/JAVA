@@ -86,12 +86,19 @@ public class DiaDiemBUS {
         return true;
     }
     
-    public ArrayList timdd(String tendd){
+    public ArrayList<DiaDiemDTO> timdd(String tendd){
         tendd=tendd.trim();
         
         if(tendd.isEmpty()){
             return dao.getDs();  
         }
         return dao.timdd(tendd);
+    }
+    
+    public ArrayList<DiaDiemDTO> getDstheongay(java.util.Date ngay){
+        if(ngay==null){
+            return null;
+    }
+        return dao.getDstheongay(ngay);
     }
 }

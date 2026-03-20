@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.example.dto.*;
+import org.example.helper.*;
+import org.example.bus.*;
 
 /**
  *
@@ -16,14 +18,14 @@ import org.example.dto.*;
  */
 public class CTHoaDonPanel extends javax.swing.JPanel {
     private DefaultTableModel model;
-    private org.example.bus.CTHoaDonBUS bus;
+    private CTHoaDonBUS bus;
     private int soluongcanxoa=0;
     /**
      * Creates new form CTHoaDonN
      */
     public CTHoaDonPanel() {
         initComponents();
-        bus=new org.example.bus.CTHoaDonBUS();
+        bus=new CTHoaDonBUS();
         bus.docDs();
         model=(DefaultTableModel) tblcthd.getModel();
         tblcthd.isCellEditable(ERROR, WIDTH);
@@ -32,11 +34,10 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
 
     public CTHoaDonPanel(String mahd) {
         initComponents();
-        bus=new org.example.bus.CTHoaDonBUS();
-        txtname.setText("Chi tiết hóa đơn của hóa đơn: "+mahd);
+        bus=new CTHoaDonBUS();
+        lbname.setText("Chi tiết hóa đơn của hóa đơn: "+mahd);
         model=(DefaultTableModel) tblcthd.getModel();
         txttim.setVisible(false);
-        btntim.setVisible(false);
         cbtim.setVisible(false);
         btnthem.setVisible(false);
         btnxoa.setVisible(false);
@@ -47,11 +48,10 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
     
         public CTHoaDonPanel(String mahd,int vedu) {
         initComponents();
-        bus=new org.example.bus.CTHoaDonBUS();
-        txtname.setText("Chi tiết hóa đơn của hóa đơn: "+mahd);
+        bus=new CTHoaDonBUS();
+        lbname.setText("Chi tiết hóa đơn của hóa đơn: "+mahd);
         model=(DefaultTableModel) tblcthd.getModel();
         txttim.setVisible(false);
-        btntim.setVisible(false);
         cbtim.setVisible(false);
         btnthem.setVisible(false);
         btnxoa.setVisible(false);
@@ -60,7 +60,7 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
         if(vedu>0){
             this.soluongcanxoa=vedu;
             btnxoa.setVisible(true);
-            txtname.setText("Cần xóa thêm "+vedu+" VÉ");
+            lbname.setText("Cần xóa thêm "+vedu+" VÉ");
         }else{
             btnxoa.setVisible(true);
         }
@@ -70,8 +70,8 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
     private void loaddata(){
         model.setRowCount(0);
         DefaultTableModel model=(DefaultTableModel) tblcthd.getModel();
-        ArrayList<org.example.dto.CTietHDDTO> ds= org.example.bus.CTHoaDonBUS.getDs();
-        for(org.example.dto.CTietHDDTO cthd:ds){
+        ArrayList<CTietHDDTO> ds= CTHoaDonBUS.getDs();
+        for(CTietHDDTO cthd:ds){
             model.addRow(new Object[]{
                 cthd.getMaHD(),cthd.getMaKHDi(),String.format("%.0f", cthd.getGiaVe())
             });
@@ -79,14 +79,14 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
        
     }
     
-    private void loaddata(ArrayList<org.example.dto.CTietHDDTO> ds){
+    private void loaddata(ArrayList<CTietHDDTO> ds){
         model.setRowCount(0);
         String loai =cbtim.getSelectedItem().toString();
         String key=txttim.getText().toString().trim();
         ds= bus.timNangcao(loai, key);
-        for(org.example.dto.CTietHDDTO cthd:ds){
+        for(CTietHDDTO cthd:ds){
             model.addRow(new Object[]{
-                cthd.getMaHD(),cthd.getMaKHDi(),cthd.getGiaVe()
+                cthd.getMaHD(),cthd.getMaKHDi(),String.format("%.0f", cthd.getGiaVe())
             });
         }
     }
@@ -96,12 +96,12 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
         this.model.setRowCount(0);
         
         try{
-            org.example.bus.CTHoaDonBUS bus=new org.example.bus.CTHoaDonBUS();
-            ArrayList<org.example.dto.CTietHDDTO> ds=bus.getDstheoma(mahd);
+            CTHoaDonBUS bus=new CTHoaDonBUS();
+            ArrayList<CTietHDDTO> ds=bus.getDstheoma(mahd);
             if(ds!=null){
-                for(org.example.dto.CTietHDDTO cthd:ds){
+                for(CTietHDDTO cthd:ds){
                     model.addRow(new Object[]{
-                        cthd.getMaHD(),cthd.getMaKHDi(),cthd.getGiaVe()
+                        cthd.getMaHD(),cthd.getMaKHDi(),String.format("%.0f", cthd.getGiaVe())
                     });
                 }
             }
@@ -119,47 +119,100 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        txtname = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
+        pnlheader = new javax.swing.JPanel();
+        lbname = new javax.swing.JLabel();
+        pnlsearch = new javax.swing.JPanel();
+        lbtim = new javax.swing.JLabel();
         cbtim = new javax.swing.JComboBox<>();
         txttim = new javax.swing.JTextField();
-        btntim = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblcthd = new javax.swing.JTable();
-        jPanel3 = new javax.swing.JPanel();
+        pnltable = new javax.swing.JPanel();
         btnthem = new javax.swing.JButton();
         btnxoa = new javax.swing.JButton();
         btnsua = new javax.swing.JButton();
         btnreset = new javax.swing.JButton();
         btnxuat = new javax.swing.JButton();
+        pnlfooter = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblcthd = new javax.swing.JTable();
 
         setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setLayout(new java.awt.BorderLayout());
+        pnlheader.setLayout(new java.awt.BorderLayout());
 
-        txtname.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        txtname.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        txtname.setText("Quản lý Chi tiết hóa đơn");
-        jPanel1.add(txtname, java.awt.BorderLayout.CENTER);
+        lbname.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        lbname.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbname.setText("Quản lý Chi tiết hóa đơn");
+        pnlheader.add(lbname, java.awt.BorderLayout.CENTER);
+
+        lbtim.setText("Tìm theo:");
+        pnlsearch.add(lbtim);
 
         cbtim.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã hóa đơn", "Mã khách hàng" }));
-        jPanel2.add(cbtim);
+        pnlsearch.add(cbtim);
 
         txttim.setColumns(20);
-        jPanel2.add(txttim);
-
-        btntim.setText("Tìm");
-        btntim.addActionListener(new java.awt.event.ActionListener() {
+        txttim.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btntimActionPerformed(evt);
+                txttimActionPerformed(evt);
             }
         });
-        jPanel2.add(btntim);
+        txttim.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txttimKeyReleased(evt);
+            }
+        });
+        pnlsearch.add(txttim);
 
-        jPanel1.add(jPanel2, java.awt.BorderLayout.PAGE_END);
+        pnlheader.add(pnlsearch, java.awt.BorderLayout.PAGE_END);
 
-        add(jPanel1, java.awt.BorderLayout.PAGE_START);
+        add(pnlheader, java.awt.BorderLayout.PAGE_START);
+
+        btnthem.setText("Thêm");
+        btnthem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnthemActionPerformed(evt);
+            }
+        });
+        pnltable.add(btnthem);
+
+        btnxoa.setText("Xóa");
+        btnxoa.setEnabled(false);
+        btnxoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnxoaActionPerformed(evt);
+            }
+        });
+        pnltable.add(btnxoa);
+
+        btnsua.setText("Chỉnh sửa");
+        btnsua.setEnabled(false);
+        btnsua.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnsuaActionPerformed(evt);
+            }
+        });
+        pnltable.add(btnsua);
+
+        btnreset.setText("Làm mới");
+        btnreset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnresetActionPerformed(evt);
+            }
+        });
+        pnltable.add(btnreset);
+
+        btnxuat.setText("Xuất excel");
+        btnxuat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnxuatActionPerformed(evt);
+            }
+        });
+        pnltable.add(btnxuat);
+
+        add(pnltable, java.awt.BorderLayout.PAGE_END);
+
+        pnlfooter.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 10, 1, 10));
+        pnlfooter.setLayout(new java.awt.BorderLayout());
 
         tblcthd.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -180,58 +233,11 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        tblcthd.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblcthdMouseClicked(evt);
-            }
-        });
         jScrollPane1.setViewportView(tblcthd);
 
-        add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        pnlfooter.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        btnthem.setText("Thêm");
-        btnthem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnthemActionPerformed(evt);
-            }
-        });
-        jPanel3.add(btnthem);
-
-        btnxoa.setText("Xóa");
-        btnxoa.setEnabled(false);
-        btnxoa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnxoaActionPerformed(evt);
-            }
-        });
-        jPanel3.add(btnxoa);
-
-        btnsua.setText("Chỉnh sửa");
-        btnsua.setEnabled(false);
-        btnsua.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnsuaActionPerformed(evt);
-            }
-        });
-        jPanel3.add(btnsua);
-
-        btnreset.setText("Làm mới");
-        btnreset.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnresetActionPerformed(evt);
-            }
-        });
-        jPanel3.add(btnreset);
-
-        btnxuat.setText("Xuất excel");
-        btnxuat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnxuatActionPerformed(evt);
-            }
-        });
-        jPanel3.add(btnxuat);
-
-        add(jPanel3, java.awt.BorderLayout.PAGE_END);
+        add(pnlfooter, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnthemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnthemActionPerformed
@@ -262,30 +268,15 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
                 if(soluongcanxoa>0){
                     soluongcanxoa--;
                     if(soluongcanxoa>0){
-                        txtname.setText("Cần xóa thêm "+soluongcanxoa+" VÉ");
+                        lbname.setText("Cần xóa thêm "+soluongcanxoa+" VÉ");
                         
                     }else{
-                        txtname.setText("Đã xóa đủ");
+                        lbname.setText("Đã xóa đủ");
                     }
                 }
             }
         }
     }//GEN-LAST:event_btnxoaActionPerformed
-
-    private void btntimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btntimActionPerformed
-        // TODO add your handling code here:
-              String tim =txttim.getText().toString().trim();
-      
-        String loai= cbtim.getSelectedItem().toString();
-        
-        if(tim.isEmpty()){
-            model.setRowCount(0);
-            return;
-        }else {
-        loaddata(bus.timNangcao(loai, tim));
-        }
-        
-    }//GEN-LAST:event_btntimActionPerformed
 
     private void btnresetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnresetActionPerformed
         // TODO add your handling code here:
@@ -294,52 +285,53 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
 
     private void btnxuatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnxuatActionPerformed
         // TODO add your handling code here:
-        org.example.helper.ExcelHelper.xuatExcel(tblcthd, this, "Danh sách chi tiết hóa đơn");
+        ExcelHelper.xuatExcel(tblcthd, this, "Danh sách chi tiết hóa đơn");
     }//GEN-LAST:event_btnxuatActionPerformed
 
     private void btnsuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsuaActionPerformed
         // TODO add your handling code here:
         int row=tblcthd.getSelectedRow();
-        if(row!=-1){
+        if(row<0){
+            return;
+        }else{
             String mact =tblcthd.getValueAt(row, 0).toString().trim();
             String makh =tblcthd.getValueAt(row, 1).toString().trim();
             CTietHDDTO ct=bus.timCt(mact, makh);
             
-            CTHoaDonDialog ctpn=new CTHoaDonDialog();
+            CTHoaDonDialog ctpn=new CTHoaDonDialog(ct);       
+            ctpn.setModal(true);
+            ctpn.setVisible(true);
         }
     }//GEN-LAST:event_btnsuaActionPerformed
 
-    private void tblcthdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblcthdMouseClicked
+    private void txttimKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txttimKeyReleased
         // TODO add your handling code here:
-        int row=tblcthd.getSelectedRow();
-        if(row!=-1){
-            btnsua.setEnabled(true);
-            btnxoa.setEnabled(true);
-            
-            if(evt.getClickCount()==2){
-                int cf=JOptionPane.showConfirmDialog(this, "Bạn có muốn xuất excel dòng này không?");
-                if(cf==JOptionPane.YES_OPTION){
-                    org.example.helper.ExcelHelper.xuatExcel1Dong(tblcthd, row, jPanel1, "Chi tiết hóa đơn:"+tblcthd.getValueAt(row, 0).toString().trim());
-                }
-            }
-        }
-    }//GEN-LAST:event_tblcthdMouseClicked
+        String tim=lbname.getText().trim();
+        String loai=cbtim.getSelectedItem().toString().trim();
+        loaddata(bus.timNangcao(loai, tim));
+
+    }//GEN-LAST:event_txttimKeyReleased
+
+    private void txttimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txttimActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txttimActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnreset;
     private javax.swing.JButton btnsua;
     private javax.swing.JButton btnthem;
-    private javax.swing.JButton btntim;
     private javax.swing.JButton btnxoa;
     private javax.swing.JButton btnxuat;
     private javax.swing.JComboBox<String> cbtim;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbname;
+    private javax.swing.JLabel lbtim;
+    private javax.swing.JPanel pnlfooter;
+    private javax.swing.JPanel pnlheader;
+    private javax.swing.JPanel pnlsearch;
+    private javax.swing.JPanel pnltable;
     private javax.swing.JTable tblcthd;
-    private javax.swing.JLabel txtname;
     private javax.swing.JTextField txttim;
     // End of variables declaration//GEN-END:variables
 }

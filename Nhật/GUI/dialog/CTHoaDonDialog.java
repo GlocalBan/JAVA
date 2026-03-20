@@ -5,7 +5,6 @@
 package org.example.gui.dialog;
 
 import java.awt.event.KeyAdapter;
-import org.example.dto.CTietHDDTO;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,7 @@ import org.example.dto.*;
  * @author Nhat
  */
 public class CTHoaDonDialog extends javax.swing.JDialog {
-    private org.example.bus.CTHoaDonBUS bus;
+    private CTHoaDonBUS bus;
     private HoaDonBUS hdbus;
     private KhachHangBUS khbus;
     /**
@@ -33,12 +32,22 @@ public class CTHoaDonDialog extends javax.swing.JDialog {
         initComponents();
         loadCbox();
         this.setTitle("Chi tiết hóa đơn");
-        this.bus=new org.example.bus.CTHoaDonBUS();
+        this.bus=new CTHoaDonBUS();
         this.setLocationRelativeTo(null);
     }
+    
+     public CTHoaDonDialog(CTietHDDTO ct) {
+        initComponents();
+        loadCbox(ct);
+        this.setTitle("Chi tiết hóa đơn");
+        this.bus=new CTHoaDonBUS();
+        this.setLocationRelativeTo(null);
+    }
+     
         public void loadCbox(){
         this.hdbus=new HoaDonBUS();
         this.khbus =new KhachHangBUS();
+        this.bus =new CTHoaDonBUS();
         ArrayList<KhachHang> dskh =KhachHangBUS.dsKH;
         ArrayList<HoaDonDTO> dshd =HoaDonBUS.ds;
         List<String> dsMa = new ArrayList<>();
@@ -54,6 +63,29 @@ public class CTHoaDonDialog extends javax.swing.JDialog {
         setupAutoComplete(cbmakh, dsMa);
     }
     
+        public void loadCbox(CTietHDDTO ct){
+        this.hdbus=new HoaDonBUS();
+        this.khbus =new KhachHangBUS();
+        this.bus =new CTHoaDonBUS();
+        ArrayList<KhachHang> dskh =KhachHangBUS.dsKH;
+        ArrayList<HoaDonDTO> dshd =HoaDonBUS.ds;
+        List<String> dsMa = new ArrayList<>();
+        
+        for(HoaDonDTO hd: dshd){
+            dsMa.add(hd.getMaHD());
+        }
+        setupAutoComplete(cbmahd, dsMa);
+        dsMa=new ArrayList<>();
+        for(KhachHang kh:dskh){
+            dsMa.add(kh.getMaKH());
+        }
+        setupAutoComplete(cbmakh, dsMa);
+        cbmahd.setSelectedItem(ct.getMaHD());
+        cbmakh.setSelectedItem(ct.getMaKHDi());
+        txtgiave.setText(String.format("%.0f", bus.laygia(ct.getMaHD())));
+
+    }
+        
     public void setupAutoComplete(JComboBox<String> cbx, List<String> data) {
     cbx.setEditable(true);
     cbx.setModel(new DefaultComboBoxModel<>(data.toArray(new String[0])));
@@ -94,9 +126,9 @@ public class CTHoaDonDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lbmahd = new javax.swing.JLabel();
+        lbmakh = new javax.swing.JLabel();
+        lbgiave = new javax.swing.JLabel();
         txtgiave = new javax.swing.JTextField();
         btnluu = new javax.swing.JButton();
         btnreset = new javax.swing.JButton();
@@ -105,11 +137,11 @@ public class CTHoaDonDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setText("Mã hóa đơn");
+        lbmahd.setText("Mã hóa đơn");
 
-        jLabel2.setText("Mã khách hàng đi");
+        lbmakh.setText("Mã khách hàng đi");
 
-        jLabel3.setText("Giá vé");
+        lbgiave.setText("Giá vé");
 
         txtgiave.setToolTipText("");
         txtgiave.setEnabled(false);
@@ -135,6 +167,17 @@ public class CTHoaDonDialog extends javax.swing.JDialog {
         btnreset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnresetActionPerformed(evt);
+            }
+        });
+
+        cbmahd.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbmahdItemStateChanged(evt);
+            }
+        });
+        cbmahd.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                cbmahdFocusLost(evt);
             }
         });
 
@@ -166,9 +209,9 @@ public class CTHoaDonDialog extends javax.swing.JDialog {
                 .addGroup(layout.createSequentialGroup()
                     .addGap(21, 21, 21)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lbmahd, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lbmakh, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lbgiave, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addContainerGap(132, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
@@ -188,11 +231,11 @@ public class CTHoaDonDialog extends javax.swing.JDialog {
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(94, 94, 94)
-                    .addComponent(jLabel1)
+                    .addComponent(lbmahd)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addComponent(jLabel2)
+                    .addComponent(lbmakh)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jLabel3)
+                    .addComponent(lbgiave)
                     .addContainerGap(101, Short.MAX_VALUE)))
         );
 
@@ -212,8 +255,8 @@ public class CTHoaDonDialog extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(this, "Lỗi chưa nhập mã hóa đơn");
                 return;
             }
-           org.example.dto.CTietHDDTO cthd=new org.example.dto.CTietHDDTO(ma, makh,Float.parseFloat(txtgiave.getText()));
-        org.example.dto.CTietHDDTO kt=bus.timCt(ma,cbmahd.getSelectedItem().toString().trim());
+            CTietHDDTO cthd=new CTietHDDTO(ma, makh,Float.parseFloat(txtgiave.getText()));
+            CTietHDDTO kt=bus.timCt(ma,cbmahd.getSelectedItem().toString().trim());
         
         if(kt!=null){
             if(bus.suaCtiethd(cthd)){
@@ -226,7 +269,7 @@ public class CTHoaDonDialog extends javax.swing.JDialog {
                 return;
             }
         }else{
-            ArrayList<org.example.dto.CTietHDDTO> ds=new ArrayList<>();
+            ArrayList<CTietHDDTO> ds=new ArrayList<>();
             if(bus.themCTietHd(cthd)){
                 resetField();
                 JOptionPane.showMessageDialog(this, "Thêm thành công");
@@ -255,6 +298,19 @@ public class CTHoaDonDialog extends javax.swing.JDialog {
     private void cbmakhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbmakhActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cbmakhActionPerformed
+
+    private void cbmahdFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbmahdFocusLost
+        // TODO add your handling code here:
+        String mahd =cbmahd.getSelectedItem().toString().trim();
+        System.out.println(mahd);
+        txtgiave.setText(String.format("%.0f", bus.laygia(mahd)));
+    }//GEN-LAST:event_cbmahdFocusLost
+
+    private void cbmahdItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbmahdItemStateChanged
+        // TODO add your handling code here:
+        String mahd = cbmahd.getSelectedItem().toString().trim();
+        txtgiave.setText(String.format("%.0f", bus.laygia(mahd)));
+    }//GEN-LAST:event_cbmahdItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -303,9 +359,9 @@ public class CTHoaDonDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnreset;
     private javax.swing.JComboBox<String> cbmahd;
     private javax.swing.JComboBox<String> cbmakh;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel lbgiave;
+    private javax.swing.JLabel lbmahd;
+    private javax.swing.JLabel lbmakh;
     private javax.swing.JTextField txtgiave;
     // End of variables declaration//GEN-END:variables
 }
