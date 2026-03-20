@@ -7,6 +7,7 @@ import org.example.dao.HoaDonDAO;
 import org.example.dto.CTietHDDTO;
 import org.example.dto.HoaDonDTO;
 import java.util.ArrayList;
+import java.time.LocalDate;
 
 /**
  *
@@ -112,7 +113,7 @@ public class HoaDonBUS {
     
 
     
-    public ArrayList<org.example.dto.HoaDonDTO> timNangcao(String loai, String key){
+    public ArrayList<HoaDonDTO> timNangcao(String loai, String key){
         if(key.trim().isEmpty()){
             return getDs();
     }
@@ -131,5 +132,23 @@ public class HoaDonBUS {
         ArrayList<org.example.dto.HoaDonDTO> ds =dao.timNangcao(tencot, key);
         return ds;
 }
+    public LocalDate layngay(String mahd){
+        if(mahd.isEmpty()){
+            return null;
+    }   
+        if(ds==null){
+            dao.getDsHoaDon();
+        }
+        return dao.layNgay(mahd);
+    }
     
+    public ArrayList<HoaDonDTO> getHDtheongay(java.util.Date ngay){
+
+        if(ngay==null){
+            return ds;
+        }
+        else{
+            return dao.getHdtheoNgay(ngay);
+        }
+    }
 }

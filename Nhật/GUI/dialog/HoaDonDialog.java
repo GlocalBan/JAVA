@@ -9,6 +9,8 @@ import org.example.bus.*;
 import org.example.dto.*;
 import org.example.gui.panel.CTHoaDonPanel;
 import org.example.gui.NhapCTHD;
+import org.example.helper.*;
+import org.example.dao.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.time.LocalDate;
@@ -98,7 +100,7 @@ public class HoaDonDialog extends javax.swing.JDialog {
     });
 }
     
-    public HoaDonDialog(org.example.dto.HoaDonDTO hd) {
+    public HoaDonDialog(HoaDonDTO hd) {
         initComponents();
         this.setTitle("Sửa hóa đơn");
         this.setLocationRelativeTo(null);
@@ -110,7 +112,7 @@ public class HoaDonDialog extends javax.swing.JDialog {
         cbmanv.setSelectedItem(hd.getMaNV());
         txtsoluong.setText(String.valueOf(hd.getSoluong()));
         txttongtien.setText(String.format("%.0f", hd.getTongTien()));
-        txtngay.setDate(org.example.helper.DateHelper.toUtilDate(hd.getNgay()));
+        txtngay.setDate(DateHelper.toUtilDate(hd.getNgay()));
         txtmahd.setInputVerifier(new InputVerifier(){
        @Override 
        public boolean verify(JComponent input){
@@ -184,18 +186,18 @@ public class HoaDonDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        lbmakht = new javax.swing.JLabel();
+        lbmanv = new javax.swing.JLabel();
+        lbmakh = new javax.swing.JLabel();
+        lbtongtien = new javax.swing.JLabel();
         txtmahd = new javax.swing.JTextField();
         txttongtien = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        lbmahd = new javax.swing.JLabel();
         btnluu = new javax.swing.JButton();
         txtsoluong = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
+        lbsoluong = new javax.swing.JLabel();
         btnxoa = new javax.swing.JButton();
-        jLabel7 = new javax.swing.JLabel();
+        lbngay = new javax.swing.JLabel();
         txtngay = new com.toedter.calendar.JDateChooser();
         cbmakht = new javax.swing.JComboBox<>();
         cbmakh = new javax.swing.JComboBox<>();
@@ -203,13 +205,13 @@ public class HoaDonDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel2.setText("Mã kế hoạch tour");
+        lbmakht.setText("Mã kế hoạch tour");
 
-        jLabel3.setText("Mã nhân viên");
+        lbmanv.setText("Mã nhân viên");
 
-        jLabel4.setText("Mã khách hàng đặt");
+        lbmakh.setText("Mã khách hàng đặt");
 
-        jLabel5.setText("Tổng tiền");
+        lbtongtien.setText("Tổng tiền");
 
         txtmahd.addInputMethodListener(new java.awt.event.InputMethodListener() {
             public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
@@ -236,7 +238,7 @@ public class HoaDonDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabel1.setText("Mã hóa đơn");
+        lbmahd.setText("Mã hóa đơn");
 
         btnluu.setText("Lưu");
         btnluu.addActionListener(new java.awt.event.ActionListener() {
@@ -251,7 +253,7 @@ public class HoaDonDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabel6.setText("Số lượng");
+        lbsoluong.setText("Số lượng");
 
         btnxoa.setText("Làm mới");
         btnxoa.addActionListener(new java.awt.event.ActionListener() {
@@ -260,7 +262,7 @@ public class HoaDonDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabel7.setText("Ngày");
+        lbngay.setText("Ngày");
 
         txtngay.setDateFormatString("dd/MM/yyyy");
 
@@ -279,27 +281,27 @@ public class HoaDonDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(30, 30, 30)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lbmahd, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(6, 6, 6)
                         .addComponent(txtmahd, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(30, 30, 30)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lbmakht, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(38, 38, 38)
                         .addComponent(cbmakht, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(30, 30, 30)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lbngay, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(140, 140, 140)
                         .addComponent(txtngay, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(30, 30, 30)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lbsoluong, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(119, 119, 119)
                         .addComponent(txtsoluong, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(30, 30, 30)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lbtongtien, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(53, 53, 53)
                         .addComponent(txttongtien, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -311,10 +313,10 @@ public class HoaDonDialog extends javax.swing.JDialog {
                         .addGap(30, 30, 30)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+                                .addComponent(lbmakh, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
                                 .addGap(38, 38, 38))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lbmanv, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(53, 53, 53)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(cbmakh, 0, 177, Short.MAX_VALUE)
@@ -328,25 +330,25 @@ public class HoaDonDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(3, 3, 3)
-                        .addComponent(jLabel1))
+                        .addComponent(lbmahd))
                     .addComponent(txtmahd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(3, 3, 3)
-                        .addComponent(jLabel2))
+                        .addComponent(lbmakht))
                     .addComponent(cbmakht, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(21, 21, 21)
-                        .addComponent(jLabel4))
+                        .addComponent(lbmakh))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(cbmakh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(16, 16, 16)
-                        .addComponent(jLabel3))
+                        .addComponent(lbmanv))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(cbmanv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -354,17 +356,17 @@ public class HoaDonDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(6, 6, 6)
-                        .addComponent(jLabel7))
+                        .addComponent(lbngay))
                     .addComponent(txtngay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(3, 3, 3)
-                        .addComponent(jLabel6))
+                        .addComponent(lbsoluong))
                     .addComponent(txtsoluong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbtongtien, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txttongtien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -402,10 +404,10 @@ public class HoaDonDialog extends javax.swing.JDialog {
             return;
         }
 
-        org.example.dto.HoaDonDTO kt = bus.timHd(ma); 
+        HoaDonDTO kt = bus.timHd(ma); 
 
         if (kt != null) { 
-        org.example.dto.HoaDonDTO hd = new org.example.dto.HoaDonDTO(ma, cbmakht.getSelectedItem().toString().trim(), cbmakh.getSelectedItem().toString().trim(), cbmanv.getSelectedItem().toString().trim(), kt.getNgay(),kt.getSoluong(), kt.getTongTien());
+        HoaDonDTO hd = new HoaDonDTO(ma, cbmakht.getSelectedItem().toString().trim(), cbmakh.getSelectedItem().toString().trim(), cbmanv.getSelectedItem().toString().trim(), kt.getNgay(),kt.getSoluong(), kt.getTongTien());
 
             if (bus.suaHoaDon(hd)) {
             
@@ -438,9 +440,9 @@ public class HoaDonDialog extends javax.swing.JDialog {
                 return; 
             }
 
-            LocalDate ngay = org.example.helper.DateHelper.toLocalDateFromUtil(ngaydl);
+            LocalDate ngay = DateHelper.toLocalDateFromUtil(ngaydl);
             
-            org.example.dto.HoaDonDTO hdmoi = new org.example.dto.HoaDonDTO(ma, cbmakht.getSelectedItem().toString().trim(), cbmakh.getSelectedItem().toString().trim(), cbmanv.getSelectedItem().toString().trim(), ngay, 0, 0.0f);
+            HoaDonDTO hdmoi = new HoaDonDTO(ma, cbmakht.getSelectedItem().toString().trim(), cbmakh.getSelectedItem().toString().trim(), cbmanv.getSelectedItem().toString().trim(), ngay, 0, 0.0f);
 
             if (bus.themHoaDon(hdmoi)) { 
                 JOptionPane.showMessageDialog(this, "Thêm thành công! Hãy nhập thông tin chi tiết.");
@@ -461,7 +463,7 @@ public class HoaDonDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
         String makht = cbmakht.getSelectedItem() != null ? cbmakht.getSelectedItem().toString().trim() : "";        int sl=Integer.parseInt(txtsoluong.getText().trim());
         if(!makht.isEmpty()){
-            org.example.dao.HoaDonDAO dao =new org.example.dao.HoaDonDAO();
+            HoaDonDAO dao =new HoaDonDAO();
             float gia=dao.laygia(makht);
             if(gia>0){
                 txttongtien.setText(String.format("%.0f", gia*sl));
@@ -536,13 +538,13 @@ public class HoaDonDialog extends javax.swing.JDialog {
     private javax.swing.JComboBox<String> cbmakh;
     private javax.swing.JComboBox<String> cbmakht;
     private javax.swing.JComboBox<String> cbmanv;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel lbmahd;
+    private javax.swing.JLabel lbmakh;
+    private javax.swing.JLabel lbmakht;
+    private javax.swing.JLabel lbmanv;
+    private javax.swing.JLabel lbngay;
+    private javax.swing.JLabel lbsoluong;
+    private javax.swing.JLabel lbtongtien;
     private javax.swing.JTextField txtmahd;
     private com.toedter.calendar.JDateChooser txtngay;
     private javax.swing.JTextField txtsoluong;

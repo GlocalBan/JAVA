@@ -9,33 +9,36 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
 import javax.swing.JOptionPane;
+import org.example.bus.*;
+import org.example.dto.*;
+import org.example.helper.*;
 
 /**
  *
  * @author Nhat
  */
 public class DiaDiemDialog extends javax.swing.JDialog {
-    private org.example.bus.DiaDiemBUS bus;
+    private DiaDiemBUS bus;
     private boolean sua=false;
     private String tenDiaDiemCu = "";
     /**
      * Creates new form DiaDiemDialog
      */
     public DiaDiemDialog() {
-        this.bus=new org.example.bus.DiaDiemBUS();
+        this.bus=new DiaDiemBUS();
         initComponents();
         this.setTitle("Địa điểm");
         this.setLocationRelativeTo(null);
     }
-    public DiaDiemDialog(org.example.dto.DiaDiemDTO dd) {
-        this.bus=new org.example.bus.DiaDiemBUS();
+    public DiaDiemDialog(DiaDiemDTO dd) {
+        this.bus=new DiaDiemBUS();
         initComponents();
         this.setTitle("Sửa địa điểm");
         this.setLocationRelativeTo(null);
         this.sua= true;
         this.tenDiaDiemCu=dd.getTenDiaDiem();
         txttendd.setText(dd.getTenDiaDiem());
-        txtngaythuchien.setDate(org.example.helper.DateHelper.toUtilDate(dd.getNgayThucHien()));
+        txtngaythuchien.setDate(DateHelper.toUtilDate(dd.getNgayThucHien()));
         txttongchi.setText(String.format("%.0f",dd.getTongChi()));
     }
     private void resetField(){
@@ -54,18 +57,18 @@ public class DiaDiemDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel3 = new javax.swing.JLabel();
+        lbtongchi = new javax.swing.JLabel();
         txttendd = new javax.swing.JTextField();
         txttongchi = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lbten = new javax.swing.JLabel();
+        lbngay = new javax.swing.JLabel();
         btnluu = new javax.swing.JButton();
         btnreset = new javax.swing.JButton();
         txtngaythuchien = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel3.setText("Tổng chi");
+        lbtongchi.setText("Tổng chi");
 
         txttongchi.setEditable(false);
         txttongchi.addActionListener(new java.awt.event.ActionListener() {
@@ -74,9 +77,9 @@ public class DiaDiemDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabel1.setText("Tên địa điểm");
+        lbten.setText("Tên địa điểm");
 
-        jLabel2.setText("Ngày thực hiện");
+        lbngay.setText("Ngày thực hiện");
 
         btnluu.setText("Lưu");
         btnluu.addActionListener(new java.awt.event.ActionListener() {
@@ -103,9 +106,9 @@ public class DiaDiemDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnluu, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(lbten, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lbngay, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lbtongchi, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(48, 48, 48)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(txttendd)
@@ -121,15 +124,15 @@ public class DiaDiemDialog extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(68, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
+                    .addComponent(lbten)
                     .addComponent(txttendd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel2)
+                    .addComponent(lbngay)
                     .addComponent(txtngaythuchien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
+                    .addComponent(lbtongchi)
                     .addComponent(txttongchi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -158,8 +161,8 @@ public class DiaDiemDialog extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(this, "Lỗi chưa chọn ngày");
                 return;
             }
-            LocalDate ngay =org.example.helper.DateHelper.toLocalDateFromUtil(ndate);
-            org.example.dto.DiaDiemDTO dd=new org.example.dto.DiaDiemDTO(ten, ngay, Float.parseFloat(txttongchi.getText().toString()));
+            LocalDate ngay =DateHelper.toLocalDateFromUtil(ndate);
+            DiaDiemDTO dd=new DiaDiemDTO(ten, ngay, Float.parseFloat(txttongchi.getText().toString()));
             
             if(sua){
                 if(bus.suaDiaDiem(dd,tenDiaDiemCu)){
@@ -238,9 +241,9 @@ public class DiaDiemDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnluu;
     private javax.swing.JButton btnreset;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel lbngay;
+    private javax.swing.JLabel lbten;
+    private javax.swing.JLabel lbtongchi;
     private com.toedter.calendar.JDateChooser txtngaythuchien;
     private javax.swing.JTextField txttendd;
     private javax.swing.JTextField txttongchi;
