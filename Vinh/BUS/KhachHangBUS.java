@@ -4,15 +4,17 @@
  */
 package BUS;
 import DTO.KhachHang;
-import DAO.DSKhachHang;
+import DAO.KhachHangDAO;
 import java.util.ArrayList;
+import java.util.List;
+import java.time.LocalDate;
 /**
  *
  * @author Admin
  */
 public class KhachHangBUS {
     static ArrayList<KhachHang> dsKH;
-    static DSKhachHang dataKH = new DSKhachHang();
+    static KhachHangDAO dataKH = new KhachHangDAO();
     public KhachHangBUS() {}
     public void docDSKH() {
         if (dsKH == null) {
@@ -67,28 +69,22 @@ public class KhachHangBUS {
         return null;
     }
 
-    public KhachHang timKiemKHTheoHo(String tenKH) {
-        if (dsKH == null) {
-            return null;
-        }
-        for (KhachHang kh : dsKH) {
-            if (kh.getTen().equalsIgnoreCase(tenKH)) {
-                return dataKH.timKhachHangTheoTen(tenKH);
-            }
-        }
-        return null;
+    public List<KhachHang> timKhachHangTheoNgaySinh(LocalDate date){
+        return dataKH.timKhachHangTheoNgaySinh(date);
     }
 
-    public KhachHang timKiemKHTheoTen(String tenKH) {
-        if (dsKH == null) {
-            return null;
-        }
-        for (KhachHang kh : dsKH) {
-            if (kh.getTen().equalsIgnoreCase(tenKH)) {
-                return dataKH.timKhachHangTheoTen(tenKH);
+    public List<KhachHang> timKhachHang(String column, String keyword) {
+        if (column.equals("Ngày sinh")){
+            try {
+                LocalDate date = LocalDate.parse(keyword);
+                return dataKH.timKhachHangTheoNgaySinh(date);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new ArrayList<>();
             }
-        }
-        return null;
+        } else {
+            return dataKH.timKhachHang(column, keyword);
+        }    
     }
 
     public boolean suaKhachHang(KhachHang khang) {

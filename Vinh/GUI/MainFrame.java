@@ -1,7 +1,24 @@
 package GUI;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
+import GUI.Panel.KHang_KHTourPanel;
+import GUI.Panel.KhachHangPanel;
+import GUI.Panel.NhanVienPanel;
 
 public class MainFrame extends JFrame {
 

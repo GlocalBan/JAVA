@@ -2,15 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package Vinh.GUI;
+package GUI.Dialog;
 
 import DTO.NhanVien;
 import BUS.NhanVienBUS;
-import DAO.DSNhanVien;
+import DAO.NhanVienDAO;
 import GUI.Panel.NhanVienPanel;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -22,7 +21,7 @@ import javax.swing.JOptionPane;
 public class NhanVienDialog extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(NhanVienDialog.class.getName());
-    private DSNhanVien dsNhanVien = new DSNhanVien();
+    private NhanVienDAO dsNhanVien = new NhanVienDAO();
     private NhanVienPanel parentPanel;
     public enum Mode {
         ADD,
@@ -30,12 +29,12 @@ public class NhanVienDialog extends javax.swing.JDialog {
     }
     private Mode mode;
     private NhanVien currentNhanVien;
-    private DSNhanVien ds;
+    private NhanVienDAO ds;
     /**
      * Creates new form NhanVienDialog
      */
     public NhanVienDialog(java.awt.Frame parent, boolean modal, 
-                      DSNhanVien ds, Mode mode, 
+                      NhanVienDAO ds, Mode mode, 
                       NhanVien nv) {
     super(parent, modal);
     this.ds = ds;
@@ -77,7 +76,7 @@ public class NhanVienDialog extends javax.swing.JDialog {
         jTextField4 = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jPanel6 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jTextField6 = new javax.swing.JTextField();
@@ -92,32 +91,6 @@ public class NhanVienDialog extends javax.swing.JDialog {
         jLabel1.setText("Mã nhân viên:");
 
         jTextField1.addActionListener(this::jTextField1ActionPerformed);
-
-        jTextField1.setInputVerifier(new InputVerifier() {
-        @Override
-        public boolean verify(JComponent input) {
-            String ma = jTextField1.getText().trim();
-
-            if (!ma.matches("^NV\\d{3}$")) {
-                JOptionPane.showMessageDialog(null, 
-                "Mã nhân viên phải có dạng NVxxx!");
-                return false; // Không cho rời field
-            }
-            if (ma.isEmpty()) {
-                JOptionPane.showMessageDialog(null, 
-                "Mã nhân viên không được để trống!");
-                return false; // Không cho rời field
-            }
-            for (NhanVien nv : ds.layDanhSachNV()) {
-                if (nv.getMaNV().equals(ma)) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Mã nhân viên đã tồn tại!");
-                    return false; // Không cho rời field
-                }
-            }
-            return true;
-        }
-    });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -144,24 +117,6 @@ public class NhanVienDialog extends javax.swing.JDialog {
 
         jTextField2.addActionListener(this::jTextField2ActionPerformed);
 
-        jTextField2.setInputVerifier(new InputVerifier() {
-            @Override
-            public boolean verify(JComponent input) {
-                String ho = jTextField2.getText().trim();
-                if (!ho.matches("^[\\p{L}]+(\\s[\\p{L}]+)*$")) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Họ chỉ được chứa chữ cái và khoảng trắng!");
-                    return false; // Không cho rời field
-                }
-                if (ho.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Họ không được để trống!");
-                    return false; // Không cho rời field
-                }
-                return true;
-            }
-        });
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -186,24 +141,6 @@ public class NhanVienDialog extends javax.swing.JDialog {
         jLabel3.setText("Tên:");
 
         jTextField3.addActionListener(this::jTextField3ActionPerformed);
-
-        jTextField3.setInputVerifier(new InputVerifier() {
-            @Override
-            public boolean verify(JComponent input) {
-                String ten = jTextField3.getText().trim();
-                if (!ten.matches("^[\\p{L}]+(\\s[\\p{L}]+)*$")) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Tên chỉ được chứa chữ cái và khoảng trắng!");
-                    return false; // Không cho rời field
-                }
-                if (ten.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Tên không được để trống!");
-                    return false; // Không cho rời field
-                }
-                return true;
-            }
-        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -230,24 +167,6 @@ public class NhanVienDialog extends javax.swing.JDialog {
 
         jTextField4.addActionListener(this::jTextField4ActionPerformed);
 
-        jTextField4.setInputVerifier(new InputVerifier() {
-            @Override
-            public boolean verify(JComponent input) {
-                String chucVu = jTextField4.getText().trim();
-                if (!chucVu.matches("^[\\p{L}]+(\\s[\\p{L}]+)*$")) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Chức vụ chỉ được chứa chữ cái và khoảng trắng!");
-                    return false; // Không cho rời field
-                }
-                if (chucVu.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Chức vụ không được để trống!");
-                    return false; // Không cho rời field
-                }
-                return true;
-            }
-        }); 
-
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -269,77 +188,34 @@ public class NhanVienDialog extends javax.swing.JDialog {
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
-        jLabel5.setText("Ngày sinh (yyyy-MM-dd):");
+        jLabel5.setText("Ngày sinh");
 
-        jTextField5.addActionListener(this::jTextField5ActionPerformed);
-
-        jTextField5.setInputVerifier(new InputVerifier() {
-            @Override
-            public boolean verify(JComponent input) {
-                String ngaySinhStr = jTextField5.getText().trim();
-                try {
-                    LocalDate ngaySinh = LocalDate.parse(ngaySinhStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                    if (ngaySinh.isAfter(LocalDate.now())) {
-                        JOptionPane.showMessageDialog(null, 
-                        "Ngày sinh không được sau ngày hiện tại!");
-                        return false; // Không cho rời field
-                    }
-                    if (ngaySinh.isBefore(LocalDate.of(1900, 1, 1))) {
-                        JOptionPane.showMessageDialog(null, 
-                        "Ngày sinh không được trước ngày 01/01/1900!");
-                        return false; // Không cho rời field
-                    }
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Ngày sinh không hợp lệ. Vui lòng nhập theo định dạng yyyy-MM-dd.");
-                    return false; // Không cho rời field
-                }
-                return true;
-            }
-        });
+        jDateChooser1.setDateFormatString("dd/MM/yyyy");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(8, 8, 8)
+                .addGap(93, 93, 93)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jDateChooser1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         jLabel6.setText("Số điện thoại:");
 
         jTextField6.addActionListener(this::jTextField6ActionPerformed);
-
-        jTextField6.setInputVerifier(new InputVerifier() {
-            @Override
-            public boolean verify(JComponent input) {
-                String sdt = jTextField6.getText().trim();
-                if (!sdt.matches("^0\\d{9}$")) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Số điện thoại phải có 10 chữ số và bắt đầu bằng 0!");
-                    return false; // Không cho rời field
-                }
-                if (sdt.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Số điện thoại không được để trống!");
-                    return false; // Không cho rời field
-                }
-                return true;
-            }
-        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -365,24 +241,6 @@ public class NhanVienDialog extends javax.swing.JDialog {
         jLabel7.setText("Địa chỉ:");
 
         jTextField7.addActionListener(this::jTextField7ActionPerformed);
-
-        jTextField7.setInputVerifier(new InputVerifier() {
-            @Override
-            public boolean verify(JComponent input) {
-                String diaChi = jTextField7.getText().trim();
-                if (!diaChi.matches("^[\\p{L}0-9\\s,.-]+$")) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Địa chỉ chỉ được chứa chữ cái, số, khoảng trắng và các ký tự ,.-!");
-                    return false; // Không cho rời field
-                }
-                if (diaChi.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Địa chỉ không được để trống!");
-                    return false; // Không cho rời field
-                }
-                return true;
-            }
-        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -452,7 +310,7 @@ public class NhanVienDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addGap(0, 24, Short.MAX_VALUE))
+                .addGap(0, 27, Short.MAX_VALUE))
         );
 
         pack();
@@ -466,17 +324,13 @@ public class NhanVienDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField2ActionPerformed
 
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField5ActionPerformed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
 
         String maNV = jTextField1.getText().trim();
         String ho = jTextField2.getText().trim();
         String ten = jTextField3.getText().trim();
         String chucVu = jTextField4.getText().trim();
-        LocalDate ngaySinh = LocalDate.parse(jTextField5.getText().trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate ngaySinh = jDateChooser1.getDate() != null ? jDateChooser1.getDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate() : null;
         String sdt = jTextField6.getText().trim();
         String diaChi = jTextField7.getText().trim();
 
@@ -523,7 +377,11 @@ public class NhanVienDialog extends javax.swing.JDialog {
         jTextField2.setText(nv.getHo());
         jTextField3.setText(nv.getTen());
         jTextField4.setText(nv.getChucVu());
-        jTextField5.setText(nv.getNgaySinh().toString());
+        if (nv.getNgaySinh() != null) {
+            jDateChooser1.setDate(java.sql.Date.valueOf(nv.getNgaySinh().toLocalDate()));
+        } else {
+            jDateChooser1.setDate(null);
+        }
         jTextField6.setText(nv.getSdt());
         jTextField7.setText(nv.getDiaChi());
     }
@@ -553,7 +411,7 @@ public class NhanVienDialog extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                NhanVienDialog dialog = new NhanVienDialog(new javax.swing.JFrame(), true, new DSNhanVien(), Mode.ADD, null);
+                NhanVienDialog dialog = new NhanVienDialog(new javax.swing.JFrame(), true, new NhanVienDAO(), Mode.ADD, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -568,6 +426,7 @@ public class NhanVienDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -586,7 +445,6 @@ public class NhanVienDialog extends javax.swing.JDialog {
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
     // End of variables declaration//GEN-END:variables

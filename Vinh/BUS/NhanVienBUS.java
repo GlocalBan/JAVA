@@ -5,14 +5,19 @@
 package BUS;
 import DTO.NhanVien;
 import java.util.ArrayList;
-import DAO.DSNhanVien;
+import java.util.List;
+
+import DAO.NhanVienDAO;
+import java.lang.reflect.Array;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 /**
  *
  * @author Admin
  */
 public class NhanVienBUS {
     static ArrayList<NhanVien> dsNV;
-    static DSNhanVien dataNV = new DSNhanVien();
+    static NhanVienDAO dataNV = new NhanVienDAO();
     public NhanVienBUS() {
         if (dsNV == null) {
             dsNV = dataNV.layDanhSachNV();
@@ -59,18 +64,37 @@ public class NhanVienBUS {
             e.printStackTrace();
         }
     }
-    public NhanVien timKiemNV(String maNV){
+    
+    public NhanVien timNhanVienTheoMa(String maNV) {
         if (dsNV == null) {
             return null;
         }
         for (NhanVien nv : dsNV) {
             if (nv.getMaNV().equals(maNV)) {
-                return dataNV.timNhanVienTheoMa(maNV);
+                dataNV.timNhanVienTheoMa(maNV);
+                return nv;
             }
         }
         return null;
     }
 
+    public List<NhanVien> timNhanVienTheoNgaySinh(LocalDate date) {
+        return dataNV.timNhanVienTheoNgaySinh(date);
+    }
+
+    public List<NhanVien> timNhanVien(String type, String keyword) {
+    if (type.equals("Ngày sinh")) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate date = LocalDate.parse(keyword, formatter);
+            return dataNV.timNhanVienTheoNgaySinh(date);
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+    }
+    return dataNV.timNhanVien(type, keyword);
+}
+    
     public boolean suaNhanVien(NhanVien nv) {
         try {
             if (dsNV == null) {

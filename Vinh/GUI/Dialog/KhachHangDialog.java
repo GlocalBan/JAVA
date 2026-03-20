@@ -2,15 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package Vinh.GUI;
+package GUI.Dialog;
 
 import DTO.KhachHang;
 import BUS.KhachHangBUS;
-import DAO.DSKhachHang;
+import DAO.KhachHangDAO;
 import GUI.Panel.KhachHangPanel;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -22,18 +21,18 @@ import javax.swing.JOptionPane;
 public class KhachHangDialog extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(KhachHangDialog.class.getName());
-    private DSKhachHang dsKhachHang = new DSKhachHang();
+    private KhachHangDAO dsKhachHang = new KhachHangDAO();
     private KhachHangPanel parentPanel;
     public enum Mode {
         ADD, EDIT
     }
     private Mode mode;
     private KhachHang currentKhachHang;
-    private DSKhachHang ds;
+    private KhachHangDAO ds;
     /**
      * Creates new form KhachHangDialog
      */
-    public KhachHangDialog(java.awt.Frame parent, boolean modal, DSKhachHang ds, Mode mode, KhachHang kh) {
+    public KhachHangDialog(java.awt.Frame parent, boolean modal, KhachHangDAO ds, Mode mode, KhachHang kh) {
         super(parent, modal);
         this.ds = ds;
         this.mode = mode;
@@ -73,7 +72,7 @@ public class KhachHangDialog extends javax.swing.JDialog {
         jButton8 = new javax.swing.JButton();
         jPanel26 = new javax.swing.JPanel();
         jLabel26 = new javax.swing.JLabel();
-        jTextField26 = new javax.swing.JTextField();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jPanel27 = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
         jTextField27 = new javax.swing.JTextField();
@@ -87,31 +86,6 @@ public class KhachHangDialog extends javax.swing.JDialog {
 
         jTextField22.addActionListener(this::jTextField22ActionPerformed);
 
-        jTextField22.setInputVerifier(new InputVerifier() {
-        @Override
-        public boolean verify(JComponent input) {
-            String ma = jTextField22.getText().trim();
-
-            if (!ma.matches("^KH\\d{3}$")) {
-                JOptionPane.showMessageDialog(null, 
-                "Mã khách hàng phải có dạng KHxxx!");
-                return false; // Không cho rời field
-            }
-            if (ma.isEmpty()) {
-                JOptionPane.showMessageDialog(null, 
-                "Mã khách hàng không được để trống!");
-                return false; // Không cho rời field
-            }
-            for (KhachHang kh : ds.layDanhSachKHang()) {
-                if (kh.getMaKH().equals(ma)) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Mã khách hàng đã tồn tại!");
-                    return false; // Không cho rời field
-                }
-            }
-            return true;
-        }
-    });
         javax.swing.GroupLayout jPanel22Layout = new javax.swing.GroupLayout(jPanel22);
         jPanel22.setLayout(jPanel22Layout);
         jPanel22Layout.setHorizontalGroup(
@@ -136,24 +110,6 @@ public class KhachHangDialog extends javax.swing.JDialog {
         jLabel23.setText("Tên:");
 
         jTextField23.addActionListener(this::jTextField23ActionPerformed);
-
-        jTextField23.setInputVerifier(new InputVerifier() {
-            @Override
-            public boolean verify(JComponent input) {
-                String ten = jTextField23.getText().trim();
-                if (!ten.matches("^[\\p{L}]+(\\s[\\p{L}]+)*$")) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Tên chỉ được chứa chữ cái và khoảng trắng!");
-                    return false; // Không cho rời field
-                }
-                if (ten.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Tên không được để trống!");
-                    return false; // Không cho rời field
-                }
-                return true;
-            }
-        });
 
         javax.swing.GroupLayout jPanel23Layout = new javax.swing.GroupLayout(jPanel23);
         jPanel23.setLayout(jPanel23Layout);
@@ -180,23 +136,6 @@ public class KhachHangDialog extends javax.swing.JDialog {
 
         jTextField24.addActionListener(this::jTextField24ActionPerformed);
 
-        jTextField24.setInputVerifier(new InputVerifier() {
-            @Override
-            public boolean verify(JComponent input) {
-                String diaChi = jTextField24.getText().trim();
-                if (!diaChi.matches("^[\\p{L}0-9\\s,.-]+$")) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Địa chỉ chỉ được chứa chữ cái, số, khoảng trắng và các ký tự ,.-!");
-                    return false; // Không cho rời field
-                }
-                if (diaChi.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Địa chỉ không được để trống!");
-                    return false; // Không cho rời field
-                }
-                return true;
-            }
-        });
         javax.swing.GroupLayout jPanel24Layout = new javax.swing.GroupLayout(jPanel24);
         jPanel24.setLayout(jPanel24Layout);
         jPanel24Layout.setHorizontalGroup(
@@ -225,74 +164,33 @@ public class KhachHangDialog extends javax.swing.JDialog {
 
         jLabel26.setText("Ngày sinh:");
 
-        jTextField26.addActionListener(this::jTextField26ActionPerformed);
+        jDateChooser1.setDateFormatString("dd/MM/yyyy");
 
-        jTextField26.setInputVerifier(new InputVerifier() {
-            @Override
-            public boolean verify(JComponent input) {
-                String ngaySinhStr = jTextField26.getText().trim();
-                try {
-                    LocalDate ngaySinh = LocalDate.parse(ngaySinhStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                    if (ngaySinh.isAfter(LocalDate.now())) {
-                        JOptionPane.showMessageDialog(null, 
-                        "Ngày sinh không được sau ngày hiện tại!");
-                        return false; // Không cho rời field
-                    }
-                    if (ngaySinh.isBefore(LocalDate.of(1900, 1, 1))) {
-                        JOptionPane.showMessageDialog(null, 
-                        "Ngày sinh không được trước ngày 01/01/1900!");
-                        return false; // Không cho rời field
-                    }
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Ngày sinh không hợp lệ. Vui lòng nhập theo định dạng yyyy-MM-dd.");
-                    return false; // Không cho rời field
-                }
-                return true;
-            }
-        });
         javax.swing.GroupLayout jPanel26Layout = new javax.swing.GroupLayout(jPanel26);
         jPanel26.setLayout(jPanel26Layout);
         jPanel26Layout.setHorizontalGroup(
             jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel26Layout.createSequentialGroup()
-                .addGap(85, 85, 85)
+                .addGap(86, 86, 86)
                 .addComponent(jLabel26)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField26, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel26Layout.setVerticalGroup(
             jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel26Layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addGroup(jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel26)
-                    .addComponent(jTextField26, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel26))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         jLabel27.setText("Họ:");
 
         jTextField27.addActionListener(this::jTextField27ActionPerformed);
 
-        jTextField27.setInputVerifier(new InputVerifier() {
-            @Override
-            public boolean verify(JComponent input) {
-                String ho = jTextField27.getText().trim();
-                if (!ho.matches("^[\\p{L}]+(\\s[\\p{L}]+)*$")) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Họ chỉ được chứa chữ cái và khoảng trắng!");
-                    return false; // Không cho rời field
-                }
-                if (ho.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Họ không được để trống!");
-                    return false; // Không cho rời field
-                }
-                return true;
-            }
-        });
         javax.swing.GroupLayout jPanel27Layout = new javax.swing.GroupLayout(jPanel27);
         jPanel27.setLayout(jPanel27Layout);
         jPanel27Layout.setHorizontalGroup(
@@ -318,23 +216,6 @@ public class KhachHangDialog extends javax.swing.JDialog {
 
         jTextField28.addActionListener(this::jTextField28ActionPerformed);
 
-        jTextField28.setInputVerifier(new InputVerifier() {
-            @Override
-            public boolean verify(JComponent input) {
-                String sdt = jTextField28.getText().trim();
-                if (!sdt.matches("^0\\d{9}$")) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Số điện thoại phải có 10 chữ số và bắt đầu bằng 0!");
-                    return false; // Không cho rời field
-                }
-                if (sdt.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Số điện thoại không được để trống!");
-                    return false; // Không cho rời field
-                }
-                return true;
-            }
-        });
         javax.swing.GroupLayout jPanel28Layout = new javax.swing.GroupLayout(jPanel28);
         jPanel28.setLayout(jPanel28Layout);
         jPanel28Layout.setHorizontalGroup(
@@ -344,7 +225,7 @@ public class KhachHangDialog extends javax.swing.JDialog {
                 .addComponent(jLabel28)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField28, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
         jPanel28Layout.setVerticalGroup(
             jPanel28Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -426,7 +307,7 @@ public class KhachHangDialog extends javax.swing.JDialog {
         String maKH = jTextField22.getText().trim();
         String ten = jTextField23.getText().trim();
         String diaChi = jTextField24.getText().trim();
-        LocalDate ngaySinh = LocalDate.parse(jTextField26.getText().trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate ngaySinh = jDateChooser1.getDate() != null ? jDateChooser1.getDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate() : null;
         String ho = jTextField27.getText().trim();
         String sdt = jTextField28.getText().trim();
 
@@ -445,10 +326,6 @@ public class KhachHangDialog extends javax.swing.JDialog {
         dispose(); // Đóng dialog sau khi lưu
     }//GEN-LAST:event_jButton7ActionPerformed
 
-    private void jTextField26ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField26ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField26ActionPerformed
-
     private void jTextField27ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField27ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField27ActionPerformed
@@ -461,7 +338,11 @@ public class KhachHangDialog extends javax.swing.JDialog {
         jTextField22.setText(kh.getMaKH());
         jTextField23.setText(kh.getTen());
         jTextField24.setText(kh.getDiaChi());
-        jTextField26.setText(kh.getNgaySinh().toString());
+            if (kh.getNgaySinh() != null) {
+                jDateChooser1.setDate(java.sql.Date.valueOf(kh.getNgaySinh().toLocalDate()));
+            } else {
+                jDateChooser1.setDate(null);
+            }
         jTextField27.setText(kh.getHo());
         jTextField28.setText(kh.getSdt());
     }
@@ -490,7 +371,7 @@ public class KhachHangDialog extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                KhachHangDialog dialog = new KhachHangDialog(new javax.swing.JFrame(), true, new DSKhachHang(), Mode.ADD, null);
+                KhachHangDialog dialog = new KhachHangDialog(new javax.swing.JFrame(), true, new KhachHangDAO(), Mode.ADD, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -505,6 +386,7 @@ public class KhachHangDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
@@ -520,7 +402,6 @@ public class KhachHangDialog extends javax.swing.JDialog {
     private javax.swing.JTextField jTextField22;
     private javax.swing.JTextField jTextField23;
     private javax.swing.JTextField jTextField24;
-    private javax.swing.JTextField jTextField26;
     private javax.swing.JTextField jTextField27;
     private javax.swing.JTextField jTextField28;
     // End of variables declaration//GEN-END:variables

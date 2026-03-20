@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package Vinh.GUI;
+package GUI.Dialog;
 
-import DAO.DSKHang_KHTour;
-import DAO.DSKhachHang;
+import DAO.KHang_KHTourDAO;
+import DAO.KhachHangDAO;
 import DAO.KeHoachTourDAO;
 import DAO.TourDAO;
 import BUS.KHang_KHTourBUS;
@@ -25,22 +25,22 @@ import javax.swing.JOptionPane;
 public class KHang_KHTourDialog extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(KHang_KHTourDialog.class.getName());
-    private DSKHang_KHTour dskhangkhtour = new DSKHang_KHTour();
+    private KHang_KHTourDAO dskhangkhtour = new KHang_KHTourDAO();
     private KHang_KHTourPanel parentPanel;
     public enum Mode {
         ADD, EDIT
     }
     private Mode mode;
     private KHang_KHTour currentKHangKHTour;
-    private DSKHang_KHTour ds;
-    private DSKhachHang dsKhachHang;
+    private KHang_KHTourDAO ds;
+    private KhachHangDAO dsKhachHang;
     private KeHoachTourDAO dsKeHoachTour;
     private TourDAO dsTour;
     /**
      * Creates new form KHang_KHTourDialog
      */
     public KHang_KHTourDialog(java.awt.Frame parent, boolean modal, 
-        DSKHang_KHTour ds, Mode mode, KHang_KHTour khangkhtour) {
+        KHang_KHTourDAO ds, Mode mode, KHang_KHTour khangkhtour) {
 
     super(parent, modal);
     this.ds = ds;
@@ -48,7 +48,7 @@ public class KHang_KHTourDialog extends javax.swing.JDialog {
     this.currentKHangKHTour = khangkhtour;
     this.setLocationRelativeTo(null);
 
-    dsKhachHang = new DSKhachHang();
+    dsKhachHang = new KhachHangDAO();
     dsKeHoachTour = new KeHoachTourDAO();
     dsTour = new TourDAO();
 
@@ -287,7 +287,7 @@ public class KHang_KHTourDialog extends javax.swing.JDialog {
         String maKHTour = jTextField34.getText().trim();
 
         if(jTextField35.getText().trim().isEmpty()){
-            DSKHang_KHTour dao = new DSKHang_KHTour();
+            KHang_KHTourDAO dao = new KHang_KHTourDAO();
             long gia = dao.layDonGiaTheoMaKHTour(maKHTour);
             jTextField35.setText(String.valueOf(gia));
         }
@@ -340,7 +340,7 @@ public class KHang_KHTourDialog extends javax.swing.JDialog {
         String maKHTour = jTextField34.getText().trim();
 
         if(!maKHTour.isEmpty()){
-            DSKHang_KHTour dao = new DSKHang_KHTour();
+            KHang_KHTourDAO dao = new KHang_KHTourDAO();
             long gia = dao.layDonGiaTheoMaKHTour(maKHTour);
 
             jTextField35.setText(String.valueOf(gia));
@@ -380,7 +380,7 @@ public class KHang_KHTourDialog extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                KHang_KHTourDialog dialog = new KHang_KHTourDialog(new javax.swing.JFrame(), true, new DSKHang_KHTour(), Mode.ADD, null);
+                KHang_KHTourDialog dialog = new KHang_KHTourDialog(new javax.swing.JFrame(), true, new KHang_KHTourDAO(), Mode.ADD, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

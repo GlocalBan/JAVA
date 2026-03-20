@@ -4,6 +4,8 @@
  */
 package DTO;
 
+import java.time.LocalDate;
+
 /**
  *
  * @author Admin
@@ -13,12 +15,12 @@ public class Person {
     private String ten;
     private String diaChi;
     private String sdt;
-    private java.sql.Date ngaySinh;
+    private LocalDate ngaySinh;
 
     public Person() {
     }
 
-    public Person(String ho, String ten, String diaChi, String sdt, java.sql.Date ngaySinh) {
+    public Person(String ho, String ten, String diaChi, String sdt, LocalDate ngaySinh) {
         this.ho = ho;
         this.ten = ten;
         this.diaChi = diaChi;
@@ -58,11 +60,11 @@ public class Person {
         this.sdt = sdt;
     }
 
-    public java.sql.Date getNgaySinh() {
+    public LocalDate getNgaySinh() {
         return ngaySinh;
     }
 
-    public void setNgaySinh(java.sql.Date ngaySinh) {
+    public void setNgaySinh(LocalDate ngaySinh) {
         this.ngaySinh = ngaySinh;
     }
     

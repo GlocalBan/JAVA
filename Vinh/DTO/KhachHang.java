@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package DTO;
+import java.time.LocalDate;
 /**
  *
  * @author Admin
@@ -13,7 +14,7 @@ public class KhachHang extends Person {
     public KhachHang() {
     }
 
-    public KhachHang(String maKH, String ho, String ten, String diaChi, String sdt, java.sql.Date ngaySinh) {
+    public KhachHang(String maKH, String ho, String ten, String diaChi, String sdt, LocalDate ngaySinh) {
         super(ho, ten, diaChi, sdt, ngaySinh);
         this.maKH = maKH;
     }

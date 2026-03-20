@@ -3,16 +3,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package BUS;
-import DAO.DSKHang_KHTour;
+import DAO.KHang_KHTourDAO;
 import DTO.KHang_KHTour;
 import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author Admin
  */
 public class KHang_KHTourBUS {
     static ArrayList<KHang_KHTour> dsKHKHTour;
-    static DSKHang_KHTour dataKHKHTour = new DSKHang_KHTour();
+    static KHang_KHTourDAO dataKHKHTour = new KHang_KHTourDAO();
     public KHang_KHTourBUS() {}
     public void docDSKHKHTour() {
         if (dsKHKHTour == null) {
@@ -77,27 +78,98 @@ public class KHang_KHTourBUS {
         }
     }
 
-    public KHang_KHTour timKiemKHang_KHTour(String maKHTour){
-        if (dsKHKHTour == null) {
+    public KHang_KHTour timKiemKHang_KHTourTheoMaKHTour(String maKHTour) {
+        try {
+            if (dsKHKHTour == null || maKHTour == null) {
+                return null;
+            }
+            for (KHang_KHTour kht : dsKHKHTour) {
+                if (kht.getMaKHTour().equals(maKHTour)) {
+                    return kht;
+                }
+            }
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
-        for (KHang_KHTour kht : dsKHKHTour) {
-            if (kht.getMaKHTour().equals(maKHTour)) {
-                return kht;
-            }
-        }
-        return null;
     }
 
-    public KHang_KHTour timKiemKHang_KHTourTheoMaKHang(String maKHang){
-        if (dsKHKHTour == null) {
+    public List<KHang_KHTour> timKHang_KHTours(String column, String value) {
+        try {
+            if (dsKHKHTour == null || column == null || value == null) {
+                return new ArrayList<>();
+            }
+            List<KHang_KHTour> result = new ArrayList<>();
+            for (KHang_KHTour kht : dsKHKHTour) {
+                switch (column) {
+                    case "MaKHTour":
+                        if (kht.getMaKHTour().equalsIgnoreCase(value)) {
+                            result.add(kht);
+                        }
+                        break;
+                    case "MaKHang":
+                        if (kht.getMaKHang().equalsIgnoreCase(value)) {
+                            result.add(kht);
+                        }
+                        break;
+                    case "GiaVe":
+                        try {
+                            long giaVeValue = Long.parseLong(value);
+                            if (kht.getGiaVe() == giaVeValue) {
+                                result.add(kht);
+                            }
+                        } catch (NumberFormatException e) {
+                            // Ignore invalid number format
+                        }
+                        break;
+                    default:
+                        // Invalid column name
+                        return new ArrayList<>();
+                }
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public List<KHang_KHTour> timKHang_KHToursTheoHo(String ho) {
+        try {
+            if (dsKHKHTour == null || ho == null) {
+                return new ArrayList<>();
+            }
+            List<KHang_KHTour> result = new ArrayList<>();
+            for (KHang_KHTour kht : dsKHKHTour) {
+                String maKHang = kht.getMaKHang();
+                if (maKHang != null && maKHang.startsWith(ho)) {
+                    result.add(kht);
+                }
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public KHang_KHTour timKHang_KHTourTheoTen(String ten) {
+        try {
+            if (dsKHKHTour == null || ten == null) {
+                return null;
+            }
+            for (KHang_KHTour kht : dsKHKHTour) {
+                String maKHang = kht.getMaKHang();
+                if (maKHang != null && maKHang.equalsIgnoreCase(ten)) {
+                    return kht;
+                }
+            }
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
-        for (KHang_KHTour kht : dsKHKHTour) {
-            if (kht.getMaKHang().equals(maKHang)) {
-                return kht;
-            }
-        }
-        return null;
     }
-}
+}       
+    
