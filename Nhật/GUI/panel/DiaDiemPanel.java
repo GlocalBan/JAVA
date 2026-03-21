@@ -3,55 +3,68 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package org.example.gui.panel;
+
 import org.example.gui.dialog.DiaDiemDialog;
-import org.example.dao.DiaDiemDAO;
-import org.example.bus.DiaDiemBUS;
-import org.example.bus.HoaDonBUS;
+import org.example.dao.*;
+import org.example.bus.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.example.dto.*;
+import org.example.helper.*;
 /**
  *
  * @author Nhat
  */
 public class DiaDiemPanel extends javax.swing.JPanel {
     private DefaultTableModel model;
-    private org.example.bus.DiaDiemBUS bus;
+    private DiaDiemBUS bus;
     /**
      * Creates new form DiaDiemN
      */
     public DiaDiemPanel() {
         initComponents();
-        bus=new org.example.bus.DiaDiemBUS();
+        bus=new DiaDiemBUS();
+        txtdate.setVisible(false);
         model = (DefaultTableModel) tbldd.getModel();
         loadData();
     }
-
+    
+    private void loadData(java.util.Date ngay){
+        model.setRowCount(0);
+        
+        ArrayList<DiaDiemDTO> ds =bus.getDstheongay(ngay);
+     if(ds==null) return;
+     for(DiaDiemDTO dd: ds){
+         model.addRow(new Object[]{
+             dd.getTenDiaDiem(),DateHelper.toString(dd.getNgayThucHien()),String.format("%.0f", dd.getTongChi())});
+     }
+    }
     private void loadData(){
         model.setRowCount(0);
         
-        ArrayList<org.example.dto.DiaDiemDTO> ds = DiaDiemBUS.getDs();
+        ArrayList<DiaDiemDTO> ds = bus.getDs();
      if(ds==null) return;
-     for(org.example.dto.DiaDiemDTO dd: ds){
+     for(DiaDiemDTO dd: ds){
          model.addRow(new Object[]{
-             dd.getTenDiaDiem(),org.example.helper.DateHelper.toString(dd.getNgayThucHien()),String.format("%.0f", dd.getTongChi())});
+             dd.getTenDiaDiem(),DateHelper.toString(dd.getNgayThucHien()),String.format("%.0f", dd.getTongChi())});
      }
     }
 
     
-    private void loadData(ArrayList<org.example.dto.DiaDiemDTO> ds,String ma){
-        model.setRowCount(0);
+    private void loadData(String ma){
+    model.setRowCount(0);
         
-     ds = bus.timdd(ma);
+     ArrayList<DiaDiemDTO> ds = bus.timdd(ma);
      if(ds==null) return;
-     for(org.example.dto.DiaDiemDTO dd: ds){
+     for(DiaDiemDTO dd: ds){
          model.addRow(new Object[]{
-             dd.getTenDiaDiem(),org.example.helper.DateHelper.toString(dd.getNgayThucHien()),dd.getTongChi()});
+             dd.getTenDiaDiem(),DateHelper.toString(dd.getNgayThucHien()),String.format("%.0f", dd.getTongChi())});
      }
     }
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -62,47 +75,108 @@ public class DiaDiemPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        pnlheader = new javax.swing.JPanel();
+        lbname = new javax.swing.JLabel();
+        pnlsearch = new javax.swing.JPanel();
+        lbtim = new javax.swing.JLabel();
+        cbtim = new javax.swing.JComboBox<>();
         txttendd = new javax.swing.JTextField();
-        btntim = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tbldd = new javax.swing.JTable();
-        jPanel3 = new javax.swing.JPanel();
+        txtdate = new com.toedter.calendar.JDateChooser();
+        pnlfooter = new javax.swing.JPanel();
         btnthem = new javax.swing.JButton();
         btnxoa = new javax.swing.JButton();
         btnsua = new javax.swing.JButton();
         btnreset = new javax.swing.JButton();
         btnxuat = new javax.swing.JButton();
+        pnltable = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tbldd = new javax.swing.JTable();
 
         setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setLayout(new java.awt.BorderLayout());
+        pnlheader.setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Quản lý địa điểm");
-        jPanel1.add(jLabel1, java.awt.BorderLayout.CENTER);
+        lbname.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        lbname.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbname.setText("Quản lý địa điểm");
+        pnlheader.add(lbname, java.awt.BorderLayout.CENTER);
 
-        jLabel2.setText("Tên địa điểm");
-        jPanel2.add(jLabel2);
+        lbtim.setText("Tìm theo:");
+        pnlsearch.add(lbtim);
 
-        txttendd.setColumns(20);
-        jPanel2.add(txttendd);
-
-        btntim.setText("Tìm");
-        btntim.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btntimActionPerformed(evt);
+        cbtim.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tên địa điểm", "Ngày thực hiện" }));
+        cbtim.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbtimItemStateChanged(evt);
             }
         });
-        jPanel2.add(btntim);
+        pnlsearch.add(cbtim);
 
-        jPanel1.add(jPanel2, java.awt.BorderLayout.PAGE_END);
+        txttendd.setColumns(20);
+        txttendd.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txttenddKeyReleased(evt);
+            }
+        });
+        pnlsearch.add(txttendd);
 
-        add(jPanel1, java.awt.BorderLayout.PAGE_START);
+        txtdate.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                txtdatePropertyChange(evt);
+            }
+        });
+        pnlsearch.add(txtdate);
+
+        pnlheader.add(pnlsearch, java.awt.BorderLayout.PAGE_END);
+
+        add(pnlheader, java.awt.BorderLayout.PAGE_START);
+
+        btnthem.setText("Thêm");
+        btnthem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnthemActionPerformed(evt);
+            }
+        });
+        pnlfooter.add(btnthem);
+
+        btnxoa.setText("Xóa");
+        btnxoa.setEnabled(false);
+        btnxoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnxoaActionPerformed(evt);
+            }
+        });
+        pnlfooter.add(btnxoa);
+
+        btnsua.setText("Sửa");
+        btnsua.setEnabled(false);
+        btnsua.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnsuaActionPerformed(evt);
+            }
+        });
+        pnlfooter.add(btnsua);
+
+        btnreset.setText("Làm mới");
+        btnreset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnresetActionPerformed(evt);
+            }
+        });
+        pnlfooter.add(btnreset);
+
+        btnxuat.setText("Xuất excel");
+        btnxuat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnxuatActionPerformed(evt);
+            }
+        });
+        pnlfooter.add(btnxuat);
+
+        add(pnlfooter, java.awt.BorderLayout.PAGE_END);
+
+        pnltable.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 10, 1, 10));
+        pnltable.setLayout(new java.awt.BorderLayout());
 
         tbldd.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -113,89 +187,24 @@ public class DiaDiemPanel extends javax.swing.JPanel {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, true
+                false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        tbldd.setPreferredSize(new java.awt.Dimension(450, 450));
-        tbldd.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblddMouseClicked(evt);
-            }
-        });
+        tbldd.setPreferredSize(new java.awt.Dimension(840, 0));
         jScrollPane1.setViewportView(tbldd);
 
-        add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        pnltable.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        btnthem.setText("Thêm");
-        btnthem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnthemActionPerformed(evt);
-            }
-        });
-        jPanel3.add(btnthem);
-
-        btnxoa.setText("Xóa");
-        btnxoa.setEnabled(false);
-        btnxoa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnxoaActionPerformed(evt);
-            }
-        });
-        jPanel3.add(btnxoa);
-
-        btnsua.setText("Sửa");
-        btnsua.setEnabled(false);
-        btnsua.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnsuaActionPerformed(evt);
-            }
-        });
-        jPanel3.add(btnsua);
-
-        btnreset.setText("Làm mới");
-        btnreset.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnresetActionPerformed(evt);
-            }
-        });
-        jPanel3.add(btnreset);
-
-        btnxuat.setText("Xuất excel");
-        btnxuat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnxuatActionPerformed(evt);
-            }
-        });
-        jPanel3.add(btnxuat);
-
-        add(jPanel3, java.awt.BorderLayout.PAGE_END);
+        add(pnltable, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void tblddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblddMouseClicked
-        // TODO add your handling code here:
-        int row = tbldd.getSelectedRow();
-        if(row!=-1){
-            btnsua.setEnabled(true);
-            btnxoa.setEnabled(true);
-            if(evt.getClickCount()==2){
-                int cf=JOptionPane.showConfirmDialog(this, "Bạn có muốn xuất Excel dòng này không?");
-                
-                if(cf==JOptionPane.YES_OPTION){
-                    org.example.helper.ExcelHelper.xuatExcel1Dong(tbldd, row, jPanel1, "Địa điểm: "+bus.timdd(tbldd.getValueAt(row, 0).toString().trim()));
-                }else{
-                    return;
-                }
-            }
-        }
-    }//GEN-LAST:event_tblddMouseClicked
 
     private void btnxuatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnxuatActionPerformed
         // TODO add your handling code here:
-        org.example.helper.ExcelHelper.xuatExcel(tbldd, this, "Danh sach hoa don");
+            ExcelHelper.xuatExcel(tbldd, this, "Danh sach hoa don");
     }//GEN-LAST:event_btnxuatActionPerformed
 
     private void btnthemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnthemActionPerformed
@@ -215,7 +224,7 @@ public class DiaDiemPanel extends javax.swing.JPanel {
             return;
         }
         String tendd =model.getValueAt(row, 0).toString();
-        org.example.dto.DiaDiemDTO dd=bus.timDiaDiem(tendd); if(dd==null){
+        DiaDiemDTO dd=bus.timDiaDiem(tendd); if(dd==null){
             JOptionPane.showMessageDialog(this, "Lỗi không tìm thấy");
             return;
             }
@@ -234,12 +243,6 @@ public class DiaDiemPanel extends javax.swing.JPanel {
         loadData();
     }//GEN-LAST:event_btnresetActionPerformed
 
-    private void btntimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btntimActionPerformed
-        // TODO add your handling code here:
-
-        loadData(bus.timdd(txttendd.getText().trim()), txttendd.getText().trim());
-    }//GEN-LAST:event_btntimActionPerformed
-
     private void btnsuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsuaActionPerformed
         // TODO add your handling code here:
         int row=tbldd.getSelectedRow();
@@ -252,22 +255,55 @@ public class DiaDiemPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnsuaActionPerformed
 
+    private void txttenddKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txttenddKeyReleased
+        // TODO add your handling code here:
+        String ten = txttendd.getText().trim();
+        loadData( ten);
+    }//GEN-LAST:event_txttenddKeyReleased
+
+    private void cbtimItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbtimItemStateChanged
+        // TODO add your handling code here:
+        String chose=cbtim.getSelectedItem().toString().trim();
+        if(chose.equals("Ngày thực hiện")){
+            txttendd.setVisible(false);
+            txtdate.setVisible(true);
+        }
+        else{
+            txttendd.setVisible(true);
+            txtdate.setVisible(false);
+        }
+    }//GEN-LAST:event_cbtimItemStateChanged
+
+    private void txtdatePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_txtdatePropertyChange
+        // TODO add your handling code here:
+        if ("date".equals(evt.getPropertyName())) {
+        java.util.Date ngay = txtdate.getDate();
+        if (ngay != null) {
+            loadData(ngay);
+        } else {
+            loadData(); // Nếu ngày bị xóa trống, load lại toàn bộ dữ liệu
+        }
+    }
+    }//GEN-LAST:event_txtdatePropertyChange
+
   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnreset;
     private javax.swing.JButton btnsua;
     private javax.swing.JButton btnthem;
-    private javax.swing.JButton btntim;
     private javax.swing.JButton btnxoa;
     private javax.swing.JButton btnxuat;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
+    private javax.swing.JComboBox<String> cbtim;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbname;
+    private javax.swing.JLabel lbtim;
+    private javax.swing.JPanel pnlfooter;
+    private javax.swing.JPanel pnlheader;
+    private javax.swing.JPanel pnlsearch;
+    private javax.swing.JPanel pnltable;
     private javax.swing.JTable tbldd;
+    private com.toedter.calendar.JDateChooser txtdate;
     private javax.swing.JTextField txttendd;
     // End of variables declaration//GEN-END:variables
 }

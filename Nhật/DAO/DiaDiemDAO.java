@@ -8,6 +8,7 @@ import java.util.*;
 import java.sql.*;
 import java.sql.Date;
 import java.time.*;
+import org.example.bus.HoaDonBUS;
 /**
  *
  * @author Nhat
@@ -109,15 +110,15 @@ public class DiaDiemDAO {
         return false;
     }
     
-    public ArrayList timdd(String tendd){
-        ArrayList<org.example.dto.DiaDiemDTO> ds=new ArrayList<>();
+    public ArrayList<DiaDiemDTO> timdd(String tendd){
+        ArrayList<DiaDiemDTO> ds=new ArrayList<>();
         String sql ="Select * from Diadiem where tendiadiem like ?";
         try(Connection conn= KetNoiCSDL.getConnection();
                 PreparedStatement ps=conn.prepareStatement(sql)){
             ps.setString(1, "%" + tendd + "%");
             ResultSet rs=ps.executeQuery();
             while(rs.next()){
-                org.example.dto.DiaDiemDTO dd=dd=maptoDiaDiem(rs);
+                DiaDiemDTO dd=maptoDiaDiem(rs);
                 ds.add(dd);
             }   
         }
@@ -126,5 +127,22 @@ public class DiaDiemDAO {
             return null;
         }
         return ds;
+    }
+    
+    public ArrayList<DiaDiemDTO> getDstheongay(java.util.Date ngay){
+        ArrayList<DiaDiemDTO> dd=new ArrayList<>();
+        String sql ="Select * from DiaDiem where ngaythuchien=?";
+        try(Connection conn=KetNoiCSDL.getConnection();
+                PreparedStatement ps=conn.prepareStatement(sql)){
+            ps.setDate(1, new java.sql.Date(ngay.getTime()));
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){
+                DiaDiemDTO dddto=maptoDiaDiem(rs);
+                dd.add(dddto);
+            }
+        }catch(SQLException e){
+            return null;
+        }
+        return dd;
     }
 }

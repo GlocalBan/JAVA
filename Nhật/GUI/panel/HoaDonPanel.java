@@ -4,29 +4,33 @@
  */
 package org.example.gui.panel;
 
-import org.example.bus.HoaDonBUS;
+import org.example.dto.*;
+import org.example.bus.*;
+import org.example.gui.dialog.*;
+import org.example.helper.*;
 import java.awt.FlowLayout;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.swing.JPanel;
+import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.example.dao.HoaDonDAO;
 
 /**
  *
  * @author Nhat
  */
 public class HoaDonPanel extends javax.swing.JPanel {
-    private org.example.bus.HoaDonBUS bus;
+    private HoaDonBUS bus;
     private DefaultTableModel model;
     /**
      * Creates new form HoaDonNew
      */
     public HoaDonPanel() {
         initComponents();
-        bus=new org.example.bus.HoaDonBUS();
+        bus=new HoaDonBUS();
         model=(DefaultTableModel) tblhoadon.getModel();
-        
+        txtday.setVisible(false);
         JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
         loadData();;
     }
@@ -34,26 +38,38 @@ public class HoaDonPanel extends javax.swing.JPanel {
     private void loadData(){
      model.setRowCount(0);
      bus.docDs();
-     ArrayList<org.example.dto.HoaDonDTO> ds = HoaDonBUS.getDs();
+     
+     ArrayList<HoaDonDTO> ds = HoaDonBUS.getDs();
      if(ds==null) return;
-     for(org.example.dto.HoaDonDTO hd: ds){
+     for(HoaDonDTO hd: ds){
          model.addRow(new Object[]{
-             hd.getMaHD(),hd.getMaKHTour(),hd.getMaKHDat(),hd.getMaNV(),org.example.helper.DateHelper.toString(hd.getNgay()),hd.getSoluong(),String.format("%.0f",hd.getTongTien())
+             hd.getMaHD(),hd.getMaKHTour(),hd.getMaKHDat(),hd.getMaNV(),DateHelper.toString(hd.getNgay()),hd.getSoluong(),String.format("%.0f",hd.getTongTien())
+         });
+     }
+    }
+    private void loadData(java.util.Date ngay){
+     model.setRowCount(0);
+     bus.docDs();
+     ArrayList<HoaDonDTO> ds =bus.getHDtheongay(ngay);
+     if(ds==null) return;
+     for(HoaDonDTO hd: ds){
+         model.addRow(new Object[]{
+             hd.getMaHD(),hd.getMaKHTour(),hd.getMaKHDat(),hd.getMaNV(),DateHelper.toString(hd.getNgay()),hd.getSoluong(),String.format("%.0f",hd.getTongTien())
+         });
+     }
+    }
+    private void loadData(String loai,String key){
+     model.setRowCount(0);
+     bus.docDs();
+     ArrayList<HoaDonDTO> ds =bus.timNangcao(loai, key);
+     if(ds==null) return;
+     for(HoaDonDTO hd: ds){
+         model.addRow(new Object[]{
+             hd.getMaHD(),hd.getMaKHTour(),hd.getMaKHDat(),hd.getMaNV(),DateHelper.toString(hd.getNgay()),hd.getSoluong(),hd.getTongTien()
          });
      }
     }
     
-    private void loadData(String loai,String key){
-     model.setRowCount(0);
-     bus.docDs();
-     ArrayList<org.example.dto.HoaDonDTO> ds =bus.timNangcao(loai, key);
-     if(ds==null) return;
-     for(org.example.dto.HoaDonDTO hd: ds){
-         model.addRow(new Object[]{
-             hd.getMaHD(),hd.getMaKHTour(),hd.getMaKHDat(),hd.getMaNV(),org.example.helper.DateHelper.toString(hd.getNgay()),hd.getSoluong(),hd.getTongTien()
-         });
-     }
-    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -64,40 +80,44 @@ public class HoaDonPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        pnlheader = new javax.swing.JPanel();
+        lbname = new javax.swing.JLabel();
+        pnlsearch = new javax.swing.JPanel();
+        lbtim = new javax.swing.JLabel();
         cbtim = new javax.swing.JComboBox<>();
         txttim = new javax.swing.JTextField();
-        btntim = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblhoadon = new javax.swing.JTable();
-        jPanel3 = new javax.swing.JPanel();
+        txtday = new com.toedter.calendar.JDateChooser();
+        pnlfooter = new javax.swing.JPanel();
         btnthem = new javax.swing.JButton();
         btnxoa = new javax.swing.JButton();
         btnsua = new javax.swing.JButton();
         btnreset = new javax.swing.JButton();
         btnxuat = new javax.swing.JButton();
+        pnltable = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblhoadon = new javax.swing.JTable();
 
         setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setLayout(new java.awt.BorderLayout());
+        pnlheader.setLayout(new java.awt.BorderLayout());
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Quản lý hóa đơn");
-        jPanel1.add(jLabel2, java.awt.BorderLayout.CENTER);
+        lbname.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        lbname.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbname.setText("Quản lý hóa đơn");
+        pnlheader.add(lbname, java.awt.BorderLayout.CENTER);
 
-        jLabel3.setText("Tìm theo:");
-        jPanel2.add(jLabel3);
-        jPanel2.add(jLabel1);
+        lbtim.setText("Tìm theo:");
+        pnlsearch.add(lbtim);
 
-        cbtim.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã hóa đơn", "Mã kế hoạch tour", "Mã khách hàng đặt", "Mã nhân viên" }));
-        jPanel2.add(cbtim);
+        cbtim.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã hóa đơn", "Mã kế hoạch tour", "Mã khách hàng đặt", "Mã nhân viên", "Ngày" }));
+        cbtim.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbtimItemStateChanged(evt);
+            }
+        });
+        pnlsearch.add(cbtim);
 
-        txttim.setColumns(20);
+        txttim.setColumns(10);
         txttim.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txttimActionPerformed(evt);
@@ -108,44 +128,24 @@ public class HoaDonPanel extends javax.swing.JPanel {
                 txttimKeyReleased(evt);
             }
         });
-        jPanel2.add(txttim);
+        pnlsearch.add(txttim);
 
-        btntim.setText("Tìm");
-        btntim.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btntimActionPerformed(evt);
+        txtday.setPreferredSize(new java.awt.Dimension(90, 22));
+        txtday.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                txtdayPropertyChange(evt);
             }
         });
-        jPanel2.add(btntim);
-
-        jPanel1.add(jPanel2, java.awt.BorderLayout.PAGE_END);
-
-        add(jPanel1, java.awt.BorderLayout.NORTH);
-
-        tblhoadon.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Mã hóa đơn", "Mã kế hoạch tour", "Mã khách hàng đặt", "Mã nhân viên", "Ngày", "Số lượng", "Tổng tiền", "Xuất"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, true, false, false, true
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+        txtday.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtdayKeyReleased(evt);
             }
         });
-        tblhoadon.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblhoadonMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(tblhoadon);
+        pnlsearch.add(txtday);
 
-        add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        pnlheader.add(pnlsearch, java.awt.BorderLayout.PAGE_END);
+
+        add(pnlheader, java.awt.BorderLayout.NORTH);
 
         btnthem.setText("Thêm");
         btnthem.addActionListener(new java.awt.event.ActionListener() {
@@ -153,7 +153,7 @@ public class HoaDonPanel extends javax.swing.JPanel {
                 btnthemActionPerformed(evt);
             }
         });
-        jPanel3.add(btnthem);
+        pnlfooter.add(btnthem);
 
         btnxoa.setText("Xóa");
         btnxoa.setEnabled(false);
@@ -162,7 +162,7 @@ public class HoaDonPanel extends javax.swing.JPanel {
                 btnxoaActionPerformed(evt);
             }
         });
-        jPanel3.add(btnxoa);
+        pnlfooter.add(btnxoa);
 
         btnsua.setText("Chỉnh sửa");
         btnsua.setEnabled(false);
@@ -171,7 +171,7 @@ public class HoaDonPanel extends javax.swing.JPanel {
                 btnsuaActionPerformed(evt);
             }
         });
-        jPanel3.add(btnsua);
+        pnlfooter.add(btnsua);
 
         btnreset.setText("Làm mới");
         btnreset.addActionListener(new java.awt.event.ActionListener() {
@@ -179,7 +179,7 @@ public class HoaDonPanel extends javax.swing.JPanel {
                 btnresetActionPerformed(evt);
             }
         });
-        jPanel3.add(btnreset);
+        pnlfooter.add(btnreset);
 
         btnxuat.setText("Xuất excel");
         btnxuat.addActionListener(new java.awt.event.ActionListener() {
@@ -187,53 +187,49 @@ public class HoaDonPanel extends javax.swing.JPanel {
                 btnxuatActionPerformed(evt);
             }
         });
-        jPanel3.add(btnxuat);
+        pnlfooter.add(btnxuat);
 
-        add(jPanel3, java.awt.BorderLayout.PAGE_END);
-    }// </editor-fold>//GEN-END:initComponents
+        add(pnlfooter, java.awt.BorderLayout.PAGE_END);
 
-    private void tblhoadonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblhoadonMouseClicked
-        // TODO add your handling code here:
-        int row =tblhoadon.getSelectedRow();
-        if(row>=0){
-            btnsua.setEnabled(true);
-            btnxoa.setEnabled(true);
-            
-            if(evt.getClickCount()==2){
-                String ma=tblhoadon.getValueAt(row, 0).toString();
-                
-                String[] option={"Chỉnh sửa","Chi tiết hóa đơn","Xuất Excel dòng này"};
-                
-                int choice=JOptionPane.showOptionDialog(this, "Vui lòng chọn lựa chọn", "Tùy chọn", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[1]);
-                
-                if(choice==0){
-                    org.example.dto.HoaDonDTO hd=new org.example.dto.HoaDonDTO(tblhoadon.getValueAt(row, 0).toString(), tblhoadon.getValueAt(row, 1).toString(), tblhoadon.getValueAt(row, 2).toString(), tblhoadon.getValueAt(row, 3).toString(),org.example.helper.DateHelper.toLocalDate(tblhoadon.getValueAt(row, 4).toString()),Integer.parseInt(tblhoadon.getValueAt(row, 5).toString()),Float.parseFloat(tblhoadon.getValueAt(row, 6).toString()));
-                    org.example.gui.dialog.HoaDonDialog hdd =new org.example.gui.dialog.HoaDonDialog(hd);
-                    hdd.setModal(true);
-                    hdd.setVisible(true);
-                    loadData();
-                }else if(choice==1){
-                    org.example.gui.panel.CTHoaDonPanel cthd=new org.example.gui.panel.CTHoaDonPanel(ma);
-                    
-                    int result=JOptionPane.showConfirmDialog(null, cthd,"Chi tiết hóa đơn",JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE);
-                    loadData();
-                    if(result==JOptionPane.OK_OPTION){
-                        return;
-                    }
-                }else if(choice == 2){
-                    // 2. NẾU CHỌN XUẤT EXCEL THÌ GỌI HÀM NÀY
-                    // Truyền thẳng biến 'row' mà bạn đã lấy ở trên vào
-                    org.example.helper.ExcelHelper.xuatExcel1Dong(tblhoadon, row, this, "ChiTiet_" + ma);
-                } else if(choice == 3){
-                    return;
-                }
-            }            
+        pnltable.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        pnltable.setLayout(new java.awt.BorderLayout());
+
+        tblhoadon.setBorder(javax.swing.BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        tblhoadon.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Mã hóa đơn", "Mã kế hoạch tour", "Mã khách hàng đặt", "Mã nhân viên", "Ngày", "Số lượng", "Tổng tiền"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, true, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tblhoadon);
+        if (tblhoadon.getColumnModel().getColumnCount() > 0) {
+            tblhoadon.getColumnModel().getColumn(0).setPreferredWidth(120);
+            tblhoadon.getColumnModel().getColumn(1).setPreferredWidth(120);
+            tblhoadon.getColumnModel().getColumn(2).setPreferredWidth(120);
+            tblhoadon.getColumnModel().getColumn(3).setPreferredWidth(120);
+            tblhoadon.getColumnModel().getColumn(4).setPreferredWidth(120);
+            tblhoadon.getColumnModel().getColumn(5).setPreferredWidth(120);
+            tblhoadon.getColumnModel().getColumn(6).setPreferredWidth(120);
         }
-    }//GEN-LAST:event_tblhoadonMouseClicked
+
+        pnltable.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        add(pnltable, java.awt.BorderLayout.CENTER);
+    }// </editor-fold>//GEN-END:initComponents
 
     private void btnthemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnthemActionPerformed
         // TODO add your handling code here:
-        org.example.gui.dialog.HoaDonDialog hdd=new org.example.gui.dialog.HoaDonDialog();
+        HoaDonDialog hdd=new org.example.gui.dialog.HoaDonDialog();
         hdd.setModal(true);
         hdd.setVisible(true);
         loadData();
@@ -251,7 +247,7 @@ public class HoaDonPanel extends javax.swing.JPanel {
             int cf =JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa không?","Xác nhận",JOptionPane.YES_NO_OPTION);
             if(cf==JOptionPane.YES_OPTION){
                 String ma = tblhoadon.getValueAt(row, 0).toString();
-                org.example.dto.HoaDonDTO hd=bus.timHd(ma);
+                HoaDonDTO hd=bus.timHd(ma);
 
                 if(bus.xoaHoaDon(ma)){
                     DefaultTableModel model=(DefaultTableModel) tblhoadon.getModel();
@@ -269,22 +265,8 @@ public class HoaDonPanel extends javax.swing.JPanel {
 
     private void btnxuatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnxuatActionPerformed
         // TODO add your handling code here:
-        org.example.helper.ExcelHelper.xuatExcel(tblhoadon, this, "Danh sách hóa đơn");
+        ExcelHelper.xuatExcel(tblhoadon, this, "Danh sách hóa đơn");
     }//GEN-LAST:event_btnxuatActionPerformed
-
-    private void btntimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btntimActionPerformed
-        // TODO add your handling code here:
-        String tim = txttim.getText().toString().trim();
-        String loai =cbtim.getSelectedItem().toString().trim();
-
-        if(tim.isEmpty()){
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập thông tin cần tìm");
-            loadData();
-        }else {
-            loadData(loai, tim);
-        }
-
-    }//GEN-LAST:event_btntimActionPerformed
 
     private void txttimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txttimActionPerformed
         // TODO add your handling code here:
@@ -300,7 +282,7 @@ public class HoaDonPanel extends javax.swing.JPanel {
             return;
         }
         String ma =tblhoadon.getValueAt(row, 0).toString().trim();
-        org.example.dto.HoaDonDTO hd=bus.timHd(ma);
+        HoaDonDTO hd=bus.timHd(ma);
         if(hd!=null){
             org.example.gui.dialog.HoaDonDialog hdd=new org.example.gui.dialog.HoaDonDialog(hd);
             hdd.setModal(true);
@@ -323,23 +305,47 @@ public class HoaDonPanel extends javax.swing.JPanel {
         loadData(loai, text);
     }//GEN-LAST:event_txttimKeyReleased
 
+    private void cbtimItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbtimItemStateChanged
+        // TODO add your handling code here:
+        String item=cbtim.getSelectedItem().toString();
+        if(item.equals("Ngày")){
+                    txttim.setVisible(false);
+                    txtday.setVisible(true);
+        }else{
+                    txttim.setVisible(true);
+                    txtday.setVisible(false); 
+        }
+    }//GEN-LAST:event_cbtimItemStateChanged
+
+    private void txtdayKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtdayKeyReleased
+        // TODO add your handling code here:
+
+        
+    }//GEN-LAST:event_txtdayKeyReleased
+
+    private void txtdayPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_txtdayPropertyChange
+        // TODO add your handling code here:
+        java.util.Date ngay = txtday.getDate();
+        loadData(ngay); 
+    }//GEN-LAST:event_txtdayPropertyChange
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnreset;
     private javax.swing.JButton btnsua;
     private javax.swing.JButton btnthem;
-    private javax.swing.JButton btntim;
     private javax.swing.JButton btnxoa;
     private javax.swing.JButton btnxuat;
     private javax.swing.JComboBox<String> cbtim;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbname;
+    private javax.swing.JLabel lbtim;
+    private javax.swing.JPanel pnlfooter;
+    private javax.swing.JPanel pnlheader;
+    private javax.swing.JPanel pnlsearch;
+    private javax.swing.JPanel pnltable;
     private javax.swing.JTable tblhoadon;
+    private com.toedter.calendar.JDateChooser txtday;
     private javax.swing.JTextField txttim;
     // End of variables declaration//GEN-END:variables
 }

@@ -54,7 +54,7 @@ public class CTHoaDonBUS {
     }
     
     public boolean xoaCtietHd(String mact,String makh){
-        org.example.dto.CTietHDDTO ct = timCt(mact, makh);
+        CTietHDDTO ct = timCt(mact, makh);
                 if (ct == null) {
             return false;
         }
@@ -87,17 +87,17 @@ public class CTHoaDonBUS {
         }
         return flag; 
    }
-    public ArrayList<org.example.dto.CTietHDDTO> getDstheoma(String mahd){
-        org.example.dao.CTietHDDAO dao=new org.example.dao.CTietHDDAO();
+    public ArrayList<CTietHDDTO> getDstheoma(String mahd){
+        CTietHDDAO dao=new CTietHDDAO();
         return dao.getDstheoma(mahd);
     }
     public float laygia(String mahd){
-        org.example.dao.CTietHDDAO daoCTietHD=new org.example.dao.CTietHDDAO();
+        CTietHDDAO daoCTietHD=new CTietHDDAO();
         return daoCTietHD.laygia(mahd);
     }
     
-    public ArrayList<org.example.dto.CTietHDDTO> timNangcao(String loai,String key){
-        ArrayList<org.example.dto.CTietHDDTO> ds =new ArrayList<>();
+    public ArrayList<CTietHDDTO> timNangcao(String loai,String key){
+        ArrayList<CTietHDDTO> ds =new ArrayList<>();
         String tencot="";
         if(loai.equals("Mã hóa đơn")){
             tencot="mahd";

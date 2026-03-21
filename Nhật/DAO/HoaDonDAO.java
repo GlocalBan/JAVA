@@ -8,6 +8,7 @@ import org.example.dto.HoaDonDTO;
 import java.sql.*;
 import java.util.*;
 import java.time.LocalDate;
+import org.example.helper.DateHelper;
 /**
  *
  * @author Nhat
@@ -174,8 +175,8 @@ public boolean themHoaDon(HoaDonDTO hd) {
         return gia;
         }
         
-    public ArrayList<org.example.dto.HoaDonDTO> timNangcao(String tencot,String key){
-        ArrayList<org.example.dto.HoaDonDTO> ds =new ArrayList<>();
+    public ArrayList<HoaDonDTO> timNangcao(String tencot,String key){
+        ArrayList<HoaDonDTO> ds =new ArrayList<>();
         String sql ="Select * from Hoadon where "+ tencot +" like ?";
         
         try(Connection conn=KetNoiCSDL.getConnection();
@@ -184,7 +185,7 @@ public boolean themHoaDon(HoaDonDTO hd) {
             ResultSet rs=ps.executeQuery();
             
             while(rs.next()){
-                org.example.dto.HoaDonDTO hd=maptoHd(rs);
+                HoaDonDTO hd=maptoHd(rs);
                 ds.add(hd);
         }
     }catch(SQLException e){
@@ -205,5 +206,41 @@ public boolean themHoaDon(HoaDonDTO hd) {
         return false;
     }
     
-
+    public LocalDate layNgay(String mahd){
+        String sql ="Select ngay from Hoadon where mahd=?";
+        
+        try(Connection conn=KetNoiCSDL.getConnection();
+                PreparedStatement ps=conn.prepareStatement(sql)){
+            ps.setString(0, mahd);
+            
+            ResultSet rs=ps.executeQuery();
+            LocalDate ngay=null;
+            if(rs.next()){
+                ngay=DateHelper.toLocalDate(rs.getDate("Ngay").toString().trim());
+            }
+            return ngay;
+        }catch(SQLException e){
+            return null;
+        }
+    }
+    
+    public ArrayList<HoaDonDTO> getHdtheoNgay(java.util.Date ngay){
+        ArrayList<HoaDonDTO> ds =new ArrayList<>();
+        String sql ="Select * from Hoadon where ngay=?";
+        
+        try(Connection conn=KetNoiCSDL.getConnection();
+                PreparedStatement ps=conn.prepareStatement(sql)){
+            
+            ps.setDate(1, new java.sql.Date(ngay.getTime()));
+            ResultSet rs=ps.executeQuery();
+            
+            while(rs.next()){
+                HoaDonDTO hd=maptoHd(rs);
+                ds.add(hd);
+        }
+    }catch(SQLException e){
+        e.printStackTrace();
+    }
+        return ds;
+    }
 }
