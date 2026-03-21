@@ -1,5 +1,6 @@
 package GUI;
 
+import DTO.TaiKhoan;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -19,6 +20,7 @@ import javax.swing.SwingConstants;
 import GUI.Panel.KHang_KHTourPanel;
 import GUI.Panel.KhachHangPanel;
 import GUI.Panel.NhanVienPanel;
+import login.PhanQuyen;
 
 public class MainFrame extends JFrame {
 
@@ -26,8 +28,7 @@ public class MainFrame extends JFrame {
     private CardLayout cardLayout;
     private JPanel contentArea;
     private JButton activeButton;
-
-    public MainFrame() {
+    public MainFrame(TaiKhoan taiKhoanDangNhap) {
         setTitle("Quản lý Tour du lịch");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 600);
@@ -50,11 +51,19 @@ public class MainFrame extends JFrame {
 //        sidebar.add(buildLogo());
 
         //menu items: label, cardName
-        String[][] menus = {
+        String[][] menus;
+        if (PhanQuyen.laQuanLy()) {
+            menus = new String[][]{
                 {"Nhân viên", "NhanVien"},
                 {"Khách hàng", "KhachHang"},
                 {"Khách hàng-Kế hoạch Tour", "KHang_KHTour"}
-        };
+            };
+        } else {
+            menus = new String[][]{
+                {"Khách hàng", "KhachHang"},
+                {"Khách hàng-Kế hoạch Tour", "KHang_KHTour"}
+            };
+        }
 
         for(String[] m : menus){
             JButton btn = createMenuButton(m[0], m[1]);
@@ -111,7 +120,7 @@ public class MainFrame extends JFrame {
         return btn;
     }
     public static void main (String []args){
-        MainFrame main = new MainFrame();
+        new MainFrame(null);
     }
 
 }

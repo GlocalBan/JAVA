@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NhanVienDAO {
+    private final TaiKhoanDAO taiKhoanDAO = new TaiKhoanDAO();
 
     public ArrayList<NhanVien> layDanhSachNV() {
 
@@ -47,7 +48,11 @@ public class NhanVienDAO {
             pstmt.setString(6, nv.getSdt());
             pstmt.setDate(7, Date.valueOf(nv.getNgaySinh()));
 
-            return pstmt.executeUpdate() > 0;
+            boolean themNhanVien = pstmt.executeUpdate() > 0;
+            if (!themNhanVien) {
+                return false;
+            }
+            return taiKhoanDAO.taoTaiKhoanNhanVien(nv.getMaNV(), nv.getChucVu());
 
         } catch (SQLException e) {
             e.printStackTrace();

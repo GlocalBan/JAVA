@@ -14,6 +14,7 @@ import java.util.List;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import login.PhanQuyen;
 /**
  *
  * @author Admin
@@ -29,6 +30,9 @@ public class KHang_KHTourPanel extends javax.swing.JPanel {
     public KHang_KHTourPanel() {
         khangkhtBUS = new KHang_KHTourBUS();
         initComponents();
+        if (!PhanQuyen.laQuanLy()) {
+            btnXoa.setEnabled(false);
+        }
         txtSearch.getDocument().addDocumentListener(new DocumentListener() {
 
             private void search() {
@@ -74,10 +78,10 @@ public class KHang_KHTourPanel extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
+        btnThem = new javax.swing.JButton();
+        btnXoa = new javax.swing.JButton();
+        btnSua = new javax.swing.JButton();
+        btnLamMoi = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -127,22 +131,22 @@ public class KHang_KHTourPanel extends javax.swing.JPanel {
 
         add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-        jButton5.setText("Thêm");
-        jButton5.addActionListener(this::jButton5ActionPerformed);
-        jPanel3.add(jButton5);
+        btnThem.setText("Thêm");
+        btnThem.addActionListener(this::btnThemActionPerformed);
+        jPanel3.add(btnThem);
 
-        jButton6.setText("Xóa");
-        jButton6.setEnabled(false);
-        jButton6.addActionListener(this::jButton6ActionPerformed);
-        jPanel3.add(jButton6);
+        btnXoa.setText("Xóa");
+        btnXoa.setEnabled(false);
+        btnXoa.addActionListener(this::btnXoaActionPerformed);
+        jPanel3.add(btnXoa);
 
-        jButton7.setText("Sửa");
-        jButton7.setEnabled(false);
-        jButton7.addActionListener(this::jButton7ActionPerformed);
-        jPanel3.add(jButton7);
+        btnSua.setText("Sửa");
+        btnSua.setEnabled(false);
+        btnSua.addActionListener(this::btnSuaActionPerformed);
+        jPanel3.add(btnSua);
 
-        jButton9.setText("Làm mới");
-        jPanel3.add(jButton9);
+        btnLamMoi.setText("Làm mới");
+        jPanel3.add(btnLamMoi);
 
         add(jPanel3, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
@@ -151,16 +155,19 @@ public class KHang_KHTourPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox2ActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         // TODO add your handling code here:
         KHang_KHTourDialog khangkhtDialog = new KHang_KHTourDialog(null, true, ds, KHang_KHTourDialog.Mode.ADD, null);
         khangkhtDialog.setVisible(true);
 
         loadKHang_KHTourToTable(ds.layDanhSachKHang_KHTour());
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_btnThemActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+        if (!PhanQuyen.laQuanLy()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Bạn không có quyền xóa dữ liệu.");
+            return;
+        }
         int i = jTable2.getSelectedRow();
         int result = javax.swing.JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa?", "Xác nhận", javax.swing.JOptionPane.YES_NO_OPTION);
         if (result == javax.swing.JOptionPane.YES_OPTION && i >= 0) {
@@ -171,9 +178,9 @@ public class KHang_KHTourPanel extends javax.swing.JPanel {
             DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
             model.removeRow(i);
         }
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_btnXoaActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         // TODO add your handling code here:
         int i = jTable2.getSelectedRow();
 
@@ -188,12 +195,13 @@ public class KHang_KHTourPanel extends javax.swing.JPanel {
                 loadKHang_KHTourToTable(ds.layDanhSachKHang_KHTour());
             }
         }
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_btnSuaActionPerformed
     
     private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
-        // TODO add your handling code here:
-        jButton6.setEnabled(true);
-        jButton7.setEnabled(true);
+        if (PhanQuyen.laQuanLy()) {
+            btnXoa.setEnabled(true);
+        }
+        btnSua.setEnabled(true);
     }//GEN-LAST:event_jTable2MouseClicked
 
     private void searchKHang_KHTour() {
@@ -244,10 +252,10 @@ public class KHang_KHTourPanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton9;
+    private javax.swing.JButton btnLamMoi;
+    private javax.swing.JButton btnSua;
+    private javax.swing.JButton btnThem;
+    private javax.swing.JButton btnXoa;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

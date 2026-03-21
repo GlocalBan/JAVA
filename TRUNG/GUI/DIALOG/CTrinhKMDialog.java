@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/AWTForms/Dialog.java to edit this template
  */
-package GUI.dialog;
+package Trung.GUI.dialog;
 
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -10,10 +10,10 @@ import javax.swing.table.DefaultTableModel;
 import java.util.Date;
 
 
-import DAO._TourDAO;
+import DAO.TourDAO;
 import DTO.KMHDDTO;
 import DTO.KMTourDTO;
-import DTO._TourDTO;
+import DTO.TourDTO;
 
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
@@ -488,10 +488,10 @@ public class CTrinhKMDialog extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) tblTour.getModel();
         model.setRowCount(0);
 
-        _TourDAO dao = new _TourDAO();
-        ArrayList<_TourDTO> list = dao.getAllTours();
+        TourDAO dao = new TourDAO();
+        ArrayList<TourDTO> list = dao.getAllTours();
 
-        for (_TourDTO t : list) {
+        for (TourDTO t : list) {
 
             model.addRow(new Object[]{
                     false,                 // checkbox chọn tour

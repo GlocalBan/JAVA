@@ -42,8 +42,8 @@ public class KhachHangDialog extends javax.swing.JDialog {
 
         if (mode == Mode.EDIT && kh != null) {
         setKhachHangData(kh);
-        jTextField22.setEditable(false); // Không cho sửa mã NV
-        jTextField27.requestFocus(); // Chuyển focus đến trường Họ
+        txtMaKH.setEditable(false); // Không cho sửa mã NV
+        txtHoKH.requestFocus(); // Chuyển focus đến trường Họ
         setTitle("Sửa khách hàng");
     } else {
         setTitle("Thêm khách hàng");
@@ -61,30 +61,30 @@ public class KhachHangDialog extends javax.swing.JDialog {
 
         jPanel22 = new javax.swing.JPanel();
         jLabel22 = new javax.swing.JLabel();
-        jTextField22 = new javax.swing.JTextField();
+        txtMaKH = new javax.swing.JTextField();
         jPanel23 = new javax.swing.JPanel();
         jLabel23 = new javax.swing.JLabel();
-        jTextField23 = new javax.swing.JTextField();
+        txtTenKH = new javax.swing.JTextField();
         jPanel24 = new javax.swing.JPanel();
         jLabel24 = new javax.swing.JLabel();
-        jTextField24 = new javax.swing.JTextField();
-        jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
+        txtDiaChiKH = new javax.swing.JTextField();
+        btnLuu = new javax.swing.JButton();
+        btnDong = new javax.swing.JButton();
         jPanel26 = new javax.swing.JPanel();
         jLabel26 = new javax.swing.JLabel();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jPanel27 = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
-        jTextField27 = new javax.swing.JTextField();
+        txtHoKH = new javax.swing.JTextField();
         jPanel28 = new javax.swing.JPanel();
         jLabel28 = new javax.swing.JLabel();
-        jTextField28 = new javax.swing.JTextField();
+        txtSoDienThoaiKH = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel22.setText("Mã khách hàng:");
 
-        jTextField22.addActionListener(this::jTextField22ActionPerformed);
+        txtMaKH.addActionListener(this::txtMaKHActionPerformed);
 
         javax.swing.GroupLayout jPanel22Layout = new javax.swing.GroupLayout(jPanel22);
         jPanel22.setLayout(jPanel22Layout);
@@ -94,7 +94,7 @@ public class KhachHangDialog extends javax.swing.JDialog {
                 .addGap(59, 59, 59)
                 .addComponent(jLabel22)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField22, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtMaKH, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel22Layout.setVerticalGroup(
@@ -103,13 +103,13 @@ public class KhachHangDialog extends javax.swing.JDialog {
                 .addGap(12, 12, 12)
                 .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel22)
-                    .addComponent(jTextField22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtMaKH, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
         jLabel23.setText("Tên:");
 
-        jTextField23.addActionListener(this::jTextField23ActionPerformed);
+        txtTenKH.addActionListener(this::txtTenKHActionPerformed);
 
         javax.swing.GroupLayout jPanel23Layout = new javax.swing.GroupLayout(jPanel23);
         jPanel23.setLayout(jPanel23Layout);
@@ -119,7 +119,7 @@ public class KhachHangDialog extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel23)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField23, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtTenKH, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(46, 46, 46))
         );
         jPanel23Layout.setVerticalGroup(
@@ -128,13 +128,13 @@ public class KhachHangDialog extends javax.swing.JDialog {
                 .addGap(12, 12, 12)
                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel23)
-                    .addComponent(jTextField23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTenKH, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
         jLabel24.setText("Địa chỉ:");
 
-        jTextField24.addActionListener(this::jTextField24ActionPerformed);
+        txtDiaChiKH.addActionListener(this::txtDiaChiKHActionPerformed);
 
         javax.swing.GroupLayout jPanel24Layout = new javax.swing.GroupLayout(jPanel24);
         jPanel24.setLayout(jPanel24Layout);
@@ -144,7 +144,7 @@ public class KhachHangDialog extends javax.swing.JDialog {
                 .addGap(101, 101, 101)
                 .addComponent(jLabel24)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField24, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtDiaChiKH, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel24Layout.setVerticalGroup(
@@ -153,14 +153,15 @@ public class KhachHangDialog extends javax.swing.JDialog {
                 .addGap(12, 12, 12)
                 .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel24)
-                    .addComponent(jTextField24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtDiaChiKH, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
-        jButton7.setText("Lưu");
-        jButton7.addActionListener(this::jButton7ActionPerformed);
+        btnLuu.setText("Lưu");
+        btnLuu.addActionListener(this::btnLuuActionPerformed);
 
-        jButton8.setText("Đóng");
+        btnDong.setText("Đóng");
+        btnDong.addActionListener(this::btnDongActionPerformed);
 
         jLabel26.setText("Ngày sinh:");
 
@@ -189,7 +190,7 @@ public class KhachHangDialog extends javax.swing.JDialog {
 
         jLabel27.setText("Họ:");
 
-        jTextField27.addActionListener(this::jTextField27ActionPerformed);
+        txtHoKH.addActionListener(this::txtHoKHActionPerformed);
 
         javax.swing.GroupLayout jPanel27Layout = new javax.swing.GroupLayout(jPanel27);
         jPanel27.setLayout(jPanel27Layout);
@@ -199,7 +200,7 @@ public class KhachHangDialog extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel27)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField27, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtHoKH, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(41, 41, 41))
         );
         jPanel27Layout.setVerticalGroup(
@@ -208,13 +209,13 @@ public class KhachHangDialog extends javax.swing.JDialog {
                 .addGap(12, 12, 12)
                 .addGroup(jPanel27Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel27)
-                    .addComponent(jTextField27, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtHoKH, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
         jLabel28.setText("Số điện thoại:");
 
-        jTextField28.addActionListener(this::jTextField28ActionPerformed);
+        txtSoDienThoaiKH.addActionListener(this::txtSoDienThoaiKHActionPerformed);
 
         javax.swing.GroupLayout jPanel28Layout = new javax.swing.GroupLayout(jPanel28);
         jPanel28.setLayout(jPanel28Layout);
@@ -224,7 +225,7 @@ public class KhachHangDialog extends javax.swing.JDialog {
                 .addGap(67, 67, 67)
                 .addComponent(jLabel28)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField28, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtSoDienThoaiKH, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(39, Short.MAX_VALUE))
         );
         jPanel28Layout.setVerticalGroup(
@@ -233,7 +234,7 @@ public class KhachHangDialog extends javax.swing.JDialog {
                 .addGap(12, 12, 12)
                 .addGroup(jPanel28Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel28)
-                    .addComponent(jTextField28, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtSoDienThoaiKH, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
@@ -261,9 +262,9 @@ public class KhachHangDialog extends javax.swing.JDialog {
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(57, 57, 57)
-                .addComponent(jButton7)
+                .addComponent(btnLuu)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton8)
+                .addComponent(btnDong)
                 .addGap(68, 68, 68))
         );
         layout.setVerticalGroup(
@@ -282,69 +283,73 @@ public class KhachHangDialog extends javax.swing.JDialog {
                 .addComponent(jPanel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton7)
-                    .addComponent(jButton8))
+                    .addComponent(btnLuu)
+                    .addComponent(btnDong))
                 .addGap(0, 33, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField22ActionPerformed
+    private void txtMaKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaKHActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField22ActionPerformed
+    }//GEN-LAST:event_txtMaKHActionPerformed
 
-    private void jTextField23ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField23ActionPerformed
+    private void txtTenKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenKHActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField23ActionPerformed
+    }//GEN-LAST:event_txtTenKHActionPerformed
 
-    private void jTextField24ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField24ActionPerformed
+    private void txtDiaChiKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDiaChiKHActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField24ActionPerformed
+    }//GEN-LAST:event_txtDiaChiKHActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void btnLuuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLuuActionPerformed
         // TODO add your handling code here:
-        String maKH = jTextField22.getText().trim();
-        String ten = jTextField23.getText().trim();
-        String diaChi = jTextField24.getText().trim();
+        String maKH = txtMaKH.getText().trim();
+        String ten = txtTenKH.getText().trim();
+        String diaChi = txtDiaChiKH.getText().trim();
         LocalDate ngaySinh = jDateChooser1.getDate() != null ? jDateChooser1.getDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate() : null;
-        String ho = jTextField27.getText().trim();
-        String sdt = jTextField28.getText().trim();
+        String ho = txtHoKH.getText().trim();
+        String sdt = txtSoDienThoaiKH.getText().trim();
 
         KhachHangBUS khachHangBUS = new KhachHangBUS();
         if (mode == Mode.ADD) {
-            KhachHang newKhachHang = new KhachHang(maKH, ho, ten, diaChi, sdt, java.sql.Date.valueOf(ngaySinh));
+            KhachHang newKhachHang = new KhachHang(maKH, ho, ten, diaChi, sdt, ngaySinh);
             khachHangBUS.them(newKhachHang);
         } else if (mode == Mode.EDIT && currentKhachHang != null) {
             currentKhachHang.setHo(ho);
             currentKhachHang.setTen(ten);
             currentKhachHang.setDiaChi(diaChi);
-            currentKhachHang.setNgaySinh(java.sql.Date.valueOf(ngaySinh));
+            currentKhachHang.setNgaySinh (ngaySinh);
             currentKhachHang.setSdt(sdt);
             khachHangBUS.suaKhachHang(currentKhachHang);
         }
         dispose(); // Đóng dialog sau khi lưu
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_btnLuuActionPerformed
 
-    private void jTextField27ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField27ActionPerformed
+    private void txtHoKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHoKHActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField27ActionPerformed
+    }//GEN-LAST:event_txtHoKHActionPerformed
 
-    private void jTextField28ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField28ActionPerformed
+    private void txtSoDienThoaiKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSoDienThoaiKHActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField28ActionPerformed
+    }//GEN-LAST:event_txtSoDienThoaiKHActionPerformed
+
+    private void btnDongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDongActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDongActionPerformed
 
     public void setKhachHangData(KhachHang kh) {
-        jTextField22.setText(kh.getMaKH());
-        jTextField23.setText(kh.getTen());
-        jTextField24.setText(kh.getDiaChi());
+        txtMaKH.setText(kh.getMaKH());
+        txtTenKH.setText(kh.getTen());
+        txtDiaChiKH.setText(kh.getDiaChi());
             if (kh.getNgaySinh() != null) {
-                jDateChooser1.setDate(java.sql.Date.valueOf(kh.getNgaySinh().toLocalDate()));
+                jDateChooser1.setDate(java.util.Date.from(kh.getNgaySinh().atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()));
             } else {
                 jDateChooser1.setDate(null);
             }
-        jTextField27.setText(kh.getHo());
-        jTextField28.setText(kh.getSdt());
+        txtHoKH.setText(kh.getHo());
+        txtSoDienThoaiKH.setText(kh.getSdt());
     }
     /**
      * @param args the command line arguments
@@ -384,8 +389,8 @@ public class KhachHangDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
+    private javax.swing.JButton btnDong;
+    private javax.swing.JButton btnLuu;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
@@ -399,10 +404,10 @@ public class KhachHangDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel26;
     private javax.swing.JPanel jPanel27;
     private javax.swing.JPanel jPanel28;
-    private javax.swing.JTextField jTextField22;
-    private javax.swing.JTextField jTextField23;
-    private javax.swing.JTextField jTextField24;
-    private javax.swing.JTextField jTextField27;
-    private javax.swing.JTextField jTextField28;
+    private javax.swing.JTextField txtDiaChiKH;
+    private javax.swing.JTextField txtHoKH;
+    private javax.swing.JTextField txtMaKH;
+    private javax.swing.JTextField txtSoDienThoaiKH;
+    private javax.swing.JTextField txtTenKH;
     // End of variables declaration//GEN-END:variables
 }

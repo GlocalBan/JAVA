@@ -7,7 +7,7 @@ package Vinh.GUI;
 import DTO.NhanVien;
 import BUS.NhanVienBUS;
 import DAO.DSNhanVien;
-import GUI.Panel.NhanVienPanel;
+import Vinh.GUI.Panel.NhanVienPanel;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -482,13 +482,13 @@ public class NhanVienDialog extends javax.swing.JDialog {
 
         NhanVienBUS nvBUS = new NhanVienBUS();
         if (mode == Mode.ADD) {
-            NhanVien newNV = new NhanVien(maNV, chucVu, ho, ten, diaChi, sdt, java.sql.Date.valueOf(ngaySinh));
+            NhanVien newNV = new NhanVien(maNV, chucVu, ho, ten, diaChi, sdt, ngaySinh);
             nvBUS.them(newNV);
         } else if (mode == Mode.EDIT && currentNhanVien != null) {
             currentNhanVien.setHo(ho);
             currentNhanVien.setTen(ten);
             currentNhanVien.setChucVu(chucVu);
-            currentNhanVien.setNgaySinh(java.sql.Date.valueOf(ngaySinh));
+            currentNhanVien.setNgaySinh(ngaySinh);
             currentNhanVien.setSdt(sdt);
             currentNhanVien.setDiaChi(diaChi);
             nvBUS.suaNhanVien(currentNhanVien);

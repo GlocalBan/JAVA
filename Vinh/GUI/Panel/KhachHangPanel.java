@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import login.PhanQuyen;
 
 /**
  *
@@ -34,6 +35,9 @@ public class KhachHangPanel extends javax.swing.JPanel {
     public KhachHangPanel() {
         khachHangBUS = new KhachHangBUS();
         initComponents();
+        if (!PhanQuyen.laQuanLy()) {
+            btnXoa.setEnabled(false);
+        }
         txtSearch.getDocument().addDocumentListener(new DocumentListener() {
         
         private void search() {
@@ -77,10 +81,10 @@ public class KhachHangPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnThem = new javax.swing.JButton();
+        btnXoa = new javax.swing.JButton();
+        btnSua = new javax.swing.JButton();
+        btnLamMoi = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -130,22 +134,22 @@ public class KhachHangPanel extends javax.swing.JPanel {
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        jButton1.setText("Thêm");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
-        jPanel3.add(jButton1);
+        btnThem.setText("Thêm");
+        btnThem.addActionListener(this::btnThemActionPerformed);
+        jPanel3.add(btnThem);
 
-        jButton2.setText("Xóa");
-        jButton2.setEnabled(false);
-        jButton2.addActionListener(this::jButton2ActionPerformed);
-        jPanel3.add(jButton2);
+        btnXoa.setText("Xóa");
+        btnXoa.setEnabled(false);
+        btnXoa.addActionListener(this::btnXoaActionPerformed);
+        jPanel3.add(btnXoa);
 
-        jButton3.setText("Sửa");
-        jButton3.setEnabled(false);
-        jButton3.addActionListener(this::jButton3ActionPerformed);
-        jPanel3.add(jButton3);
+        btnSua.setText("Sửa");
+        btnSua.setEnabled(false);
+        btnSua.addActionListener(this::btnSuaActionPerformed);
+        jPanel3.add(btnSua);
 
-        jButton4.setText("Làm mới");
-        jPanel3.add(jButton4);
+        btnLamMoi.setText("Làm mới");
+        jPanel3.add(btnLamMoi);
 
         add(jPanel3, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
@@ -154,16 +158,19 @@ public class KhachHangPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         // TODO add your handling code here:
         KhachHangDialog dialog = new KhachHangDialog(null, true, ds, KhachHangDialog.Mode.ADD, null);
         dialog.setVisible(true);
 
         loadKhachHangToTable(ds.layDanhSachKHang());
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnThemActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+        if (!PhanQuyen.laQuanLy()) {
+            JOptionPane.showMessageDialog(this, "Bạn không có quyền xóa dữ liệu.");
+            return;
+        }
         int i = jTable1.getSelectedRow();
         int result = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa khách hàng này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION && i >= 0) {
@@ -173,9 +180,9 @@ public class KhachHangPanel extends javax.swing.JPanel {
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
             model.removeRow(i);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnXoaActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         // TODO add your handling code here:
         int i = jTable1.getSelectedRow();
 
@@ -187,12 +194,13 @@ public class KhachHangPanel extends javax.swing.JPanel {
 
             loadKhachHangToTable(ds.layDanhSachKHang());
         }
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_btnSuaActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
-        jButton2.setEnabled(true);
-        jButton3.setEnabled(true);
+        if (PhanQuyen.laQuanLy()) {
+            btnXoa.setEnabled(true);
+        }
+        btnSua.setEnabled(true);
     }
 
     private void searchKhachHang() {
@@ -264,10 +272,10 @@ public class KhachHangPanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton btnLamMoi;
+    private javax.swing.JButton btnSua;
+    private javax.swing.JButton btnThem;
+    private javax.swing.JButton btnXoa;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

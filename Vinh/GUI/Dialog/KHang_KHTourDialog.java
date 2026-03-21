@@ -71,54 +71,38 @@ public class KHang_KHTourDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton9 = new javax.swing.JButton();
-        jButton10 = new javax.swing.JButton();
+        btnLuu = new javax.swing.JButton();
+        btnDong = new javax.swing.JButton();
         jPanel33 = new javax.swing.JPanel();
         jLabel33 = new javax.swing.JLabel();
-        jTextField33 = new javax.swing.JTextField();
+        txtMaKH = new javax.swing.JTextField();
         jPanel34 = new javax.swing.JPanel();
         jLabel34 = new javax.swing.JLabel();
-        jTextField34 = new javax.swing.JTextField();
+        txtMaKHTour = new javax.swing.JTextField();
         jPanel35 = new javax.swing.JPanel();
         jLabel35 = new javax.swing.JLabel();
-        jTextField35 = new javax.swing.JTextField();
+        txtGiaVe = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtHoKH = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txtTenKH = new javax.swing.JTextField();
 
-        jButton9.setText("Lưu");
-        jButton9.addActionListener(this::jButton9ActionPerformed);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jButton10.setText("Đóng");
-        jButton10.addActionListener(this::jButton10ActionPerformed);
+        btnLuu.setText("Lưu");
+        btnLuu.addActionListener(this::btnLuuActionPerformed);
+
+        btnDong.setText("Đóng");
+        btnDong.addActionListener(this::btnDongActionPerformed);
 
         jLabel33.setText("Mã khách hàng:");
 
-        jTextField33.addFocusListener(new java.awt.event.FocusAdapter() {
+        txtMaKH.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
-                jTextField33FocusLost(evt);
+                txtMaKHFocusLost(evt);
             }
         });
-        jTextField33.addActionListener(this::jTextField33ActionPerformed);
-
-        jTextField33.setInputVerifier(new InputVerifier() {
-            @Override
-            public boolean verify(JComponent input) {
-                String text = jTextField33.getText().trim();
-                if (text.isEmpty()) {
-                    JOptionPane.showMessageDialog(KHang_KHTourDialog.this, "Mã khách hàng không được để trống.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                    return false;
-                }
-                for (KhachHang kh : dsKhachHang.layDanhSachKHang()) {
-                    if (kh.getMaKH().equals(text)) {
-                        return true;
-                    }
-                }
-                JOptionPane.showMessageDialog(KHang_KHTourDialog.this, "Mã khách hàng không tồn tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-        });
+        txtMaKH.addActionListener(this::txtMaKHActionPerformed);
 
         javax.swing.GroupLayout jPanel33Layout = new javax.swing.GroupLayout(jPanel33);
         jPanel33.setLayout(jPanel33Layout);
@@ -128,7 +112,7 @@ public class KHang_KHTourDialog extends javax.swing.JDialog {
                 .addGap(59, 59, 59)
                 .addComponent(jLabel33)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField33, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtMaKH, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(49, Short.MAX_VALUE))
         );
         jPanel33Layout.setVerticalGroup(
@@ -137,37 +121,18 @@ public class KHang_KHTourDialog extends javax.swing.JDialog {
                 .addGap(12, 12, 12)
                 .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel33)
-                    .addComponent(jTextField33, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtMaKH, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
         jLabel34.setText("Mã kế hoạch - Tour:");
 
-        jTextField34.addFocusListener(new java.awt.event.FocusAdapter() {
+        txtMaKHTour.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
-                jTextField34FocusLost(evt);
+                txtMaKHTourFocusLost(evt);
             }
         });
-
-        jTextField34.addActionListener(this::jTextField34ActionPerformed);
-
-        jTextField34.setInputVerifier(new InputVerifier() {
-            @Override
-            public boolean verify(JComponent input) {
-                String text = jTextField34.getText().trim();
-                if (text.isEmpty()) {
-                    JOptionPane.showMessageDialog(KHang_KHTourDialog.this, "Mã kế hoạch - Tour không được để trống.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                    return false;
-                }
-                for (KeHoachTourDTO kt : dsKeHoachTour.getAllKeHoachTours()) {
-                    if (kt.getMaKHTour().equals(text)) {
-                        return true;
-                    }
-                }
-                JOptionPane.showMessageDialog(KHang_KHTourDialog.this, "Mã kế hoạch - Tour không tồn tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-        });
+        txtMaKHTour.addActionListener(this::txtMaKHTourActionPerformed);
 
         javax.swing.GroupLayout jPanel34Layout = new javax.swing.GroupLayout(jPanel34);
         jPanel34.setLayout(jPanel34Layout);
@@ -177,7 +142,7 @@ public class KHang_KHTourDialog extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel34)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField34, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtMaKHTour, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(41, 41, 41))
         );
         jPanel34Layout.setVerticalGroup(
@@ -186,15 +151,19 @@ public class KHang_KHTourDialog extends javax.swing.JDialog {
                 .addGap(12, 12, 12)
                 .addGroup(jPanel34Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel34)
-                    .addComponent(jTextField34, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtMaKHTour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
         jLabel35.setText("Giá vé:");
 
-        jTextField35.setEnabled(false);
-        
-        jTextField35.addActionListener(this::jTextField35ActionPerformed);
+        txtGiaVe.setEnabled(false);
+        txtGiaVe.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtGiaVeFocusLost(evt);
+            }
+        });
+        txtGiaVe.addActionListener(this::txtGiaVeActionPerformed);
 
         javax.swing.GroupLayout jPanel35Layout = new javax.swing.GroupLayout(jPanel35);
         jPanel35.setLayout(jPanel35Layout);
@@ -204,7 +173,7 @@ public class KHang_KHTourDialog extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel35)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField35, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtGiaVe, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(41, 41, 41))
         );
         jPanel35Layout.setVerticalGroup(
@@ -213,17 +182,22 @@ public class KHang_KHTourDialog extends javax.swing.JDialog {
                 .addGap(12, 12, 12)
                 .addGroup(jPanel35Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel35)
-                    .addComponent(jTextField35, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtGiaVe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
         jLabel1.setText("Họ:");
 
-        jTextField1.setEnabled(false);
+        txtHoKH.setEnabled(false);
+        txtHoKH.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtHoKHFocusLost(evt);
+            }
+        });
 
         jLabel2.setText("Tên:");
 
-        jTextField2.setEnabled(false);
+        txtTenKH.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -236,9 +210,9 @@ public class KHang_KHTourDialog extends javax.swing.JDialog {
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(58, 58, 58)
-                .addComponent(jButton9)
+                .addComponent(btnLuu)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton10)
+                .addComponent(btnDong)
                 .addGap(61, 61, 61))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
@@ -248,11 +222,11 @@ public class KHang_KHTourDialog extends javax.swing.JDialog {
                 .addGap(43, 43, 43)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtHoKH, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtTenKH, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -262,36 +236,36 @@ public class KHang_KHTourDialog extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtHoKH, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTenKH, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
                 .addComponent(jPanel34, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel35, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton9)
-                    .addComponent(jButton10))
+                    .addComponent(btnLuu)
+                    .addComponent(btnDong))
                 .addGap(33, 33, 33))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+    private void btnLuuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLuuActionPerformed
         // TODO add your handling code here:
-        String maKH = jTextField33.getText().trim();
-        String ho = jTextField1.getText().trim();
-        String ten = jTextField2.getText().trim();
-        String maKHTour = jTextField34.getText().trim();
+        String maKH = txtMaKH.getText().trim();
+        String ho = txtHoKH.getText().trim();
+        String ten = txtTenKH.getText().trim();
+        String maKHTour = txtMaKHTour.getText().trim();
 
-        if(jTextField35.getText().trim().isEmpty()){
+        if(txtGiaVe.getText().trim().isEmpty()){
             KHang_KHTourDAO dao = new KHang_KHTourDAO();
             long gia = dao.layDonGiaTheoMaKHTour(maKHTour);
-            jTextField35.setText(String.valueOf(gia));
+            txtGiaVe.setText(String.valueOf(gia));
         }
-        long giaVe = Long.parseLong(jTextField35.getText().trim());
+        long giaVe = Long.parseLong(txtGiaVe.getText().trim());
         KHang_KHTourBUS khangkhtBUS = new KHang_KHTourBUS();
         if(mode==Mode.ADD) {
             KHang_KHTour newKHangKHTour = new KHang_KHTour(maKHTour, maKH, giaVe);
@@ -303,55 +277,67 @@ public class KHang_KHTourDialog extends javax.swing.JDialog {
             khangkhtBUS.suaKHang_KHTour(currentKHangKHTour);
         }
         dispose();
-    }//GEN-LAST:event_jButton9ActionPerformed
+    }//GEN-LAST:event_btnLuuActionPerformed
 
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+    private void btnDongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDongActionPerformed
         // TODO add your handling code here:
         this.dispose();
-    }//GEN-LAST:event_jButton10ActionPerformed
+    }//GEN-LAST:event_btnDongActionPerformed
 
-    private void jTextField33ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField33ActionPerformed
+    private void txtMaKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaKHActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField33ActionPerformed
+    }//GEN-LAST:event_txtMaKHActionPerformed
 
-    private void jTextField34ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField34ActionPerformed
+    private void txtMaKHTourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaKHTourActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField34ActionPerformed
+    }//GEN-LAST:event_txtMaKHTourActionPerformed
 
-    private void jTextField35ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField35ActionPerformed
+    private void txtGiaVeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGiaVeActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField35ActionPerformed
+    }//GEN-LAST:event_txtGiaVeActionPerformed
 
-    private void jTextField33FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField33FocusLost
+    private void txtMaKHFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtMaKHFocusLost
         // TODO add your handling code here:
-        String ma = jTextField33.getText().trim();
+        String ma = txtMaKH.getText().trim();
         for(KhachHang kh : dsKhachHang.layDanhSachKHang()) {
             if(kh.getMaKH().equals(ma)) {
-                jTextField1.setText(kh.getHo());
-                jTextField2.setText(kh.getTen());
+                txtHoKH.setText(kh.getHo());
+                txtTenKH.setText(kh.getTen());
                 return;
             }
         }
         JOptionPane.showMessageDialog(KHang_KHTourDialog.this, "Mã khách hàng không tồn tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-    }//GEN-LAST:event_jTextField33FocusLost
+    }//GEN-LAST:event_txtMaKHFocusLost
 
-    private void jTextField34FocusLost(java.awt.event.FocusEvent evt) {
+    private void txtMaKHTourFocusLost(java.awt.event.FocusEvent evt) {
 
-        String maKHTour = jTextField34.getText().trim();
+        String maKHTour = txtMaKHTour.getText().trim();
 
         if(!maKHTour.isEmpty()){
             KHang_KHTourDAO dao = new KHang_KHTourDAO();
             long gia = dao.layDonGiaTheoMaKHTour(maKHTour);
 
-            jTextField35.setText(String.valueOf(gia));
+            txtGiaVe.setText(String.valueOf(gia));
         }
+    }
+
+    private void txtHoKHFocusLost(java.awt.event.FocusEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void txtTenKHFocusLost(java.awt.event.FocusEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void txtGiaVeFocusLost(java.awt.event.FocusEvent evt) {
+        // TODO add your handling code here:
     }
 
     private void setDataToFields() {
         if (currentKHangKHTour != null) {
-            jTextField33.setText(currentKHangKHTour.getMaKHang());
-            jTextField34.setText(currentKHangKHTour.getMaKHTour());
-            jTextField35.setText(String.valueOf(currentKHangKHTour.getGiaVe()));
+            txtMaKH.setText(currentKHangKHTour.getMaKHang());
+            txtMaKHTour.setText(currentKHangKHTour.getMaKHTour());
+            txtGiaVe.setText(String.valueOf(currentKHangKHTour.getGiaVe()));
         }
     }
 
@@ -393,8 +379,8 @@ public class KHang_KHTourDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton9;
+    private javax.swing.JButton btnDong;
+    private javax.swing.JButton btnLuu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel33;
@@ -403,10 +389,10 @@ public class KHang_KHTourDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel33;
     private javax.swing.JPanel jPanel34;
     private javax.swing.JPanel jPanel35;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField33;
-    private javax.swing.JTextField jTextField34;
-    private javax.swing.JTextField jTextField35;
+    private javax.swing.JTextField txtGiaVe;
+    private javax.swing.JTextField txtHoKH;
+    private javax.swing.JTextField txtMaKH;
+    private javax.swing.JTextField txtMaKHTour;
+    private javax.swing.JTextField txtTenKH;
     // End of variables declaration//GEN-END:variables
 }

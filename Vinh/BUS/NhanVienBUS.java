@@ -45,9 +45,9 @@ public class NhanVienBUS {
                     return;
                 }
             }
-            dataNV.themNhanVien(nv);
-            if (dsNV != null) {
-            dsNV.add(nv);
+            boolean success = dataNV.themNhanVien(nv);
+            if (success && dsNV != null) {
+                dsNV.add(nv);
             }
         } catch (Exception e) {
             e.printStackTrace();
