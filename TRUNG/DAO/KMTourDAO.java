@@ -10,13 +10,9 @@ public class KMTourDAO {
 
         ArrayList<KMTourDTO> list = new ArrayList<>();
 
-        String sql = """
-        SELECT km.*, ct.maTour
-        FROM ctrinhkm km
-        LEFT JOIN kmtour_chitiet ct
-        ON km.maKM = ct.maKM COLLATE utf8mb4_general_ci
-        WHERE km.hinhThucKM = 0
-        """;
+        String sql = "SELECT * FROM CTrinhKM km " +
+                     "JOIN KMTour_CHITIET ct ON km.maKM = ct.maKM " +
+                     "WHERE km.hinhThucKM = 0";
 
         try (Connection conn = KetNoiCSDL.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -69,13 +65,9 @@ public class KMTourDAO {
 
         KMTourDTO km = null;
 
-        String sql = """
-        SELECT km.*, ct.maTour
-        FROM ctrinhkm km
-        LEFT JOIN kmtour_chitiet ct
-        ON km.maKM = ct.maKM COLLATE utf8mb4_general_ci
-        WHERE km.maKM = ?
-        """;
+        String sql = "SELECT * FROM CTrinhKM km " +
+                     "JOIN KMTour_CHITIET ct ON km.maKM = ct.maKM " +
+                     "WHERE km.maKM=?";
 
         try (Connection conn = KetNoiCSDL.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
