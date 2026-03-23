@@ -91,6 +91,7 @@ public class HoaDonPanel extends javax.swing.JPanel {
         btnthem = new javax.swing.JButton();
         btnxoa = new javax.swing.JButton();
         btnsua = new javax.swing.JButton();
+        btnchitiet = new javax.swing.JButton();
         btnreset = new javax.swing.JButton();
         btnxuat = new javax.swing.JButton();
         pnltable = new javax.swing.JPanel();
@@ -173,6 +174,15 @@ public class HoaDonPanel extends javax.swing.JPanel {
         });
         pnlfooter.add(btnsua);
 
+        btnchitiet.setText("Xem chi tiết");
+        btnchitiet.setEnabled(false);
+        btnchitiet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnchitietActionPerformed(evt);
+            }
+        });
+        pnlfooter.add(btnchitiet);
+
         btnreset.setText("Làm mới");
         btnreset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -204,14 +214,21 @@ public class HoaDonPanel extends javax.swing.JPanel {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, true, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        tblhoadon.setColumnSelectionAllowed(true);
+        tblhoadon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblhoadonMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblhoadon);
+        tblhoadon.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (tblhoadon.getColumnModel().getColumnCount() > 0) {
             tblhoadon.getColumnModel().getColumn(0).setPreferredWidth(120);
             tblhoadon.getColumnModel().getColumn(1).setPreferredWidth(120);
@@ -227,76 +244,9 @@ public class HoaDonPanel extends javax.swing.JPanel {
         add(pnltable, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnthemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnthemActionPerformed
-        // TODO add your handling code here:
-        HoaDonDialog hdd=new org.example.gui.dialog.HoaDonDialog();
-        hdd.setModal(true);
-        hdd.setVisible(true);
-        loadData();
-    }//GEN-LAST:event_btnthemActionPerformed
-
-    private void btnxoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnxoaActionPerformed
-        // TODO add your handling code here:
-        try{
-            int row =tblhoadon.getSelectedRow();
-
-            if(row==-1){
-                JOptionPane.showMessageDialog(this, "Vui lòng chọn hóa đơn cần xóa");
-                return;
-            }
-            int cf =JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa không?","Xác nhận",JOptionPane.YES_NO_OPTION);
-            if(cf==JOptionPane.YES_OPTION){
-                String ma = tblhoadon.getValueAt(row, 0).toString();
-                HoaDonDTO hd=bus.timHd(ma);
-
-                if(bus.xoaHoaDon(ma)){
-                    DefaultTableModel model=(DefaultTableModel) tblhoadon.getModel();
-
-                    model.removeRow(row);
-                    loadData();
-                    JOptionPane.showMessageDialog(this, "Xóa thành công");
-                }
-
-            }
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }
-    }//GEN-LAST:event_btnxoaActionPerformed
-
-    private void btnxuatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnxuatActionPerformed
-        // TODO add your handling code here:
-        ExcelHelper.xuatExcel(tblhoadon, this, "Danh sách hóa đơn");
-    }//GEN-LAST:event_btnxuatActionPerformed
-
     private void txttimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txttimActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txttimActionPerformed
-
-    private void btnsuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsuaActionPerformed
-        // TODO add your handling code here:
-        
-        int row =tblhoadon.getSelectedRow();
-        
-        if(row==-1){
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn dòng cần sửa");
-            return;
-        }
-        String ma =tblhoadon.getValueAt(row, 0).toString().trim();
-        HoaDonDTO hd=bus.timHd(ma);
-        if(hd!=null){
-            org.example.gui.dialog.HoaDonDialog hdd=new org.example.gui.dialog.HoaDonDialog(hd);
-            hdd.setModal(true);
-            hdd.setVisible(true);
-            loadData();
-        }else{
-            JOptionPane.showMessageDialog(this, "Không tìm thấy dữ liệu hóa đơn");
-        }
-    }//GEN-LAST:event_btnsuaActionPerformed
-
-    private void btnresetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnresetActionPerformed
-        // TODO add your handling code here:
-        loadData();
-    }//GEN-LAST:event_btnresetActionPerformed
 
     private void txttimKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txttimKeyReleased
         // TODO add your handling code here:
@@ -329,8 +279,105 @@ public class HoaDonPanel extends javax.swing.JPanel {
         loadData(ngay); 
     }//GEN-LAST:event_txtdayPropertyChange
 
+    private void tblhoadonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblhoadonMouseClicked
+        // TODO add your handling code here:
+        int row=tblhoadon.getSelectedRow();
+        String ma =tblhoadon.getValueAt(row, 0).toString().trim();
+        if(row!=-1){
+            btnsua.setEnabled(true);
+            btnxoa.setEnabled(true);
+            btnchitiet.setEnabled(true);
+            if(evt.getClickCount()==2){
+                int cf=JOptionPane.showConfirmDialog(this, "Bạn có muốn xuất excel dòng này không?");
+                if(cf==JOptionPane.YES_OPTION){
+                    ExcelHelper.xuatExcel1Dong(tblhoadon, row, btnreset, ma);
+                }
+            }
+        }
+    }//GEN-LAST:event_tblhoadonMouseClicked
+
+    private void btnxuatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnxuatActionPerformed
+        // TODO add your handling code here:
+        ExcelHelper.xuatExcel(tblhoadon, this, "Danh sách hóa đơn");
+    }//GEN-LAST:event_btnxuatActionPerformed
+
+    private void btnresetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnresetActionPerformed
+        // TODO add your handling code here:
+        loadData();
+    }//GEN-LAST:event_btnresetActionPerformed
+
+    private void btnsuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsuaActionPerformed
+        // TODO add your handling code here:
+
+        int row =tblhoadon.getSelectedRow();
+
+        if(row==-1){
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn dòng cần sửa");
+            return;
+        }
+        String ma =tblhoadon.getValueAt(row, 0).toString().trim();
+        HoaDonDTO hd=bus.timHd(ma);
+        if(hd!=null){
+            org.example.gui.dialog.HoaDonDialog hdd=new org.example.gui.dialog.HoaDonDialog(hd);
+            hdd.setModal(true);
+            hdd.setVisible(true);
+            loadData();
+        }else{
+            JOptionPane.showMessageDialog(this, "Không tìm thấy dữ liệu hóa đơn");
+        }
+    }//GEN-LAST:event_btnsuaActionPerformed
+
+    private void btnxoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnxoaActionPerformed
+        // TODO add your handling code here:
+        try{
+            int row =tblhoadon.getSelectedRow();
+
+            if(row==-1){
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn hóa đơn cần xóa");
+                return;
+            }
+            int cf =JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa không?","Xác nhận",JOptionPane.YES_NO_OPTION);
+            if(cf==JOptionPane.YES_OPTION){
+                String ma = tblhoadon.getValueAt(row, 0).toString();
+                HoaDonDTO hd=bus.timHd(ma);
+
+                if(bus.xoaHoaDon(ma)){
+                    DefaultTableModel model=(DefaultTableModel) tblhoadon.getModel();
+
+                    model.removeRow(row);
+                    loadData();
+                    JOptionPane.showMessageDialog(this, "Xóa thành công");
+                }
+
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_btnxoaActionPerformed
+
+    private void btnthemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnthemActionPerformed
+        // TODO add your handling code here:
+        HoaDonDialog hdd=new org.example.gui.dialog.HoaDonDialog();
+        hdd.setModal(true);
+        hdd.setVisible(true);
+        loadData();
+    }//GEN-LAST:event_btnthemActionPerformed
+
+    private void btnchitietActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnchitietActionPerformed
+        // TODO add your handling code here:
+        int row=tblhoadon.getSelectedRow();
+        String ma =tblhoadon.getValueAt(row, 0).toString().trim();
+        if(row!=-1){
+        btnchitiet.setEnabled(true);
+        NhapCTHD nhap=new NhapCTHD(ma);
+        nhap.setModal(true);
+        nhap.setVisible(true);
+        }
+    }//GEN-LAST:event_btnchitietActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnchitiet;
     private javax.swing.JButton btnreset;
     private javax.swing.JButton btnsua;
     private javax.swing.JButton btnthem;

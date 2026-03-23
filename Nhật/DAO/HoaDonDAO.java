@@ -243,4 +243,82 @@ public boolean themHoaDon(HoaDonDTO hd) {
     }
         return ds;
     }
+    
+    public int getTongChi(LocalDate tungay, LocalDate denngay){
+        int tongchi=0;
+        String sql ="Select sum(tongchi)as tong from kehoachtour where makhtour in ("+"select distinct makhtour from hoadon where ngay between ? and ?)";
+        try(Connection conn=KetNoiCSDL.getConnection();
+                PreparedStatement ps=conn.prepareStatement(sql)){
+                
+            ps.setDate(1, java.sql.Date.valueOf(tungay));
+            ps.setDate(2, java.sql.Date.valueOf(denngay));
+            ResultSet rs=ps.executeQuery();
+            if(rs.next()){
+                tongchi=rs.getInt("tong");
+            }
+    }catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return tongchi;
+    }
+    
+    public int getTongThu(LocalDate tungay, LocalDate denngay){
+        int tong=0;
+        String sql ="Select sum(tongtien) as tong from hoadon where ngay between ? and ?";
+        try(Connection conn=KetNoiCSDL.getConnection();
+                PreparedStatement ps=conn.prepareStatement(sql)){
+            ps.setDate(1, java.sql.Date.valueOf(tungay));
+            ps.setDate(2, java.sql.Date.valueOf(denngay));
+            ResultSet rs =ps.executeQuery();
+            if(rs.next()){
+                tong=rs.getInt("tong");
+            }
+        }catch (SQLException ex) {
+           ex.printStackTrace();
+        }
+        return tong;
+    }
+    
+    public int[] getTongThuTungThang(int nam){
+        int[] tongtien=new int[12];
+        String sql ="Select month(ngay) as thang, sum(tongtien) as tong from hoadon where year(ngay)=? group by month(ngay)";
+        try(Connection conn =KetNoiCSDL.getConnection();
+            PreparedStatement ps=conn.prepareStatement(sql)){
+            ps.setInt(1, nam);
+            ResultSet rs =ps.executeQuery();
+            while(rs.next()){
+                int thang=rs.getInt("thang");
+                int tong=rs.getInt("tong");
+                if(thang>=1 && thang<=12){
+                    tongtien[thang-1]=tong;
+                }
+            }
+        }catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return tongtien;
+    }
+    
+    public int [] getTongChiTungThang(int nam){
+        int[] tongtien=new int[12];
+        String sql ="Select month(h.ngay) as thang, sum(distinct k.tongchi) as tong from hoadon h join kehoachtour k"
+                + " on k.makhtour=h.makhtour where year(h.ngay)=? group by month(h.ngay)";
+        try(Connection conn=KetNoiCSDL.getConnection();
+                PreparedStatement ps=conn.prepareStatement(sql)){
+            ps.setInt(1, nam);
+            ResultSet rs=ps.executeQuery();
+            
+            while(rs.next()){
+                int thang=rs.getInt("thang");
+                int tong=rs.getInt("tong");
+                if(thang>=1 && thang<=12){
+                    tongtien[thang-1]=tong;
+                }
+            }
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+        return tongtien;
+    }
+    
 }

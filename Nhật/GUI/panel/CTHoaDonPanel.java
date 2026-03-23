@@ -233,6 +233,11 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        tblcthd.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblcthdMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblcthd);
 
         pnlfooter.add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -315,6 +320,19 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
     private void txttimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txttimActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txttimActionPerformed
+
+    private void tblcthdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblcthdMouseClicked
+        // TODO add your handling code here:
+        int row=tblcthd.getSelectedRow();
+        if(row!=-1){
+            btnsua.setEnabled(true);
+            btnxoa.setEnabled(true);
+            int cf=JOptionPane.showConfirmDialog(this, "Bạn có muốn xuất Excel dòng này không?");
+            if(cf==JOptionPane.YES_OPTION){
+                ExcelHelper.xuatExcel1Dong(tblcthd, row, btnreset, "Chi tiết hóa đơn");
+            }
+        }
+    }//GEN-LAST:event_tblcthdMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

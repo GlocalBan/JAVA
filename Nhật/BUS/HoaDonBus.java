@@ -151,4 +151,39 @@ public class HoaDonBUS {
             return dao.getHdtheoNgay(ngay);
         }
     }
+    
+    public int getTongchi(LocalDate tungay, LocalDate denngay){
+        if(tungay==null || denngay==null){
+            return 0;
+        }
+        if(tungay.isAfter(denngay) || denngay.isBefore(tungay)){
+            return 0;
+        }
+        return dao.getTongChi(tungay, denngay);
+    }
+    
+    public int getTongThu(LocalDate tungay, LocalDate denngay){
+        int tong=0;
+        if(tungay==null || denngay==null){
+            return 0;
+        }
+        if(tungay.isAfter(denngay) || denngay.isBefore(tungay)){
+            return 0;
+        }
+        return dao.getTongThu(tungay, denngay);
+    }
+    
+    public int[] getTongThuTungThang(int nam){
+        if(nam<2000){
+            return new int[12];
+        }
+        return dao.getTongThuTungThang(nam);
+    }
+    
+    public int[] getTongChiTungThang(int nam){
+        if(nam<2000){
+            return new int[12];
+        }
+        return dao.getTongChiTungThang(nam);
+    }
 }

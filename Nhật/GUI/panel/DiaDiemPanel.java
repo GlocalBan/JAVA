@@ -89,7 +89,7 @@ public class DiaDiemPanel extends javax.swing.JPanel {
         btnreset = new javax.swing.JButton();
         btnxuat = new javax.swing.JButton();
         pnltable = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
         tbldd = new javax.swing.JTable();
 
         setLayout(new java.awt.BorderLayout());
@@ -180,24 +180,24 @@ public class DiaDiemPanel extends javax.swing.JPanel {
 
         tbldd.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
                 "Tên địa điểm", "Ngày thực hiện", "Tổng chi"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+        ));
+        tbldd.setPreferredSize(null);
+        tbldd.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblddMouseClicked(evt);
             }
         });
-        tbldd.setPreferredSize(new java.awt.Dimension(840, 0));
-        jScrollPane1.setViewportView(tbldd);
+        jScrollPane2.setViewportView(tbldd);
 
-        pnltable.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        pnltable.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
         add(pnltable, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
@@ -286,6 +286,19 @@ public class DiaDiemPanel extends javax.swing.JPanel {
     }
     }//GEN-LAST:event_txtdatePropertyChange
 
+    private void tblddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblddMouseClicked
+        // TODO add your handling code here:
+        int row=tbldd.getSelectedRow();
+        if(row!=-1){
+            btnsua.setEnabled(true);
+            btnxoa.setEnabled(true);
+            int cf=JOptionPane.showConfirmDialog(this, "Bạn có muốn xuất Excel dòng này không?");
+            if(cf==JOptionPane.YES_OPTION){
+                ExcelHelper.xuatExcel1Dong(tbldd, row, btnreset, "Địa điểm");
+            }
+        }
+    }//GEN-LAST:event_tblddMouseClicked
+
   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -295,7 +308,7 @@ public class DiaDiemPanel extends javax.swing.JPanel {
     private javax.swing.JButton btnxoa;
     private javax.swing.JButton btnxuat;
     private javax.swing.JComboBox<String> cbtim;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lbname;
     private javax.swing.JLabel lbtim;
     private javax.swing.JPanel pnlfooter;

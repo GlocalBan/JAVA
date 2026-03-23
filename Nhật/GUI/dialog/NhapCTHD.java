@@ -2,10 +2,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package GUI;
+package org.example.gui.dialog;
 
+import java.util.ArrayList;
+import org.example.bus.CTHoaDonBUS;
+import org.example.bus.KhachHangBUS;
+import org.example.dto.KhachHang;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import org.example.dto.CTietHDDTO;
 
 /**
  *
@@ -14,7 +22,7 @@ import javax.swing.table.DefaultTableModel;
 public class NhapCTHD extends javax.swing.JDialog {
     private String mahd;
     private int soluong;
-    private BUS.CTHoaDonBus bus;
+    private CTHoaDonBUS bus;
     /**
      * Creates new form NhapCTHD
      */
@@ -22,11 +30,40 @@ public class NhapCTHD extends javax.swing.JDialog {
         super(parent, modal);
         this.soluong=soluong;
         this.mahd=mahd;
-        bus=new BUS.CTHoaDonBus();
+        bus=new org.example.bus.CTHoaDonBUS();
         this.setTitle("Nhập chi tiết hóa đơn");
         this.setLocationRelativeTo(null);
         initComponents();
         loaddata();
+        setupComboBoxKhachHang();
+    }
+    
+    public NhapCTHD(String ma) {
+        this.soluong=soluong;
+        this.mahd=mahd;
+        bus=new org.example.bus.CTHoaDonBUS();
+        this.setTitle("Chi tiết hóa đơn của hóa đơn: "+ma);
+        this.setLocationRelativeTo(null);
+        initComponents();
+        btnluu.setVisible(false);
+        tblnhapct.setDefaultEditor(Object.class, null);
+        loaddata(ma);
+        
+    }
+    private void setupComboBoxKhachHang() {
+    JComboBox<String> cbKhachHang = new JComboBox<>();
+    
+    KhachHangBUS khBus = new KhachHangBUS();
+    if (KhachHangBUS.dsKH == null) {
+        khBus.docDSKH();
+    }
+    
+    for (KhachHang kh : KhachHangBUS.dsKH) {
+        cbKhachHang.addItem(kh.getMaKH());
+    }
+    
+    TableColumn khColumn = tblnhapct.getColumnModel().getColumn(1);
+    khColumn.setCellEditor(new DefaultCellEditor(cbKhachHang));
     }
 
     private void loaddata(){
@@ -36,6 +73,18 @@ public class NhapCTHD extends javax.swing.JDialog {
         
         for(int i=0;i<soluong;i++){
             model.addRow(new Object[]{mahd,"",bus.laygia(mahd)});
+        }
+    }
+    private void loaddata(String mahd){
+        DefaultTableModel model=(DefaultTableModel) tblnhapct.getModel();
+        
+        model.setRowCount(0);
+        
+        ArrayList<CTietHDDTO> ds=bus.getDstheoma(mahd);
+        for(CTietHDDTO cthddto: ds){
+            model.addRow(new Object[]{
+                cthddto.getMaHD(),cthddto.getMaKHDi(),cthddto.getGiaVe()
+            });
         }
     }
     /**
@@ -49,7 +98,7 @@ public class NhapCTHD extends javax.swing.JDialog {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tblnhapct = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        btnluu = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -63,15 +112,7 @@ public class NhapCTHD extends javax.swing.JDialog {
             new String [] {
                 "Mã hóa đơn", "Mã khách hàng", "Giá vé"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, true, true
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        ));
         tblnhapct.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tblnhapctKeyPressed(evt);
@@ -79,10 +120,10 @@ public class NhapCTHD extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(tblnhapct);
 
-        jButton1.setText("Lưu");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnluu.setText("Lưu");
+        btnluu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnluuActionPerformed(evt);
             }
         });
 
@@ -97,7 +138,7 @@ public class NhapCTHD extends javax.swing.JDialog {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(155, 155, 155)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnluu, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -106,14 +147,14 @@ public class NhapCTHD extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
+                .addComponent(btnluu)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnluuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnluuActionPerformed
         // TODO add your handling code here:
         
         DefaultTableModel model=(DefaultTableModel) tblnhapct.getModel();
@@ -127,12 +168,12 @@ public class NhapCTHD extends javax.swing.JDialog {
             String mahd =model.getValueAt(i, 0).toString().trim();
             String makh =model.getValueAt(i, 1).toString().trim();
             float giave= Float.parseFloat(model.getValueAt(i, 2).toString().trim());
-            DTO.CTietHD cthd=new DTO.CTietHD(mahd,makh,giave);
+            org.example.dto.CTietHDDTO cthd=new org.example.dto.CTietHDDTO(mahd,makh,giave);
             if(!bus.themCTietHd(cthd)){
                 loi=true;
                 break;
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnluuActionPerformed
         if(!loi){
         JOptionPane.showMessageDialog(this, "Lưu thành công");
         this.dispose();
@@ -150,7 +191,7 @@ public class NhapCTHD extends javax.swing.JDialog {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnluu;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblnhapct;
     // End of variables declaration//GEN-END:variables
