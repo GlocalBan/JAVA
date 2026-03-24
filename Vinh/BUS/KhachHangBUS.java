@@ -1,31 +1,26 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package BUS;
-import DTO.KhachHang;
-import DAO.KhachHangDAO;
+package org.example.bus;
+
+import org.example.dao.KhachHangDAO;
+import org.example.dto.KhachHangDTO;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
-/**
- *
- * @author Admin
- */
+
 public class KhachHangBUS {
-    static ArrayList<KhachHang> dsKH;
-    static KhachHangDAO dataKH = new KhachHangDAO();
-    public KhachHangBUS() {}
+    public static ArrayList<KhachHangDTO> dsKH;
+    public static KhachHangDAO dataKH = new KhachHangDAO();
+
+    public KhachHangBUS() {
+        docDSKH();
+    }
     public void docDSKH() {
-        if (dsKH == null) {
-            dsKH = new ArrayList<KhachHang>();
-        }
         dsKH = dataKH.layDanhSachKHang();
     }
-    public void them(KhachHang khang) {
+    public void them(KhachHangDTO khang) {
         try{
             if (dsKH == null) {
-                dsKH = new ArrayList<KhachHang>();
+                dsKH = new ArrayList<KhachHangDTO>();
             }
             if (khang == null) {
                 return;
@@ -33,14 +28,14 @@ public class KhachHangBUS {
             if (khang.getMaKH() == null || khang.getMaKH().isEmpty()) {
                 return;
             }
-            for (KhachHang existingKH : dsKH) {
+            for (KhachHangDTO existingKH : dsKH) {
                 if (existingKH.getMaKH().equals(khang.getMaKH())) {
                     return;
                 }
             }
             dataKH.themKhachHang(khang);
             if (dsKH != null) {
-            dsKH.add(khang);
+                dsKH.add(khang);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -57,11 +52,9 @@ public class KhachHangBUS {
             e.printStackTrace();
         }
     }
-    public KhachHang timKiemKH(String maKH){
-        if (dsKH == null) {
-            return null;
-        }
-        for (KhachHang kh : dsKH) {
+    public KhachHangDTO timKiemKH(String maKH){
+
+        for (KhachHangDTO kh : dsKH) {
             if (kh.getMaKH().equals(maKH)) {
                 return dataKH.timKhachHangTheoMa(maKH);
             }
@@ -69,11 +62,11 @@ public class KhachHangBUS {
         return null;
     }
 
-    public List<KhachHang> timKhachHangTheoNgaySinh(LocalDate date){
+    public List<KhachHangDTO> timKhachHangTheoNgaySinh(LocalDate date){
         return dataKH.timKhachHangTheoNgaySinh(date);
     }
 
-    public List<KhachHang> timKhachHang(String column, String keyword) {
+    public List<KhachHangDTO> timKhachHang(String column, String keyword) {
         if (column.equals("Ngày sinh")){
             try {
                 LocalDate date = LocalDate.parse(keyword);
@@ -84,14 +77,15 @@ public class KhachHangBUS {
             }
         } else {
             return dataKH.timKhachHang(column, keyword);
-        }    
+        }
     }
 
-    public boolean suaKhachHang(KhachHang khang) {
+    public boolean suaKhachHang(KhachHangDTO khang) {
         try {
             if (dsKH == null) {
                 return false;
             }
+
             boolean success = dataKH.suaKhachHang(khang);
             if (success) {
                 for (int i = 0; i < dsKH.size(); i++) {

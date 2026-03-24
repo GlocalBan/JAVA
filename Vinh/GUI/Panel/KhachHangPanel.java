@@ -1,14 +1,12 @@
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package GUI.Panel;
+package org.example.gui.panel;
 
-
-import BUS.KhachHangBUS;
-import DAO.KhachHangDAO;
-import DTO.KhachHang;
-import GUI.Dialog.KhachHangDialog;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -18,17 +16,19 @@ import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
-import login.PhanQuyen;
+import org.example.bus.KhachHangBUS;
+import org.example.dao.KhachHangDAO;
+import org.example.dto.KhachHangDTO;
+import org.example.gui.dialog.KhachHangDialog;
+import org.example.login.PhanQuyen;
 
 /**
  *
  * @author Admin
  */
+
 public class KhachHangPanel extends javax.swing.JPanel {
 
-    /**
-     * Creates new form QLKhachHang
-     */
     KhachHangDAO ds = new KhachHangDAO();
     KhachHangBUS khachHangBUS = new KhachHangBUS();
     KhachHangDialog KHdialog;
@@ -39,12 +39,12 @@ public class KhachHangPanel extends javax.swing.JPanel {
             btnXoa.setEnabled(false);
         }
         txtSearch.getDocument().addDocumentListener(new DocumentListener() {
-        
-        private void search() {
-            String keyword = txtSearch.getText().trim();
-            List<KhachHang> list = khachHangBUS.timKhachHang(getColumnName(jComboBox1.getSelectedItem().toString()), keyword);
-            loadKhachHangToTable(list);
-        }    
+
+            private void search() {
+                String keyword = txtSearch.getText().trim();
+                List<KhachHangDTO> list = khachHangBUS.timKhachHang(getColumnName(jComboBox1.getSelectedItem().toString()), keyword);
+                loadKhachHangToTable(list);
+            }
             @Override
             public void insertUpdate(DocumentEvent e) {
                 search();
@@ -111,19 +111,19 @@ public class KhachHangPanel extends javax.swing.JPanel {
         add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
-            },
-            new String [] {
-                "Mã khách hàng", "Họ", "Tên", "Ngày sinh", "Số điện thoại", "Địa chỉ"
-            }
+                new Object [][] {
+                        {null, null, null, null, null, null},
+                        {null, null, null, null, null, null},
+                        {null, null, null, null, null, null},
+                        {null, null, null, null, null, null},
+                        {null, null, null, null, null, null}
+                },
+                new String [] {
+                        "Mã khách hàng", "Họ", "Tên", "Ngày sinh", "Số điện thoại", "Địa chỉ"
+                }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -146,6 +146,13 @@ public class KhachHangPanel extends javax.swing.JPanel {
         btnSua.setText("Sửa");
         btnSua.setEnabled(false);
         btnSua.addActionListener(this::btnSuaActionPerformed);
+
+        jTable1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                jTable1MouseClicked(e);
+            }
+        });
         jPanel3.add(btnSua);
 
         btnLamMoi.setText("Làm mới");
@@ -188,7 +195,7 @@ public class KhachHangPanel extends javax.swing.JPanel {
 
         if (i>=0){
             String maKH = jTable1.getValueAt(i, 0).toString();
-            KhachHang kh = khachHangBUS.timKiemKH(maKH);
+            KhachHangDTO kh = khachHangBUS.timKiemKH(maKH);
             KhachHangDialog dialog = new KhachHangDialog(null, true, ds, KhachHangDialog.Mode.EDIT, kh);
             dialog.setVisible(true);
 
@@ -196,7 +203,7 @@ public class KhachHangPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnSuaActionPerformed
 
-    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {
+    private void jTable1MouseClicked(MouseEvent evt) {
         if (PhanQuyen.laQuanLy()) {
             btnXoa.setEnabled(true);
         }
@@ -207,7 +214,7 @@ public class KhachHangPanel extends javax.swing.JPanel {
         String keyword = txtSearch.getText().trim();
         String selected = jComboBox1.getSelectedItem().toString();
 
-        List<KhachHang> list;
+        List<KhachHangDTO> list;
 
         if (keyword.isEmpty()) {
             loadKhachHangToTable(ds.layDanhSachKHang());
@@ -246,12 +253,12 @@ public class KhachHangPanel extends javax.swing.JPanel {
         }
     }
 
-    private void loadKhachHangToTable(List<KhachHang> list) {
+    private void loadKhachHangToTable(List<KhachHangDTO> list) {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0); // Xóa dữ liệu cũ trong bảng
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        for(KhachHang kh : list){
+        for(KhachHangDTO kh : list){
             Date date = java.sql.Date.valueOf(kh.getNgaySinh());
             String ngaySinhStr = "";
             if(date!=null){
@@ -260,12 +267,12 @@ public class KhachHangPanel extends javax.swing.JPanel {
             }
 
             model.addRow(new Object[]{
-                kh.getMaKH(),
-                kh.getHo(),
-                kh.getTen(),
-                ngaySinhStr,
-                kh.getSdt(),
-                kh.getDiaChi()
+                    kh.getMaKH(),
+                    kh.getHo(),
+                    kh.getTen(),
+                    ngaySinhStr,
+                    kh.getSdt(),
+                    kh.getDiaChi()
             });
         }
     }

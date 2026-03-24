@@ -1,29 +1,22 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package org.example.gui.panel;
 
+import javax.swing.*;
+
+import javax.swing.table.DefaultTableModel;
+
+import java.util.ArrayList;
 import org.example.gui.dialog.DiaDiemDialog;
 import org.example.dao.*;
 import org.example.bus.*;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 import org.example.dto.*;
-import org.example.helper.*;
-/**
- *
- * @author Nhat
- */
-public class DiaDiemPanel extends javax.swing.JPanel {
+
+import org.example.gui.helper.DateHelper;
+import org.example.gui.helper.ExcelHelper;
+
+public class DiaDiemPanel extends JPanel {
     private DefaultTableModel model;
     private DiaDiemBUS bus;
-    /**
-     * Creates new form DiaDiemN
-     */
+    
     public DiaDiemPanel() {
         initComponents();
         bus=new DiaDiemBUS();
@@ -31,41 +24,41 @@ public class DiaDiemPanel extends javax.swing.JPanel {
         model = (DefaultTableModel) tbldd.getModel();
         loadData();
     }
-    
+
     private void loadData(java.util.Date ngay){
         model.setRowCount(0);
-        
+
         ArrayList<DiaDiemDTO> ds =bus.getDstheongay(ngay);
-     if(ds==null) return;
-     for(DiaDiemDTO dd: ds){
-         model.addRow(new Object[]{
-             dd.getTenDiaDiem(),DateHelper.toString(dd.getNgayThucHien()),String.format("%.0f", dd.getTongChi())});
-     }
+        if(ds==null) return;
+        for(DiaDiemDTO dd: ds){
+            model.addRow(new Object[]{
+                    dd.getTenDiaDiem(), DateHelper.toString(dd.getNgayThucHien()),String.format("%.0f", dd.getTongChi())});
+        }
     }
     private void loadData(){
         model.setRowCount(0);
-        
+
         ArrayList<DiaDiemDTO> ds = bus.getDs();
-     if(ds==null) return;
-     for(DiaDiemDTO dd: ds){
-         model.addRow(new Object[]{
-             dd.getTenDiaDiem(),DateHelper.toString(dd.getNgayThucHien()),String.format("%.0f", dd.getTongChi())});
-     }
+        if(ds==null) return;
+        for(DiaDiemDTO dd: ds){
+            model.addRow(new Object[]{
+                    dd.getTenDiaDiem(),DateHelper.toString(dd.getNgayThucHien()),String.format("%.0f", dd.getTongChi())});
+        }
     }
 
-    
+
     private void loadData(String ma){
-    model.setRowCount(0);
-        
-     ArrayList<DiaDiemDTO> ds = bus.timdd(ma);
-     if(ds==null) return;
-     for(DiaDiemDTO dd: ds){
-         model.addRow(new Object[]{
-             dd.getTenDiaDiem(),DateHelper.toString(dd.getNgayThucHien()),String.format("%.0f", dd.getTongChi())});
-     }
+        model.setRowCount(0);
+
+        ArrayList<DiaDiemDTO> ds = bus.timdd(ma);
+        if(ds==null) return;
+        for(DiaDiemDTO dd: ds){
+            model.addRow(new Object[]{
+                    dd.getTenDiaDiem(),DateHelper.toString(dd.getNgayThucHien()),String.format("%.0f", dd.getTongChi())});
+        }
     }
-    
-    
+
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -107,7 +100,7 @@ public class DiaDiemPanel extends javax.swing.JPanel {
         cbtim.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tên địa điểm", "Ngày thực hiện" }));
         cbtim.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cbtimItemStateChanged(evt);
+                cbTimItemStateChanged(evt);
             }
         });
         pnlsearch.add(cbtim);
@@ -115,14 +108,14 @@ public class DiaDiemPanel extends javax.swing.JPanel {
         txttendd.setColumns(20);
         txttendd.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txttenddKeyReleased(evt);
+                txtTenDdKeyReleased(evt);
             }
         });
         pnlsearch.add(txttendd);
 
         txtdate.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                txtdatePropertyChange(evt);
+                txtDatePropertyChange(evt);
             }
         });
         pnlsearch.add(txtdate);
@@ -152,7 +145,7 @@ public class DiaDiemPanel extends javax.swing.JPanel {
         btnsua.setEnabled(false);
         btnsua.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnsuaActionPerformed(evt);
+                btnSuaActionPerformed(evt);
             }
         });
         pnlfooter.add(btnsua);
@@ -160,7 +153,7 @@ public class DiaDiemPanel extends javax.swing.JPanel {
         btnreset.setText("Làm mới");
         btnreset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnresetActionPerformed(evt);
+                btnResetActionPerformed(evt);
             }
         });
         pnlfooter.add(btnreset);
@@ -179,20 +172,20 @@ public class DiaDiemPanel extends javax.swing.JPanel {
         pnltable.setLayout(new java.awt.BorderLayout());
 
         tbldd.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "Tên địa điểm", "Ngày thực hiện", "Tổng chi"
-            }
+                new Object [][] {
+                        {null, null, null},
+                        {null, null, null},
+                        {null, null, null},
+                        {null, null, null}
+                },
+                new String [] {
+                        "Tên địa điểm", "Ngày thực hiện", "Tổng chi"
+                }
         ));
         tbldd.setPreferredSize(null);
         tbldd.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblddMouseClicked(evt);
+                tblDdMouseClicked(evt);
             }
         });
         jScrollPane2.setViewportView(tbldd);
@@ -204,7 +197,7 @@ public class DiaDiemPanel extends javax.swing.JPanel {
 
     private void btnxuatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnxuatActionPerformed
         // TODO add your handling code here:
-            ExcelHelper.xuatExcel(tbldd, this, "Danh sach hoa don");
+        ExcelHelper.xuatExcel(tbldd, this, "Danh sach hoa don");
     }//GEN-LAST:event_btnxuatActionPerformed
 
     private void btnthemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnthemActionPerformed
@@ -227,7 +220,7 @@ public class DiaDiemPanel extends javax.swing.JPanel {
         DiaDiemDTO dd=bus.timDiaDiem(tendd); if(dd==null){
             JOptionPane.showMessageDialog(this, "Lỗi không tìm thấy");
             return;
-            }
+        }
         if(JOptionPane.showConfirmDialog(this, "Xóa địa điểm?","Xác nhận",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
             if(bus.xoaDiaDiem(dd)){
                 JOptionPane.showMessageDialog(this, "Xóa thành công");
@@ -235,33 +228,33 @@ public class DiaDiemPanel extends javax.swing.JPanel {
             }else{
                 JOptionPane.showMessageDialog(this, "Xóa thất bại");
             }
-    }//GEN-LAST:event_btnxoaActionPerformed
+        }//GEN-LAST:event_btnxoaActionPerformed
     }
-    
-    private void btnresetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnresetActionPerformed
+
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
         // TODO add your handling code here:
         loadData();
-    }//GEN-LAST:event_btnresetActionPerformed
+    }//GEN-LAST:event_btnResetActionPerformed
 
-    private void btnsuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsuaActionPerformed
+    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         // TODO add your handling code here:
         int row=tbldd.getSelectedRow();
         if(row!=-1){
             String ten=tbldd.getValueAt(row, 0).toString().trim();
             DiaDiemDTO dd =bus.timDiaDiem(ten);
-        DiaDiemDialog ddd=new DiaDiemDialog(dd);
-        ddd.setModal(true);
-        ddd.setVisible(true);
+            DiaDiemDialog ddd=new DiaDiemDialog(dd);
+            ddd.setModal(true);
+            ddd.setVisible(true);
         }
-    }//GEN-LAST:event_btnsuaActionPerformed
+    }//GEN-LAST:event_btnSuaActionPerformed
 
-    private void txttenddKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txttenddKeyReleased
+    private void txtTenDdKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTenDdKeyReleased
         // TODO add your handling code here:
         String ten = txttendd.getText().trim();
         loadData( ten);
-    }//GEN-LAST:event_txttenddKeyReleased
+    }//GEN-LAST:event_txtTenDdKeyReleased
 
-    private void cbtimItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbtimItemStateChanged
+    private void cbTimItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbTimItemStateChanged
         // TODO add your handling code here:
         String chose=cbtim.getSelectedItem().toString().trim();
         if(chose.equals("Ngày thực hiện")){
@@ -272,21 +265,21 @@ public class DiaDiemPanel extends javax.swing.JPanel {
             txttendd.setVisible(true);
             txtdate.setVisible(false);
         }
-    }//GEN-LAST:event_cbtimItemStateChanged
+    }//GEN-LAST:event_cbTimItemStateChanged
 
-    private void txtdatePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_txtdatePropertyChange
+    private void txtDatePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_txtDatePropertyChange
         // TODO add your handling code here:
         if ("date".equals(evt.getPropertyName())) {
-        java.util.Date ngay = txtdate.getDate();
-        if (ngay != null) {
-            loadData(ngay);
-        } else {
-            loadData(); // Nếu ngày bị xóa trống, load lại toàn bộ dữ liệu
+            java.util.Date ngay = txtdate.getDate();
+            if (ngay != null) {
+                loadData(ngay);
+            } else {
+                loadData(); // Nếu ngày bị xóa trống, load lại toàn bộ dữ liệu
+            }
         }
-    }
-    }//GEN-LAST:event_txtdatePropertyChange
+    }//GEN-LAST:event_txtDatePropertyChange
 
-    private void tblddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblddMouseClicked
+    private void tblDdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDdMouseClicked
         // TODO add your handling code here:
         int row=tbldd.getSelectedRow();
         if(row!=-1){
@@ -294,12 +287,10 @@ public class DiaDiemPanel extends javax.swing.JPanel {
             btnxoa.setEnabled(true);
             int cf=JOptionPane.showConfirmDialog(this, "Bạn có muốn xuất Excel dòng này không?");
             if(cf==JOptionPane.YES_OPTION){
-                ExcelHelper.xuatExcel1Dong(tbldd, row, btnreset, "Địa điểm");
+//                ExcelHelper.xuatExcel1Dong(tbldd, row, btnreset, "Địa điểm");
             }
         }
-    }//GEN-LAST:event_tblddMouseClicked
-
-  
+    }//GEN-LAST:event_tblDdMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnreset;
