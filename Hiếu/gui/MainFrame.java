@@ -1,9 +1,24 @@
 package org.example.gui;
 
+import org.example.dto.TaiKhoanDTO;
 import org.example.gui.panel.*;
+import org.example.login.PhanQuyen;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 public class _MainFrame extends JFrame {
 
@@ -11,8 +26,7 @@ public class _MainFrame extends JFrame {
     private CardLayout cardLayout;
     private JPanel contentArea;
     private JButton activeButton;
-
-    public _MainFrame() {
+    public _MainFrame(TaiKhoanDTO taiKhoanDangNhap) {
         setTitle("Quản lý Tour du lịch");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 600);
@@ -28,23 +42,41 @@ public class _MainFrame extends JFrame {
     private JPanel buildSideBar(){
         JPanel sidebar = new JPanel();
         sidebar.setBackground(new Color(30, 90, 160));
-        sidebar.setPreferredSize(new Dimension(190, 0));
+        sidebar.setPreferredSize(new Dimension(240, 0));
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
 
         // Logo
 //        sidebar.add(buildLogo());
 
         //menu items: label, cardName
-        String[][] menus = {
-                {"Tour", "Tour"},
-                {"Loại Tour", "LoaiTour"},
-                {"Kế Hoạch Tour", "KeHoachTour"},
-                {"Hóa đơn", "HoaDon"},
-                {"Khách hàng", "KhachHang"},
-                {"Nhân viên", "NhanVien"},
-                {"Địa điểm", "DiaDiem"},
-                {"Thống kê", "ThongKe"}
-        };
+        String[][] menus;
+        if (PhanQuyen.laQuanLy()) {
+            menus = new String[][]{
+                    {"Tour", "Tour"},
+                    {"Loại Tour", "LoaiTour"},
+                    {"Kế Hoạch Tour", "KeHoachTour"},
+                    {"Khách hàng - Kế hoạch Tour", "KHang_KHTour"},
+                    {"Hóa đơn", "HoaDon"},
+                    {"Địa điểm", "DiaDiem"},
+                    {"Nhân viên", "NhanVien"},
+                    {"Khách hàng", "KhachHang"},
+                    {"Chương trình khuyến mãi", "CTrinhKM"},
+                    {"Lịch khuyến mãi", "CalendarKM"},
+                    {"Thống kê", "ThongKe"},
+            };
+        } else {
+            menus = new String[][]{
+                    {"Tour", "Tour"},
+                    {"Loại Tour", "LoaiTour"},
+                    {"Kế Hoạch Tour", "KeHoachTour"},
+                    {"Khách hàng - Kế hoạch Tour", "KHang_KHTour"},
+                    {"Hóa đơn", "HoaDon"},
+                    {"Địa điểm", "DiaDiem"},
+                    {"Khách hàng", "KhachHang"},
+                    {"Chương trình khuyến mãi", "CTrinhKM"},
+                    {"Lịch khuyến mãi", "CalendarKM"},
+            };
+        }
 
         for(String[] m : menus){
             JButton btn = createMenuButton(m[0], m[1]);
@@ -64,11 +96,13 @@ public class _MainFrame extends JFrame {
         contentArea.add(new _TourPanel(), "Tour");
         contentArea.add(new _LoaiTourPanel(), "LoaiTour");
         contentArea.add(new _KeHoachTourPanel(), "KeHoachTour");
+        contentArea.add(new KHang_KHTourPanel(), "KHang_KHTour");
         contentArea.add(new HoaDonPanel(), "HoaDon");
         contentArea.add(new DiaDiemPanel(), "DiaDiem");
-        contentArea.add(new KhachHangPanel(), "KhachHang");
         contentArea.add(new NhanVienPanel(), "NhanVien");
-        contentArea.add(new DiaDiemPanel(), "DiaDiem");
+        contentArea.add(new KhachHangPanel(), "KhachHang");
+        contentArea.add(new CTrinhKMPanel(), "CTrinhKM");
+        contentArea.add(new CalendarKMPanel(), "CalendarKM");
         contentArea.add(new _StatisticsPanel(), "ThongKe");
 
         return contentArea;
@@ -95,8 +129,8 @@ public class _MainFrame extends JFrame {
         btn.setFont(new Font("SansSerif", Font.PLAIN, 14));
         btn.setForeground(Color.WHITE);
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btn.setMaximumSize(new Dimension(190, 48));
-        btn.setPreferredSize(new Dimension(190, 48));
+        btn.setMaximumSize(new Dimension(240, 48));
+        btn.setPreferredSize(new Dimension(240, 48));
         btn.setBorder(BorderFactory.createEmptyBorder(0, 24, 0, 0));
 
         btn.addActionListener(e -> {
