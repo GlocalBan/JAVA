@@ -54,7 +54,7 @@ public class DiaDiemDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        lbtongchi.setText("Tổng chi");
+        lbtongchi.setText("Quốc gia");
 
         txtquocgia.setEditable(false);
         txtquocgia.addActionListener(new java.awt.event.ActionListener() {
@@ -65,7 +65,7 @@ public class DiaDiemDialog extends javax.swing.JDialog {
 
         lbten.setText("Tên địa điểm");
 
-        lbngay.setText("Ngày thực hiện");
+        lbngay.setText("Địa chỉ");
 
         btnluu.setText("Lưu");
         btnluu.addActionListener(new java.awt.event.ActionListener() {
