@@ -6,7 +6,7 @@ package org.example.dao;
 import java.sql.*;
 import org.example.dto.CTietHDDTO;
 import java.util.*;
-import javax.swing.JOptionPane;
+
 /**
  *
  * @author Nhat
@@ -19,8 +19,8 @@ public class CTietHDDAO {
         ArrayList<CTietHDDTO> ds=new ArrayList<>();
         String sql ="Select * from CThoadon";
         
-        try(Connection conn=KetNoiCSDL.getConnection();
-                PreparedStatement ps=conn.prepareStatement(sql)){
+        try(Connection conn= MyConnection.getConnection();
+            PreparedStatement ps=conn.prepareStatement(sql)){
             ResultSet rs=ps.executeQuery();
             while(rs.next()){
                 CTietHDDTO ct=maptoCthd(rs);
@@ -36,8 +36,8 @@ public class CTietHDDAO {
     public ArrayList<CTietHDDTO> getDstheoma(String mahd){
         ArrayList<CTietHDDTO> ds=new ArrayList<>();
         String sql ="Select * from CThoadon where mahd=?";
-        try(Connection conn =KetNoiCSDL.getConnection();
-                PreparedStatement ps=conn.prepareStatement(sql)){
+        try(Connection conn = MyConnection.getConnection();
+            PreparedStatement ps=conn.prepareStatement(sql)){
                 ps.setString(1, mahd);
                     ResultSet rs=ps.executeQuery();
                     while(rs.next()){
@@ -62,8 +62,8 @@ public class CTietHDDAO {
     
     public CTietHDDTO TimHD(String mahd){
         String sql = "Select * from CThoadon where mahd=?";
-        try(Connection conn=KetNoiCSDL.getConnection();
-                PreparedStatement ps=conn.prepareStatement(sql)){
+        try(Connection conn= MyConnection.getConnection();
+            PreparedStatement ps=conn.prepareStatement(sql)){
                 ps.setString(1, mahd);
                 ResultSet rs=ps.executeQuery();
                 if(rs.next()){
@@ -82,7 +82,7 @@ public class CTietHDDAO {
 
         Connection conn = null;
         try {
-            conn = KetNoiCSDL.getConnection();
+            conn = MyConnection.getConnection();
             conn.setAutoCommit(false); 
 
             try (PreparedStatement ps = conn.prepareStatement(sqlcheck)) {
@@ -123,24 +123,32 @@ public class CTietHDDAO {
         }
         return false;
     }
-    
-    public boolean xoaCtietHd(String mahd,String makh){
+
+    public boolean xoaCtietHd(String mahd, String makh){
         String sqlXoa = "DELETE FROM cthoadon WHERE mahd=? AND makhang=?";
 
         String sqlUpdateHD = "UPDATE hoadon SET soluong = soluong - 1, "
-                           + "tongtien = tongtien - (SELECT t.dongia FROM kehoachtour k JOIN tour t ON k.matour = t.matour WHERE k.makhtour = (SELECT makhtour FROM hoadon WHERE mahd=?)) "
-                           + "WHERE mahd=?";
-        
+                + "tongtien = tongtien - (SELECT t.dongia FROM kehoachtour k JOIN tour t ON k.matour = t.matour WHERE k.makhtour = (SELECT makhtour FROM hoadon WHERE mahd=?)) "
+                + "WHERE mahd=?";
+
+
+        String sqlHoanVe = "UPDATE kehoachtour SET tongsove = tongsove + 1 "
+                + "WHERE makhtour = (SELECT makhtour FROM hoadon WHERE mahd=?)";
+
         Connection conn = null;
         try {
-            conn = KetNoiCSDL.getConnection();
+            conn = MyConnection.getConnection();
             conn.setAutoCommit(false);
 
-            // 1. Thực hiện xóa chi tiết
             try (PreparedStatement psXoa = conn.prepareStatement(sqlXoa)) {
                 psXoa.setString(1, mahd);
                 psXoa.setString(2, makh);
-                psXoa.executeUpdate();
+                int rowDeleted = psXoa.executeUpdate();
+
+                if(rowDeleted == 0) {
+                    conn.rollback();
+                    return false;
+                }
             }
 
             try (PreparedStatement psUp = conn.prepareStatement(sqlUpdateHD)) {
@@ -149,11 +157,23 @@ public class CTietHDDAO {
                 psUp.executeUpdate();
             }
 
-            conn.commit(); 
+            try (PreparedStatement psHoan = conn.prepareStatement(sqlHoanVe)) {
+                psHoan.setString(1, mahd);
+                psHoan.executeUpdate();
+            }
+
+            conn.commit();
             return true;
         } catch (SQLException e) {
             if (conn != null) try { conn.rollback(); } catch (SQLException ex) {}
             e.printStackTrace();
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (SQLException ex) {}
+            }
         }
         return false;
     }
@@ -161,8 +181,8 @@ public class CTietHDDAO {
         float gia=0;
         String makht="";
         String sql1="Select makhtour from hoadon where mahd=?";
-        try(Connection conn=KetNoiCSDL.getConnection();
-                PreparedStatement ps=conn.prepareStatement(sql1)){
+        try(Connection conn= MyConnection.getConnection();
+            PreparedStatement ps=conn.prepareStatement(sql1)){
             ps.setString(1, mahd);
             ResultSet rs=ps.executeQuery();
             if(rs.next()){
@@ -172,8 +192,8 @@ public class CTietHDDAO {
              ex.printStackTrace();
          }
         String sql ="Select t.dongia from kehoachtour k join tour t on k.matour = t.matour where k.makhtour=?";
-        try(Connection conn=KetNoiCSDL.getConnection();
-                PreparedStatement ps=conn.prepareStatement(sql)){
+        try(Connection conn= MyConnection.getConnection();
+            PreparedStatement ps=conn.prepareStatement(sql)){
             ps.setString(1, makht);
             ResultSet rs=ps.executeQuery();
             if(rs.next()){
@@ -190,8 +210,8 @@ public class CTietHDDAO {
          
          String sql="Select * from cthoadon where "+tencot+" like ?";
         
-         try(Connection conn =KetNoiCSDL.getConnection();
-                 PreparedStatement ps=conn.prepareStatement(sql)){
+         try(Connection conn = MyConnection.getConnection();
+             PreparedStatement ps=conn.prepareStatement(sql)){
              ps.setString(1, "%" + key + "%");
              ResultSet rs=ps.executeQuery();
              while(rs.next()){
@@ -207,8 +227,8 @@ public class CTietHDDAO {
      
          public boolean suaCthd(CTietHDDTO ct){
         String sql = "Update cthoadon set giave=? where mahd=? and makhang=?";
-        try(Connection conn=KetNoiCSDL.getConnection();
-                PreparedStatement ps=conn.prepareStatement(sql)){
+        try(Connection conn= MyConnection.getConnection();
+            PreparedStatement ps=conn.prepareStatement(sql)){
             ps.setFloat(1,ct.getGiaVe() );
             ps.setString(2, ct.getMaHD());
             ps.setString(3, ct.getMaKHDi());

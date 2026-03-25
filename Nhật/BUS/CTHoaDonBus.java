@@ -5,20 +5,20 @@
 package org.example.bus;
 
 import org.example.dao.CTietHDDAO;
+import org.example.dao._KeHoachTourDAO;
 import java.util.ArrayList;
 import org.example.dto.CTietHDDTO;
-import org.example.dao.HoaDonDAO;
-/**
- *
- * @author Nhat
- */
+
+
 public class CTHoaDonBUS {
     public static ArrayList<CTietHDDTO> ds;
     public static CTietHDDAO dao;
-    
+    public static _KeHoachTourDAO khtdao;
+
     public CTHoaDonBUS(){
     if(ds==null){
         dao=new CTietHDDAO();
+        khtdao=new _KeHoachTourDAO();
         ds=dao.getDs();
     }
 }
@@ -109,6 +109,14 @@ public class CTHoaDonBUS {
         }
         return dao.timNangcao(tencot, key);
     }
-    
-    
+
+    public boolean capNhatSoluong(int sl, String makhtour){
+        if(makhtour.isEmpty()) return false;
+        if(sl<=0) {
+            return false;
+        }else{
+            return khtdao.capNhatSoluong(sl, makhtour);
+        }
+    }
+
 }

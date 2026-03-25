@@ -101,4 +101,18 @@ public class DiaDiemBUS {
     }
         return dao.getDstheongay(ngay);
     }
+
+    public ArrayList<DiaDiemDTO> getDsTheoDiachi(String DiaChi){
+        if(DiaChi.isEmpty()){
+            return null;
+        }
+        return dao.getDstheoDiaChi(DiaChi);
+    }
+
+    public ArrayList<DiaDiemDTO> getDsTheoQuocGia(String quocgia){
+        if(quocgia.isEmpty()){
+            return null;
+        }
+        return dao.getDstheoQuocGia(quocgia);
+    }
 }

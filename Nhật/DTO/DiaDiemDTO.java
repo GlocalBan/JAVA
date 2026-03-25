@@ -12,43 +12,43 @@ import java.time.LocalDate;
  */
 public class DiaDiemDTO {
     public String TenDiaDiem;
-    public LocalDate NgayThucHien; 
-    public float TongChi;
+    public String DiaChi;
+    public String QuocGia;
 
-    public DiaDiemDTO(String TenDiaDiem, LocalDate NgayThucHien, float TongChi) {
+    public DiaDiemDTO(String TenDiaDiem, String DiaChi, String QuocGia) {
         this.TenDiaDiem = TenDiaDiem;
-        this.NgayThucHien = NgayThucHien;
-        this.TongChi = TongChi;
+        this.DiaChi = DiaChi;
+        this.QuocGia = QuocGia;
     }
     
     public DiaDiemDTO() {
         this.TenDiaDiem = TenDiaDiem;
-        this.NgayThucHien = NgayThucHien;
-        this.TongChi = TongChi;
+        this.DiaChi = DiaChi;
+        this.QuocGia = QuocGia;
     }
     
     public String getTenDiaDiem() {
         return TenDiaDiem;
     }
 
-    public LocalDate getNgayThucHien() {
-        return NgayThucHien;
+    public String getdiachi() {
+        return DiaChi;
     }
 
-    public float getTongChi() {
-        return TongChi;
+    public String getQuocGia() {
+        return QuocGia;
     }
 
     public void setTenDiaDiem(String TenDiaDiem) {
         this.TenDiaDiem = TenDiaDiem;
     }
 
-    public void setNgayThucHien(LocalDate NgayThucHien) {
-        this.NgayThucHien = NgayThucHien;
+    public void setdiachi(String diachi) {
+        this.DiaChi = diachi;
     }
 
-    public void setTongChi(float TongChi) {
-        this.TongChi = TongChi;
+    public void setQuocGia(String QuocGia) {
+        this.QuocGia = QuocGia;
     }
     
     
