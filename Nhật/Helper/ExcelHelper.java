@@ -171,8 +171,6 @@ public class ExcelHelper {
                 titleCell.setCellValue(tenSheet);
                 titleCell.setCellStyle(titleStyle);
 
-                // Số lượng cột cần xuất (Trừ đi 1 nếu cột cuối cùng là cột chứa cái nút bấm, để excel không hiện chữ "Xuất Excel" vô nghĩa)
-                // Nếu cột cuối không phải nút, hãy xóa phần "- 1" đi nhé.
                 int colCountToExport = table.getColumnCount() - 1;
 
                 sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, Math.max(1, colCountToExport - 1)));
