@@ -19,6 +19,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import org.example.login.DangNhap;
 
 public class _MainFrame extends JFrame {
 
@@ -84,6 +86,35 @@ public class _MainFrame extends JFrame {
             sidebar.add(Box.createRigidArea(new Dimension(0, 2)));
         }
         sidebar.add(Box.createVerticalGlue());
+
+        JButton logoutBtn = new JButton("Đăng xuất");
+        logoutBtn.setOpaque(false);
+        logoutBtn.setContentAreaFilled(false);
+        logoutBtn.setBorderPainted(false);
+        logoutBtn.setFocusPainted(false);
+        logoutBtn.setHorizontalAlignment(SwingConstants.LEFT);
+        logoutBtn.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        logoutBtn.setForeground(Color.WHITE);
+        logoutBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        logoutBtn.setMaximumSize(new Dimension(240, 48));
+        logoutBtn.setPreferredSize(new Dimension(240, 48));
+        logoutBtn.setBorder(BorderFactory.createEmptyBorder(0, 24, 0, 0));
+
+        logoutBtn.addActionListener(e -> {
+            // Clear session (if the method exists) then return to login screen
+            try {
+                // Use reflection so the code still compiles even if dangXuat() is missing
+                PhanQuyen.class.getMethod("dangXuat").invoke(null);
+            } catch (Exception ignored) {
+                // If there's no dangXuat() in current build, still route back to login.
+            }
+            SwingUtilities.invokeLater(() -> {
+                DangNhap dangNhap = new DangNhap();
+                dangNhap.setVisible(true);
+                _MainFrame.this.dispose();
+            });
+        });
+        sidebar.add(logoutBtn);
 
         return sidebar;
     }

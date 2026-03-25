@@ -8,6 +8,7 @@ import org.example.gui._MainFrame;
 
 import java.beans.Statement;
 import java.sql.Connection;
+import java.util.Arrays;
 import java.util.logging.Logger;
 import javax.swing.*;
 
@@ -33,7 +34,8 @@ public class DangNhap extends JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JPasswordField();
+        jTextField2.setEchoChar('*');
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -101,7 +103,9 @@ public class DangNhap extends JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String username = jTextField1.getText().trim();
-        String password = jTextField2.getText().trim();
+        char[] passwordChars = jTextField2.getPassword();
+        String password = new String(passwordChars).trim();
+        Arrays.fill(passwordChars, '\0');
 
         if (username.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ tài khoản và mật khẩu.");
@@ -131,6 +135,6 @@ public class DangNhap extends JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JPasswordField jTextField2;
     // End of variables declaration//GEN-END:variables
 }
