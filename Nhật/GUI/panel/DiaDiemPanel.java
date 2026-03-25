@@ -91,7 +91,7 @@ public class DiaDiemPanel extends JPanel {
         lbtim.setText("Tìm theo:");
         pnlsearch.add(lbtim);
 
-        cbtim.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tên địa điểm", "Ngày thực hiện" }));
+        cbtim.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tên địa điểm", "Địa chỉ" }));
         cbtim.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cbTimItemStateChanged(evt);
@@ -173,7 +173,7 @@ public class DiaDiemPanel extends JPanel {
                         {null, null, null}
                 },
                 new String [] {
-                        "Tên địa điểm", "Ngày thực hiện", "Tổng chi"
+                        "Tên địa điểm", "Địa chỉ", "Quốc gia"
                 }
         ));
         tbldd.setPreferredSize(null);
@@ -251,7 +251,7 @@ public class DiaDiemPanel extends JPanel {
     private void cbTimItemStateChanged(java.awt.event.ItemEvent evt) {
         // TODO add your handling code here:
         String chose=cbtim.getSelectedItem().toString().trim();
-        if(chose.equals("Ngày thực hiện")){
+        if(chose.equals("Địa chỉ")){
             txttendd.setVisible(false);
             txtdate.setVisible(true);
         }
