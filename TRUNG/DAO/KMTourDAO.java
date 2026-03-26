@@ -125,24 +125,6 @@ public class KMTourDAO {
 
             conn.setAutoCommit(false);
 
-            String sql = """
-                    INSERT INTO ctrinhkm
-                    (maKM, tenKM, ngayBD, ngayKT, hinhThucKM, chietKhau, ghiChu)
-                    VALUES (?,?,?,?,?,?,?)
-                    """;
-
-            PreparedStatement ps = conn.prepareStatement(sql);
-
-            ps.setString(1, kmTour.getMaKM());
-            ps.setString(2, kmTour.getTenKM());
-            ps.setDate(3, java.sql.Date.valueOf(kmTour.getNgayBD()));
-            ps.setDate(4, java.sql.Date.valueOf(kmTour.getNgayKT()));
-            ps.setBoolean(5, kmTour.getHinhThucKM());
-            ps.setFloat(6, kmTour.getChietKhau());
-            ps.setString(7, kmTour.getGhiChu());
-
-            ps.executeUpdate();
-
             String sql2 = "INSERT INTO kmtour_chitiet VALUES (?,?)";
 
             for (String maTour : kmTour.getDsMaTour()) {

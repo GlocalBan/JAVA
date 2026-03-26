@@ -111,25 +111,15 @@ public class KMHDDAO {
 
 
     public boolean themKMHD(KMHDDTO kmhd) {
-        String sqlKM = "INSERT INTO CTrinhKM VALUES (?, ?, ?, ?, ?, ?, ?)";
         String sqlHD = "INSERT INTO KMHD_CHITIET VALUES (?, ?)";
        try (Connection conn = KetNoiCSDL.getConnection()) {
 
             conn.setAutoCommit(false);
 
-            try (PreparedStatement p1 = conn.prepareStatement(sqlKM)) {
-                p1.setString(1, kmhd.getTenKM());
-                p1.setDate(2, java.sql.Date.valueOf(kmhd.getNgayBD()));
-                p1.setDate(3, java.sql.Date.valueOf(kmhd.getNgayKT()));
-                p1.setFloat(4, kmhd.getChietKhau());
-                p1.setString(5, kmhd.getGhiChu());
-                p1.setString(6, kmhd.getMaKM());
-                p1.executeUpdate();
-            }
-
+            
             try (PreparedStatement p2 = conn.prepareStatement(sqlHD)) {
-                p2.setFloat(1, kmhd.getTongTienApDung());
-                p2.setString(2, kmhd.getMaKM());
+                p2.setString(1, kmhd.getMaKM());
+                p2.setFloat(2, kmhd.getTongTienApDung());
                 p2.executeUpdate();
             }
 
