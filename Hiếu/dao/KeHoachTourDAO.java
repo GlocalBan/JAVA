@@ -96,4 +96,19 @@ public class _KeHoachTourDAO {
             return false;
         }
     }
+
+    public boolean capNhatSoluong(int sl, String makhtour){
+        String sql="Update kehoachtour set tongsove=tongsove-? where makhtour=?";
+
+        try(Connection conn=_MyConnection.getConnection();
+            PreparedStatement ps=conn.prepareStatement(sql)){
+            ps.setInt(1,sl);
+            ps.setString(2,makhtour);
+            ps.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 }
