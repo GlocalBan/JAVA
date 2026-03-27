@@ -1,14 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package org.example.bus;
-
 import org.example.dao.CTietHDDAO;
 import org.example.dao._KeHoachTourDAO;
-import java.util.ArrayList;
 import org.example.dto.CTietHDDTO;
-
+import java.util.ArrayList;
 
 public class CTHoaDonBUS {
     public static ArrayList<CTietHDDTO> ds;
@@ -16,63 +10,61 @@ public class CTHoaDonBUS {
     public static _KeHoachTourDAO khtdao;
 
     public CTHoaDonBUS(){
-    if(ds==null){
-        dao=new CTietHDDAO();
-        khtdao=new _KeHoachTourDAO();
-        ds=dao.getDs();
+        if(ds==null){
+            dao=new CTietHDDAO();
+            ds=dao.getDs();
+        }
     }
-}
-    
+
     public void docDs(){
         ds=dao.getDs();
     }
-    
+
     public static ArrayList<CTietHDDTO> getDs(){
         return ds;
     }
-    
+
     public boolean timCtiethd(CTietHDDTO ct){
         for(CTietHDDTO cthd:ds){
             if(ct.getMaHD().equals(cthd.getMaHD()) && ct.getMaKHDi().equals(cthd.getMaKHDi()))
                 return true;
-                }
+        }
         return false;
     }
-    
-    public CTietHDDTO timCt(String mact,String makh){
-        for(CTietHDDTO cthd:ds){
+
+    public CTietHDDTO timCt(String mact, String makh){
+        for(CTietHDDTO cthd:ds)
             if(cthd.getMaHD().equals(mact) && cthd.getMaKHDi().equals(makh))
                 return cthd;
-        }
+
         return null;
     }
-        
+
     public boolean themCTietHd(CTietHDDTO ct){
         ds.add(ct);
         dao.themCtietHD(ct);
         return true;
     }
-    
+
     public boolean xoaCtietHd(String mact,String makh){
         CTietHDDTO ct = timCt(mact, makh);
-                if (ct == null) {
+        if (ct == null)
             return false;
-        }
 
         if(dao.xoaCtietHd(mact, makh)) {
             ds.remove(ct);
-            return true; 
+            return true;
         }
 
         return false;
     }
-    
+
     public boolean suaCtiethd(CTietHDDTO ct){
-        boolean flag=false;
-        if(timCtiethd(ct)!=true){
-            flag=false;
-        }else {
-            flag=true;
+        boolean flag = false;
+        if(timCtiethd(ct) != true)
+            flag = false;
+        else {
+            flag = true;
             for(int i=0;i<ds.size();i++){
                 if(ds.get(i).getMaHD().equals(ct.getMaHD()) && ds.get(i).getMaKHDi().equals(ct.getMaKHDi())){
                     ds.set(i,ct);
@@ -80,23 +72,25 @@ public class CTHoaDonBUS {
                 }
             }
         }
-        if(dao.TimHD(ct.getMaHD())==null){
+        if(dao.TimHD(ct.getMaHD())==null)
             flag=false;
-        }else {
+        else
             dao.suaCthd(ct);
-        }
-        return flag; 
-   }
+
+        return flag;
+    }
+
     public ArrayList<CTietHDDTO> getDstheoma(String mahd){
-        CTietHDDAO dao=new CTietHDDAO();
+        CTietHDDAO dao = new CTietHDDAO();
         return dao.getDstheoma(mahd);
     }
-    public float laygia(String mahd){
+
+    public float layGia(String mahd){
         CTietHDDAO daoCTietHD=new CTietHDDAO();
         return daoCTietHD.laygia(mahd);
     }
-    
-    public ArrayList<CTietHDDTO> timNangcao(String loai,String key){
+
+    public ArrayList<CTietHDDTO> timNangcao(String loai, String key){
         ArrayList<CTietHDDTO> ds =new ArrayList<>();
         String tencot="";
         if(loai.equals("Mã hóa đơn")){
@@ -118,5 +112,4 @@ public class CTHoaDonBUS {
             return khtdao.capNhatSoluong(sl, makhtour);
         }
     }
-
 }
