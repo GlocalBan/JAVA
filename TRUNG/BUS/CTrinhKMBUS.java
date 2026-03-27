@@ -1,21 +1,20 @@
-package BUS;
+package org.example.bus;
 
-import DTO.CTrinhKMDTO;
-import DTO.KMHDDTO;
-import DTO.KMTourDTO;
-import DAO.CTrinhKMDAO;
-import DAO.KMHDDAO;
-import DAO.KMTourDAO;
+import org.example.dao.CTrinhKMDAO;
+import org.example.dao.KMHDDAO;
+import org.example.dao.KMTourDAO;
+import org.example.dto.CTrinhKMDTO;
+import org.example.dto.KMHDDTO;
+import org.example.dto.KMTourDTO;
 
 import java.util.*;
 
-
 public class CTrinhKMBUS {
     public ArrayList<CTrinhKMDTO> dsCTrinhKM;
-    private CTrinhKMDAO dao;   
+    private CTrinhKMDAO dao;
     public CTrinhKMBUS() {
         if (dsCTrinhKM == null) {
-             dao = new CTrinhKMDAO();
+            dao = new CTrinhKMDAO();
             //khoit tao dsCTrinhKM tu database
             dsCTrinhKM = dao.getDsCTrinhKM();
         }
@@ -39,42 +38,42 @@ public class CTrinhKMBUS {
     }
 
     public boolean themCTrinhKM(CTrinhKMDTO ct) {
-    // Kiểm tra trùng mã
-    if (dao.timCTrinhKM(ct.getMaKM()) != null) return false;
+        // Kiểm tra trùng mã
+        if (dao.timCTrinhKM(ct.getMaKM()) != null) return false;
 
-    // Bước 1: Thêm vào bảng CTrinhKM (bảng cha)
-    boolean resultCha = dao.themCTrinhKM(ct);
-    if (!resultCha) return false;
+        // Bước 1: Thêm vào bảng CTrinhKM (bảng cha)
+        boolean resultCha = dao.themCTrinhKM(ct);
+        if (!resultCha) return false;
 
-    boolean resultCon = false;
-    try {
-        if (ct instanceof KMTourDTO) {
-            KMTourDAO daoTour = new KMTourDAO();
-            resultCon = daoTour.themKMTour((KMTourDTO) ct);
-        } else if (ct instanceof KMHDDTO) {
-            KMHDDAO daoKmhd = new KMHDDAO();
-            resultCon = daoKmhd.themKMHD((KMHDDTO) ct);
-        } else {
-            // Trường hợp chỉ có CTrinhKM (không có chi tiết)
-            resultCon = true;
-        }
+        boolean resultCon = false;
+        try {
+            if (ct instanceof KMTourDTO) {
+                KMTourDAO daoTour = new KMTourDAO();
+                resultCon = daoTour.themKMTour((KMTourDTO) ct);
+            } else if (ct instanceof KMHDDTO) {
+                KMHDDAO daoKmhd = new KMHDDAO();
+                resultCon = daoKmhd.themKMHD((KMHDDTO) ct);
+            } else {
+                // Trường hợp chỉ có CTrinhKM (không có chi tiết)
+                resultCon = true;
+            }
 
-        // Nếu thêm chi tiết thất bại (false), rollback thủ công
-        if (!resultCon) {
+            // Nếu thêm chi tiết thất bại (false), rollback thủ công
+            if (!resultCon) {
+                dao.xoaCTrinhKM(ct.getMaKM());
+                return false;
+            }
+        } catch (Exception e) {
+            // Có lỗi phát sinh (ví dụ SQLException), rollback
             dao.xoaCTrinhKM(ct.getMaKM());
+            e.printStackTrace();
             return false;
         }
-    } catch (Exception e) {
-        // Có lỗi phát sinh (ví dụ SQLException), rollback
-        dao.xoaCTrinhKM(ct.getMaKM());
-        e.printStackTrace();
-        return false;
-    }
 
-    // Cập nhật danh sách nội bộ
-    dsCTrinhKM.add(ct);
-    return true;
-}
+        // Cập nhật danh sách nội bộ
+        dsCTrinhKM.add(ct);
+        return true;
+    }
 
     public CTrinhKMDTO getFullCTrinhKM(String maKM) {
         CTrinhKMDTO basic = dao.timCTrinhKM(maKM);
@@ -148,7 +147,7 @@ public class CTrinhKMBUS {
             switch (loai) {
                 case "Tất cả":
                     if (ct.getMaKM().toLowerCase().contains(keyword.toLowerCase())
-                        || ct.getTenKM().toLowerCase().contains(keyword.toLowerCase())) {
+                            || ct.getTenKM().toLowerCase().contains(keyword.toLowerCase())) {
                         result.add(ct);
                     }
                     break;
@@ -183,15 +182,11 @@ public class CTrinhKMBUS {
     }
 
     public CTrinhKMDTO maptoCTrinhKM(String maKM) {
-//        try {
-            CTrinhKMDTO ct = dao.timCTrinhKM(maKM);
-            if (ct != null) {
-                return ct;
-            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        CTrinhKMDTO ct = dao.timCTrinhKM(maKM);
+
+        if (ct != null) {
+            return ct;
+        }
         return null;
     }
-
 }
