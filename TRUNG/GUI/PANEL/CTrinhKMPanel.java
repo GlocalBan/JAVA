@@ -1,77 +1,83 @@
+package org.example.gui.panel;
+import org.example.bus.CTrinhKMBUS;
+import org.example.dto.CTrinhKMDTO;
+import org.example.gui.dialog.CTrinhKMDialog;
+import org.example.gui.helper.ExcelHelper;
 
-package GUI.panel;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
-import DTO.CTrinhKMDTO;
-import DTO.KMTourDTO;
-
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-import javax.swing.*;
-import GUI.dialog.CTrinhKMDialog;
+public class CTrinhKMPanel extends JPanel {
 
-public class CTrinhKMPanel extends javax.swing.JPanel {
-
-    private BUS.CTrinhKMBUS bus;
+    private CTrinhKMBUS bus;
     private DefaultTableModel model;
 
     public CTrinhKMPanel() {
         initComponents();
-        txtSearch.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+        txtSearch.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
                 autoSearch();
             }
 
-            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+            public void removeUpdate(DocumentEvent e) {
                 autoSearch();
             }
 
-            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+            public void changedUpdate(DocumentEvent e) {
                 autoSearch();
             }
         });
-        tblKM.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
+        tblKM.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent evt) {
                 tblKMMouseClicked(evt);
             }
         });
-        bus=new BUS.CTrinhKMBUS();
+        bus=new CTrinhKMBUS();
         model = (DefaultTableModel) tblKM.getModel();
         tblKM.setDefaultEditor(Object.class, null);
         loadData();
     }
 
     private void loadData() {
-    model.setRowCount(0); 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    ArrayList<CTrinhKMDTO> list = new ArrayList<>(bus.getDsCTrinhKM());
-    list.sort(Comparator.comparing(CTrinhKMDTO::getMaKM));
+        model.setRowCount(0);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        ArrayList<CTrinhKMDTO> list = new ArrayList<>(bus.getDsCTrinhKM());
+        list.sort(Comparator.comparing(CTrinhKMDTO::getMaKM));
         for (CTrinhKMDTO km : list) {
-        model.addRow(new Object[]{
-            km.getMaKM(),
-            km.getTenKM(),
-            km.getNgayBD().format(formatter),
-            km.getNgayKT().format(formatter),
-            km.getHinhThucKM() ? "KMHD" : "KMTour",
-            km.getChietKhau(),
-            km.getGhiChu()
-        });
+            model.addRow(new Object[]{
+                    km.getMaKM(),
+                    km.getTenKM(),
+                    km.getNgayBD().format(formatter),
+                    km.getNgayKT().format(formatter),
+                    km.getHinhThucKM() ? "KMHD" : "KMTour",
+                    km.getChietKhau(),
+                    km.getGhiChu()
+            });
+        }
     }
-}
 
     private void loadData(String loai, String keyword) {
-        model.setRowCount(0); 
+        model.setRowCount(0);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         bus.searchCTrinhKM(loai, keyword).forEach(km -> {
             model.addRow(new Object[]{
-                km.getMaKM(),
-                km.getTenKM(),
-                km.getNgayBD().format(formatter),
-                km.getNgayKT().format(formatter),
-                km.getHinhThucKM() ? "KMHD" : "KMTour",
-                km.getChietKhau(),
-                km.getGhiChu()
+                    km.getMaKM(),
+                    km.getTenKM(),
+                    km.getNgayBD().format(formatter),
+                    km.getNgayKT().format(formatter),
+                    km.getHinhThucKM() ? "KMHD" : "KMTour",
+                    km.getChietKhau(),
+                    km.getGhiChu()
             });
         });
     }
@@ -80,88 +86,87 @@ public class CTrinhKMPanel extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
 
     private void initComponents() {
+        jPanel1 = new JPanel();
+        jLabel1 = new JLabel();
+        jPanel2 = new JPanel();
+        jLabel2 = new JLabel();
+        cbbKM = new JComboBox<>();
+        filler1 = new Box.Filler(new Dimension(20, 0), new Dimension(20, 0), new Dimension(20, 32767));
+        jLabel3 = new JLabel();
+        txtSearch = new JTextField();
+        jScrollPane1 = new JScrollPane();
+        tblKM = new JTable();
+        jPanel3 = new JPanel();
+        btnAdd = new JButton();
+        btnDel = new JButton();
+        btnEdit = new JButton();
+        btnLoad = new JButton();
+        btnXuat = new JButton();
 
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        cbbKM = new javax.swing.JComboBox<>();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
-        jLabel3 = new javax.swing.JLabel();
-        txtSearch = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblKM = new javax.swing.JTable();
-        jPanel3 = new javax.swing.JPanel();
-        btnAdd = new javax.swing.JButton();
-        btnDel = new javax.swing.JButton();
-        btnEdit = new javax.swing.JButton();
-        btnLoad = new javax.swing.JButton();
-        btnXuat = new javax.swing.JButton();
-
-        setPreferredSize(new java.awt.Dimension(623, 300));
-        setLayout(new java.awt.BorderLayout());
+        setPreferredSize(new Dimension(623, 300));
+        setLayout(new BorderLayout());
 
         jPanel1.setAlignmentX(0.0F);
         jPanel1.setAlignmentY(0.0F);
-        jPanel1.setPreferredSize(new java.awt.Dimension(623, 50));
-        jPanel1.setLayout(new java.awt.BorderLayout());
+        jPanel1.setPreferredSize(new Dimension(623, 50));
+        jPanel1.setLayout(new BorderLayout());
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setFont(new Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel1.setText("QUẢN LÝ KHUYẾN MÃI");
-        jPanel1.add(jLabel1, java.awt.BorderLayout.PAGE_START);
+        jPanel1.add(jLabel1, BorderLayout.PAGE_START);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 100, 5, 100));
+        jPanel2.setBorder(BorderFactory.createEmptyBorder(5, 100, 5, 100));
         jPanel2.setAlignmentX(0.0F);
         jPanel2.setAlignmentY(0.0F);
-        jPanel2.setMinimumSize(new java.awt.Dimension(230, 35));
-        jPanel2.setPreferredSize(new java.awt.Dimension(100, 45));
+        jPanel2.setMinimumSize(new Dimension(230, 35));
+        jPanel2.setPreferredSize(new Dimension(100, 45));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
+        jLabel2.setFont(new Font("Segoe UI", 3, 14)); // NOI18N
         jLabel2.setText("Loại");
         jPanel2.add(jLabel2);
 
-        cbbKM.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        cbbKM.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "KMHD", "KMTour" }));
+        cbbKM.setFont(new Font("Segoe UI", 1, 14)); // NOI18N
+        cbbKM.setModel(new DefaultComboBoxModel<>(new String[] { "Tất cả", "KMHD", "KMTour" }));
         cbbKM.setToolTipText("");
-        cbbKM.setMinimumSize(new java.awt.Dimension(91, 20));
+        cbbKM.setMinimumSize(new Dimension(91, 20));
         cbbKM.setName(""); // NOI18N
-        cbbKM.setPreferredSize(new java.awt.Dimension(81, 30));
+        cbbKM.setPreferredSize(new Dimension(81, 30));
         cbbKM.addActionListener(this::cbbKMActionPerformed);
         jPanel2.add(cbbKM);
         jPanel2.add(filler1);
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
+        jLabel3.setFont(new Font("Segoe UI", 3, 14)); // NOI18N
         jLabel3.setText("Từ khóa");
         jPanel2.add(jLabel3);
 
-        txtSearch.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtSearch.setHorizontalAlignment(JTextField.CENTER);
         txtSearch.setToolTipText("");
         txtSearch.setAlignmentX(2.0F);
         txtSearch.setAlignmentY(20.0F);
-        txtSearch.setMargin(new java.awt.Insets(5, 10, 5, 10));
-        txtSearch.setMinimumSize(new java.awt.Dimension(40, 22));
-        txtSearch.setPreferredSize(new java.awt.Dimension(200, 28));
+        txtSearch.setMargin(new Insets(5, 10, 5, 10));
+        txtSearch.setMinimumSize(new Dimension(40, 22));
+        txtSearch.setPreferredSize(new Dimension(200, 28));
         txtSearch.addActionListener(this::txtSearchActionPerformed);
         jPanel2.add(txtSearch);
 
-        jPanel1.add(jPanel2, java.awt.BorderLayout.PAGE_END);
+        jPanel1.add(jPanel2, BorderLayout.PAGE_END);
 
-        add(jPanel1, java.awt.BorderLayout.PAGE_START);
+        add(jPanel1, BorderLayout.PAGE_START);
 
-        tblKM.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Mã KM", "Tên KM", "Ngày BD", "Ngày KT", "Hình thức", "Chiết Khấu(%)", "Ghi chú"
-            }
+        tblKM.setModel(new DefaultTableModel(
+                new Object [][] {
+                        {null, null, null, null, null, null, null},
+                        {null, null, null, null, null, null, null},
+                        {null, null, null, null, null, null, null},
+                        {null, null, null, null, null, null, null}
+                },
+                new String [] {
+                        "Mã KM", "Tên KM", "Ngày BD", "Ngày KT", "Hình thức", "Chiết Khấu(%)", "Ghi chú"
+                }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.String.class
+                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -169,36 +174,121 @@ public class CTrinhKMPanel extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(tblKM);
+        jScrollPane1.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 
-        add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        add(jScrollPane1, BorderLayout.CENTER);
 
-        jPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 20, 5));
+        jPanel3.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 5));
 
-        btnAdd.setText("Thêm");
-        btnAdd.addActionListener(this::btnAddActionPerformed);
+
+        them();
         jPanel3.add(btnAdd);
 
-        btnDel.setText("Xóa");
-        btnDel.addActionListener(this::btnDelActionPerformed);
+        xoa();
         jPanel3.add(btnDel);
 
-        btnEdit.setText("Chỉnh sửa");
-        btnEdit.addActionListener(this::btnEditActionPerformed);
+        sua();
         jPanel3.add(btnEdit);
 
-        btnLoad.setText("Load");
-        btnLoad.addActionListener(this::btnLoadActionPerformed);
+        lamMoi();
         jPanel3.add(btnLoad);
 
-        btnXuat.setText("Xuất Excel");
-        btnXuat.addActionListener(this::btnXuatActionPerformed);
+        xuatExcel();
         jPanel3.add(btnXuat);
 
-        add(jPanel3, java.awt.BorderLayout.PAGE_END);
-    }// </editor-fold>//GEN-END:initComponents
-    
-    private void tblKMMouseClicked(java.awt.event.MouseEvent evt) {
+        add(jPanel3, BorderLayout.PAGE_END);
+    }
 
+    private JButton createBtn(String text, Color color){
+        JButton btn = new JButton(text);
+        btn.setBackground(color);
+        btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false);
+        btn.setFont(new Font("SansSerif", Font.BOLD, 13));
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR)); // in south panel
+
+        btn.setContentAreaFilled(true);
+        btn.setOpaque(true);
+        btn.setBorderPainted(false);
+
+        return btn;
+    }
+
+    private void them(){
+        btnAdd = createBtn("Thêm", Color.GREEN);
+        btnAdd.addActionListener(v -> {
+            CTrinhKMDialog dialog=new CTrinhKMDialog(bus);
+            dialog.setModal(true);
+            dialog.setVisible(true);
+            loadData();
+        });
+    }
+
+    private void xoa(){
+        btnDel = createBtn("Xóa", Color.GREEN);
+        btnDel.addActionListener(v -> {
+            try{
+                int row = tblKM.getSelectedRow();
+
+                if (row >= 0) {
+                    int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa chương trình khuyến mãi này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+                    if (confirm == JOptionPane.YES_OPTION) {
+                        String maKM = model.getValueAt(row, 0).toString();
+                        if(bus.xoaCTrinhKM(maKM)) {
+                            DefaultTableModel model = (DefaultTableModel) tblKM.getModel();
+                            model.removeRow(row);
+                            loadData();
+                            JOptionPane.showMessageDialog(this, "Xóa chương trình khuyến mãi thành công.");
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Xóa chương trình khuyến mãi thất bại.");
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Vui lòng chọn một chương trình khuyến mãi để xóa.");
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Có lỗi xảy ra khi xóa chương trình khuyến mãi.");
+            }
+        });
+    }
+
+    private void sua(){
+        btnEdit = createBtn("Chỉnh sửa", Color.GREEN);
+        btnEdit.addActionListener(v -> {
+            int row = tblKM.getSelectedRow();
+            if (row >= 0) {
+                String maKM = tblKM.getValueAt(row, 0).toString();
+                CTrinhKMDTO ct = bus.getFullCTrinhKM(maKM);  // Lấy chi tiết
+                if (ct != null) {
+                    CTrinhKMDialog dialog = new CTrinhKMDialog(bus, ct);
+                    dialog.setModal(true);
+                    dialog.setVisible(true);
+                    loadData();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Không tìm thấy chi tiết chương trình khuyến mãi.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn một chương trình khuyến mãi để chỉnh sửa.");
+            }
+        });
+    }
+
+    private void lamMoi(){
+        btnLoad = createBtn("Làm mới", Color.GREEN);
+        btnLoad.addActionListener(v -> {
+            loadData();
+        });
+    }
+
+    private void xuatExcel(){
+        btnXuat = createBtn("Xuất excel", Color.GREEN);
+        btnXuat.addActionListener(v -> {
+            ExcelHelper.xuatExcel(tblKM, this, "Danh sách khuyến mãi");
+        });
+    }
+
+
+    private void tblKMMouseClicked(MouseEvent evt) {
         int row = tblKM.rowAtPoint(evt.getPoint());
 
         if (row >= 0) {
@@ -237,14 +327,13 @@ public class CTrinhKMPanel extends javax.swing.JPanel {
                 }
             }
         }
-    }          
-                
-    
-    private void cbbKMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbKMActionPerformed
+    }
+
+    private void cbbKMActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cbbKMActionPerformed
         String loai =cbbKM.getSelectedItem().toString().trim();
         loadData(loai,"");
     }//GEN-LAST:event_cbbKMActionPerformed
-    
+
     private void autoSearch() {
         // TODO add your handling code here:
         String tim = txtSearch.getText().toString().trim();
@@ -257,93 +346,25 @@ public class CTrinhKMPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnSearchActionPerformed
 
-    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        // TODO add your handling code here:
-        GUI.dialog.CTrinhKMDialog dialog=new GUI.dialog.CTrinhKMDialog(bus);
-        dialog.setModal(true);
-        dialog.setVisible(true);
-        loadData();
-    }//GEN-LAST:event_btnAddActionPerformed
-
-      
-
-    private void btnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelActionPerformed
-        // TODO add your handling code here:
-        try{
-            int row = tblKM.getSelectedRow();
-            
-            if (row >= 0) {
-                int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa chương trình khuyến mãi này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
-                if (confirm == JOptionPane.YES_OPTION) {
-                    String maKM = model.getValueAt(row, 0).toString();
-                    if(bus.xoaCTrinhKM(maKM)) {
-                        DefaultTableModel model = (DefaultTableModel) tblKM.getModel();
-                        model.removeRow(row);
-                        loadData();
-                        JOptionPane.showMessageDialog(this, "Xóa chương trình khuyến mãi thành công.");
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Xóa chương trình khuyến mãi thất bại.");
-                    }
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "Vui lòng chọn một chương trình khuyến mãi để xóa.");
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Có lỗi xảy ra khi xóa chương trình khuyến mãi.");
-        }
-    }//GEN-LAST:event_btnDelActionPerformed
-
-    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+    private void txtSearchActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSearchActionPerformed
 
-    private void btnLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadActionPerformed
-        // TODO add your handling code here:
-        loadData();
-    }//GEN-LAST:event_btnLoadActionPerformed
-
-    private void btnXuatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXuatActionPerformed
-        // TODO add your handling code here:
-        Helper.ExcelHelper.xuatExcel(tblKM, this, "Danh sách khuyến mãi");
-    }//GEN-LAST:event_btnXuatActionPerformed
-
-    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        int row = tblKM.getSelectedRow();
-        if (row >= 0) {
-            String maKM = tblKM.getValueAt(row, 0).toString();
-            CTrinhKMDTO ct = bus.getFullCTrinhKM(maKM);  // Lấy chi tiết
-            if (ct != null) {
-                CTrinhKMDialog dialog = new CTrinhKMDialog(bus, ct);
-                dialog.setModal(true);
-                dialog.setVisible(true);
-                loadData();
-            } else {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy chi tiết chương trình khuyến mãi.");
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một chương trình khuyến mãi để chỉnh sửa.");
-        }
-    }//GEN-LAST:event_btnEditActionPerformed
-    
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAdd;
-    private javax.swing.JButton btnDel;
-    private javax.swing.JButton btnEdit;
-    private javax.swing.JButton btnLoad;
-    private javax.swing.JButton btnXuat;
-    private javax.swing.JComboBox<String> cbbKM;
-    private javax.swing.Box.Filler filler1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblKM;
-    private javax.swing.JTextField txtSearch;
-    // End of variables declaration//GEN-END:variables
+    private JButton btnAdd;
+    private JButton btnDel;
+    private JButton btnEdit;
+    private JButton btnLoad;
+    private JButton btnXuat;
+    private JComboBox<String> cbbKM;
+    private Box.Filler filler1;
+    private JLabel jLabel1;
+    private JLabel jLabel2;
+    private JLabel jLabel3;
+    private JPanel jPanel1;
+    private JPanel jPanel2;
+    private JPanel jPanel3;
+    private JScrollPane jScrollPane1;
+    private JTable tblKM;
+    private JTextField txtSearch;
 }
-
-
