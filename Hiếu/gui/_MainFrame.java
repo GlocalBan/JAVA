@@ -4,13 +4,7 @@ import org.example.dto.TaiKhoanDTO;
 import org.example.gui.panel.*;
 import org.example.login.PhanQuyen;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.*;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -23,7 +17,6 @@ import javax.swing.SwingUtilities;
 import org.example.login.DangNhap;
 
 public class _MainFrame extends JFrame {
-
     //layout
     private CardLayout cardLayout;
     private JPanel contentArea;
@@ -46,9 +39,6 @@ public class _MainFrame extends JFrame {
         sidebar.setBackground(new Color(30, 90, 160));
         sidebar.setPreferredSize(new Dimension(240, 0));
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
-
-        // Logo
-//        sidebar.add(buildLogo());
 
         //menu items: label, cardName
         String[][] menus;
@@ -81,39 +71,15 @@ public class _MainFrame extends JFrame {
         }
 
         for(String[] m : menus){
-            JButton btn = createMenuButton(m[0], m[1]);
+            JButton btn = createMenuButton(m[0], m[1], null);
             sidebar.add(btn);
             sidebar.add(Box.createRigidArea(new Dimension(0, 2)));
         }
         sidebar.add(Box.createVerticalGlue());
 
-        JButton logoutBtn = new JButton("Đăng xuất");
-        logoutBtn.setOpaque(false);
-        logoutBtn.setContentAreaFilled(false);
-        logoutBtn.setBorderPainted(false);
-        logoutBtn.setFocusPainted(false);
-        logoutBtn.setHorizontalAlignment(SwingConstants.LEFT);
-        logoutBtn.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        logoutBtn.setForeground(Color.WHITE);
-        logoutBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        logoutBtn.setMaximumSize(new Dimension(240, 48));
-        logoutBtn.setPreferredSize(new Dimension(240, 48));
-        logoutBtn.setBorder(BorderFactory.createEmptyBorder(0, 24, 0, 0));
+        JButton logoutBtn = createMenuButton("Đăng xuất", null, Color.RED);
+        logoutBtn.addActionListener(e -> handleLogout());
 
-        logoutBtn.addActionListener(e -> {
-            // Clear session (if the method exists) then return to login screen
-            try {
-                // Use reflection so the code still compiles even if dangXuat() is missing
-                PhanQuyen.class.getMethod("dangXuat").invoke(null);
-            } catch (Exception ignored) {
-                // If there's no dangXuat() in current build, still route back to login.
-            }
-            SwingUtilities.invokeLater(() -> {
-                DangNhap dangNhap = new DangNhap();
-                dangNhap.setVisible(true);
-                _MainFrame.this.dispose();
-            });
-        });
         sidebar.add(logoutBtn);
 
         return sidebar;
@@ -139,10 +105,13 @@ public class _MainFrame extends JFrame {
         return contentArea;
     }
 
-    private JButton createMenuButton(String text, String card){
+    private JButton createMenuButton(String text, String card, Color color){
         JButton btn = new JButton(text) {
             @Override protected void paintComponent(Graphics g) {
-                if (this == activeButton) {
+                if(color != null){
+                    g.setColor(color);
+                    g.fillRect(0, 0, getWidth(), getHeight());
+                }else if (this == activeButton) {
                     g.setColor(new Color(255, 255, 255, 30));
                     g.fillRoundRect(8, 4, getWidth() - 16, getHeight() - 8, 10, 10);
                 } else if (getModel().isRollover()) {
@@ -152,6 +121,8 @@ public class _MainFrame extends JFrame {
                 super.paintComponent(g);
             }
         };
+
+
         btn.setOpaque(false);
         btn.setContentAreaFilled(false);
         btn.setBorderPainted(false);
@@ -165,14 +136,29 @@ public class _MainFrame extends JFrame {
         btn.setBorder(BorderFactory.createEmptyBorder(0, 24, 0, 0));
 
         btn.addActionListener(e -> {
-
             if(activeButton != null) // fix color painted
                 activeButton.repaint();
 
             activeButton = btn;
             btn.repaint();
             cardLayout.show(contentArea, card);
+
+            if(card != null) { // nếu card null (nút đăng xuất) sẽ là nút bình thường không show ra như những nút khác
+                cardLayout.show(contentArea, card);
+            }
         });
         return btn;
+    }
+
+    private void handleLogout() {
+        try {
+            PhanQuyen.class.getMethod("dangXuat").invoke(null);
+        } catch (Exception ignored) {}
+
+        SwingUtilities.invokeLater(() -> {
+            DangNhap dangNhap = new DangNhap();
+            dangNhap.setVisible(true);
+            this.dispose();
+        });
     }
 }
