@@ -1,22 +1,35 @@
 package org.example.gui.dialog;
 
+import org.example.bus.NhanVienBUS;
 import org.example.bus._KeHoachTourBUS;
+import org.example.dto.NhanVienDTO;
 import org.example.dto._KeHoachTourDTO;
+import org.example.dto._TourDTO;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 
 public class _KeHoachTourDialog extends JDialog {
     // define jlabel and txt
     private JLabel jlbMaKHTour, jlbNgayKhoiHanh, jlbNgayKetThuc, jlbTongSoVe, jlbTongChi, jlbTongThu, jlbMaTour, jlbMaNVHD;
-    private JTextField txtMaKHTour, txtNgayKhoiHanh, txtNgayKetThuc, txtTongSoVe, txtTongChi, txtTongThu, txtMaTour, txtMaNVHD;
+    private JTextField txtMaKHTour, txtNgayKhoiHanh, txtNgayKetThuc, txtTongSoVe, txtTongChi, txtTongThu, txtMaTour;
+
+    // define table
+    DefaultTableModel tableModel;
+
+    // combo staff
+    private JComboBox<NhanVienDTO> cbStaff;
+    private DefaultComboBoxModel<NhanVienDTO> staffModel;
 
     // define btn
     private JButton saveBtn, cancelBtn;
 
+    private NhanVienBUS nhanVienBUS;
     private _KeHoachTourBUS keHoachTourBUS;
     private _KeHoachTourDTO keHoachTourDTO;
 
@@ -30,6 +43,12 @@ public class _KeHoachTourDialog extends JDialog {
         this.keHoachTourBUS = keHoachTourBUS;
         this.keHoachTourDTO = keHoachTourDTO;
         this.maTour = maTour;
+        this.nhanVienBUS = new NhanVienBUS();
+        nhanVienBUS.docDSNV();
+
+        // load staff combobox
+        cbStaff = new JComboBox<>();
+
         today = LocalDate.now();
 
         setTitle(keHoachTourDTO == null ? "Thêm kế hoạch tour" : "Sửa kế hoạch Tour");
@@ -117,8 +136,15 @@ public class _KeHoachTourDialog extends JDialog {
         jlbMaNVHD = new JLabel("Mã nhân viên hướng dẫn");
         jlbMaNVHD.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
         formPanel.add(jlbMaNVHD);
-        txtMaNVHD = new JTextField();
-        formPanel.add(txtMaNVHD);
+
+        // Load combo staff
+        staffModel = new DefaultComboBoxModel<>();
+        staffModel = CBStaffPresent();
+        cbStaff.setModel(staffModel);
+        if (staffModel.getSize() > 0) {
+            cbStaff.setSelectedIndex(0);
+        }
+        formPanel.add(cbStaff); // center panel add combobox tours
 
         add(formPanel, BorderLayout.CENTER);
         add(southPanel, BorderLayout.SOUTH);
@@ -132,7 +158,21 @@ public class _KeHoachTourDialog extends JDialog {
         txtTongChi.setText(keHoachTourDTO.getTongChi() + "");
         txtTongThu.setText(keHoachTourDTO.getTongThu() + "");
         txtMaTour.setText(keHoachTourDTO.getMaTour());
-        txtMaNVHD.setText(keHoachTourDTO.getMaNVHD());
+        // combobox manvhd
+    }
+
+    private DefaultComboBoxModel<NhanVienDTO> CBStaffPresent(){
+        DefaultComboBoxModel<NhanVienDTO> model = new DefaultComboBoxModel<>();
+
+        nhanVienBUS.docDSNV();
+
+        ArrayList<NhanVienDTO> lsStaff = nhanVienBUS.dsNV;
+        if (lsStaff == null || lsStaff.isEmpty())
+            return model;
+
+        for (NhanVienDTO t : lsStaff)
+            model.addElement(t);
+        return model;
     }
 
     private JButton createBtn(String text, Color color){
@@ -179,11 +219,12 @@ public class _KeHoachTourDialog extends JDialog {
                     JOptionPane.showMessageDialog(null, "Mã kế hoạch tour đã tồn tại, vui lòng nhập mã khác!");
                 else{
                     _KeHoachTourDTO keHoachTourMoi = null;
+                    NhanVienDTO selectedStaff = getStaffSelected();
 
                     keHoachTourMoi = new _KeHoachTourDTO(
                             txtMaKHTour.getText(), ngayKhoiHanh,
                             ngayKetThuc, tongSoVe,
-                            tongChi, tongThu, txtMaTour.getText(), txtMaNVHD.getText()
+                            tongChi, tongThu, txtMaTour.getText(), selectedStaff.getMaNV()
                     );
 
                     // validate before add
@@ -208,7 +249,8 @@ public class _KeHoachTourDialog extends JDialog {
                 keHoachTourDTO.setTongChi(tongChi);
                 keHoachTourDTO.setTongThu(tongThu);
                 keHoachTourDTO.setMaTour(txtMaTour.getText());
-                keHoachTourDTO.setMaNVHD(txtMaNVHD.getText());
+                NhanVienDTO selectedStaff = getStaffSelected();
+                keHoachTourDTO.setMaNVHD(selectedStaff.getMaNV());
 
                 keHoachTourBUS.editKeHoachTour(keHoachTourDTO); // edit by keHoachTourBus
             }
@@ -229,5 +271,9 @@ public class _KeHoachTourDialog extends JDialog {
             }
         }
         return false;
+    }
+
+    private NhanVienDTO getStaffSelected(){
+        return (NhanVienDTO) cbStaff.getSelectedItem();
     }
 }
