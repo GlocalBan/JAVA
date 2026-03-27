@@ -119,7 +119,7 @@ public class _TourDiaLog extends JDialog {
         formPanel.add(cbLoaiTours);
 
         // row image
-        jlbImgLink = new JLabel("Đường dẫn ảnh");
+        jlbImgLink = new JLabel(" Đường dẫn ảnh");
         formPanel.add(jlbImgLink);
 
         // image panel
