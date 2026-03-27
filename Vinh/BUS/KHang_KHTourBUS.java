@@ -1,30 +1,24 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package BUS;
-import DAO.KHang_KHTourDAO;
-import DTO.KHang_KHTour;
+package org.example.bus;
+import org.example.dao.KHang_KHTourDAO;
+import org.example.dto.KHang_KHTourDTO;
+
 import java.util.ArrayList;
 import java.util.List;
-/**
- *
- * @author Admin
- */
+
 public class KHang_KHTourBUS {
-    static ArrayList<KHang_KHTour> dsKHKHTour;
+    static ArrayList<KHang_KHTourDTO> dsKHKHTour;
     static KHang_KHTourDAO dataKHKHTour = new KHang_KHTourDAO();
     public KHang_KHTourBUS() {}
     public void docDSKHKHTour() {
         if (dsKHKHTour == null) {
-            dsKHKHTour = new ArrayList<KHang_KHTour>();
+            dsKHKHTour = new ArrayList<KHang_KHTourDTO>();
         }
         dsKHKHTour = dataKHKHTour.layDanhSachKHang_KHTour();
     }
-    public void them(KHang_KHTour kht) {
+    public void them(KHang_KHTourDTO kht) {
         try{
             if (dsKHKHTour == null) {
-                dsKHKHTour = new ArrayList<KHang_KHTour>();
+                dsKHKHTour = new ArrayList<KHang_KHTourDTO>();
             }
             if (kht == null) {
                 return;
@@ -32,14 +26,14 @@ public class KHang_KHTourBUS {
             if (kht.getMaKHTour() == null || kht.getMaKHTour().isEmpty()) {
                 return;
             }
-            for (KHang_KHTour existingKHT : dsKHKHTour) {
+            for (KHang_KHTourDTO existingKHT : dsKHKHTour) {
                 if (existingKHT.getMaKHTour().equals(kht.getMaKHTour())) {
                     return;
                 }
             }
             dataKHKHTour.themKHang_KHTour(kht);
             if (dsKHKHTour != null) {
-            dsKHKHTour.add(kht);
+                dsKHKHTour.add(kht);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -58,13 +52,13 @@ public class KHang_KHTourBUS {
         }
     }
 
-    public boolean suaKHang_KHTour(KHang_KHTour kht) {
+    public boolean suaKHang_KHTour(KHang_KHTourDTO kht) {
         try {
             if (dsKHKHTour == null || kht == null || kht.getMaKHTour() == null || kht.getMaKHTour().isEmpty()) {
                 return false;
             }
             for (int i = 0; i < dsKHKHTour.size(); i++) {
-                KHang_KHTour existingKHT = dsKHKHTour.get(i);
+                KHang_KHTourDTO existingKHT = dsKHKHTour.get(i);
                 if (existingKHT.getMaKHTour().equals(kht.getMaKHTour()) && existingKHT.getMaKHang().equals(kht.getMaKHang())) {
                     dataKHKHTour.capNhatKHang_KHTour(kht);
                     dsKHKHTour.set(i, kht);
@@ -78,12 +72,12 @@ public class KHang_KHTourBUS {
         }
     }
 
-    public KHang_KHTour timKiemKHang_KHTourTheoMaKHTour(String maKHTour) {
+    public KHang_KHTourDTO timKiemKHang_KHTourTheoMaKHTour(String maKHTour) {
         try {
             if (dsKHKHTour == null || maKHTour == null) {
                 return null;
             }
-            for (KHang_KHTour kht : dsKHKHTour) {
+            for (KHang_KHTourDTO kht : dsKHKHTour) {
                 if (kht.getMaKHTour().equals(maKHTour)) {
                     return kht;
                 }
@@ -95,13 +89,13 @@ public class KHang_KHTourBUS {
         }
     }
 
-    public List<KHang_KHTour> timKHang_KHTours(String column, String value) {
+    public List<KHang_KHTourDTO> timKHang_KHTours(String column, String value) {
         try {
             if (dsKHKHTour == null || column == null || value == null) {
                 return new ArrayList<>();
             }
-            List<KHang_KHTour> result = new ArrayList<>();
-            for (KHang_KHTour kht : dsKHKHTour) {
+            List<KHang_KHTourDTO> result = new ArrayList<>();
+            for (KHang_KHTourDTO kht : dsKHKHTour) {
                 switch (column) {
                     case "MaKHTour":
                         if (kht.getMaKHTour().equalsIgnoreCase(value)) {
@@ -135,13 +129,13 @@ public class KHang_KHTourBUS {
         }
     }
 
-    public List<KHang_KHTour> timKHang_KHToursTheoHo(String ho) {
+    public List<KHang_KHTourDTO> timKHang_KHToursTheoHo(String ho) {
         try {
             if (dsKHKHTour == null || ho == null) {
                 return new ArrayList<>();
             }
-            List<KHang_KHTour> result = new ArrayList<>();
-            for (KHang_KHTour kht : dsKHKHTour) {
+            List<KHang_KHTourDTO> result = new ArrayList<>();
+            for (KHang_KHTourDTO kht : dsKHKHTour) {
                 String maKHang = kht.getMaKHang();
                 if (maKHang != null && maKHang.startsWith(ho)) {
                     result.add(kht);
@@ -154,12 +148,12 @@ public class KHang_KHTourBUS {
         }
     }
 
-    public KHang_KHTour timKHang_KHTourTheoTen(String ten) {
+    public KHang_KHTourDTO timKHang_KHTourTheoTen(String ten) {
         try {
             if (dsKHKHTour == null || ten == null) {
                 return null;
             }
-            for (KHang_KHTour kht : dsKHKHTour) {
+            for (KHang_KHTourDTO kht : dsKHKHTour) {
                 String maKHang = kht.getMaKHang();
                 if (maKHang != null && maKHang.equalsIgnoreCase(ten)) {
                     return kht;
@@ -171,5 +165,4 @@ public class KHang_KHTourBUS {
             return null;
         }
     }
-}       
-    
+}
