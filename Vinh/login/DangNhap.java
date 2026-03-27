@@ -9,18 +9,25 @@ import java.util.Arrays;
 import javax.swing.*;
 
 public class DangNhap extends JFrame {
+    private final TaiKhoanDAO taiKhoanDAO = new TaiKhoanDAO();
     public DangNhap() {
         initComponents();
         setLocationRelativeTo(null);
     }
 
-    private final TaiKhoanDAO taiKhoanDAO = new TaiKhoanDAO();
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        // Set favicon
+        try {
+            ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("logosgu.png"));
+            setIconImage(icon.getImage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //set title
+        setTitle("Đăng Nhập - Library Management System");
 
-        jlbLogin = new JLabel();
         jlbAccount = new JLabel();
         jlbPassword = new JLabel();
         loginBtn = new JButton();
@@ -29,10 +36,29 @@ public class DangNhap extends JFrame {
         txtPassword = new JPasswordField();
         txtPassword.setEchoChar('*');
 
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        // Header Panel
+        JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 15));
+        headerPanel.setBackground(Color.CYAN);
+        headerPanel.setPreferredSize(new Dimension(450, 100));
 
-        jlbLogin.setFont(new Font("Segoe UI", 1, 24)); // NOI18N
-        jlbLogin.setText("Đăng nhập");
+        // Logo
+        try {
+            ImageIcon originalIcon = new ImageIcon(getClass().getClassLoader().getResource("logo.png"));
+            Image scaledImage = originalIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+            JLabel logoLabel = new JLabel(new ImageIcon(scaledImage));
+            headerPanel.add(logoLabel);
+        } catch (Exception e) {
+            // Fallback to emoji if logo not found
+        }
+
+        // title
+        JLabel jlbTitle = new JLabel("TOUR MANAGEMENT SYSTEM");
+        jlbTitle.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        jlbTitle.setForeground(Color.WHITE);
+        headerPanel.add(jlbTitle);
+
+        //set close operation
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         jlbAccount.setText("Tài khoản:");
 
@@ -42,15 +68,16 @@ public class DangNhap extends JFrame {
         login();
         logout();
 
-        GroupLayout layout = new GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        // main Panel
+        JPanel mainPanel = new JPanel();
+        GroupLayout layout = new GroupLayout(mainPanel);
+        mainPanel.setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGap(136, 136, 136)
-                                                .addComponent(jlbLogin))
+                                                .addGap(10, 10, 10))
                                         .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                                 .addGap(106, 106, 106)
                                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
@@ -72,7 +99,6 @@ public class DangNhap extends JFrame {
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jlbLogin)
                                 .addGap(50, 50, 50)
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(jlbAccount)
@@ -85,11 +111,13 @@ public class DangNhap extends JFrame {
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(loginBtn)
                                         .addComponent(logoutBtn))
-                                .addGap(64, 64, 64))
+                                .addGap(20, 20, 20))
         );
 
+        add(headerPanel, BorderLayout.NORTH);
+        add(mainPanel, BorderLayout.CENTER);
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
     private void login(){
         loginBtn = createBtn("Đăng nhập", Color.GREEN);
@@ -141,7 +169,6 @@ public class DangNhap extends JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JButton loginBtn;
     private JButton logoutBtn;
-    private JLabel jlbLogin;
     private JLabel jlbAccount;
     private JLabel jlbPassword;
     private JTextField txtUsername;

@@ -1,22 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package login;
+package org.example.login;
 
-import DTO.TaiKhoan;
+import org.example.dto.TaiKhoanDTO;
 
-/**
- *
- * @author Admin
- */
 public class PhanQuyen {
-    private static TaiKhoan currentTaiKhoan;
+    private static TaiKhoanDTO currentTaiKhoan;
 
     private PhanQuyen() {
     }
 
-    public static void dangNhap(TaiKhoan taiKhoan) {
+    public static void dangNhap(TaiKhoanDTO taiKhoan) {
         currentTaiKhoan = taiKhoan;
     }
 
@@ -24,7 +16,7 @@ public class PhanQuyen {
         currentTaiKhoan = null;
     }
 
-    public static TaiKhoan getCurrentTaiKhoan() {
+    public static TaiKhoanDTO getCurrentTaiKhoan() {
         return currentTaiKhoan;
     }
 

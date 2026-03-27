@@ -1,32 +1,28 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
-package GUI.Panel;
+package org.example.gui.panel;
 
-import BUS.NhanVienBUS;
-import DAO.NhanVienDAO;
-import DTO.NhanVien;
-import GUI.Dialog.NhanVienDialog;
+import org.example.bus.NhanVienBUS;
+import org.example.dao.NhanVienDAO;
+import org.example.dto.NhanVienDTO;
+import org.example.gui.dialog.NhanVienDialog;
+import org.example.login.PhanQuyen;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.swing.JOptionPane;
+
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
-import login.PhanQuyen;
-/**
- *
- * @author Admin
- */
-public class NhanVienPanel extends javax.swing.JPanel {
 
-    /**
-     * Creates new form QLNhanVien
-     */
+public class NhanVienPanel extends JPanel {
+
     NhanVienDAO ds = new NhanVienDAO();
     NhanVienBUS nvBUS = new NhanVienBUS();
     NhanVienDialog NVdialog;
@@ -40,27 +36,27 @@ public class NhanVienPanel extends javax.swing.JPanel {
         }
         txtSearch.getDocument().addDocumentListener(new DocumentListener() {
 
-        private void search() {
-            String keyword = txtSearch.getText().trim();
-            List<NhanVien> list = nvBUS.timNhanVien(getColumnName(jComboBox1.getSelectedItem().toString()), keyword);
-            loadNhanVienToTable(list);
-        }
+            private void search() {
+                String keyword = txtSearch.getText().trim();
+                List<NhanVienDTO> list = nvBUS.timNhanVien(getColumnName(jComboBox1.getSelectedItem().toString()), keyword);
+                loadNhanVienToTable(list);
+            }
 
-        @Override
-        public void insertUpdate(DocumentEvent e) {
-            search();
-        }
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                search();
+            }
 
-        @Override
-        public void removeUpdate(DocumentEvent e) {
-            search();
-        }
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                search();
+            }
 
-        @Override
-        public void changedUpdate(DocumentEvent e) {
-            search();
-        }
-    });
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                search();
+            }
+        });
         loadNhanVienToTable(ds.layDanhSachNV());
     }
 
@@ -73,160 +69,190 @@ public class NhanVienPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        txtSearch = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jPanel3 = new javax.swing.JPanel();
-        btnThem = new javax.swing.JButton();
-        btnXoa = new javax.swing.JButton();
-        btnSua = new javax.swing.JButton();
-        btnLamMoi = new javax.swing.JButton();
+        jPanel1 = new JPanel();
+        jLabel1 = new JLabel();
+        jPanel2 = new JPanel();
+        jLabel2 = new JLabel();
+        jComboBox1 = new JComboBox<>();
+        txtSearch = new JTextField();
+        jScrollPane1 = new JScrollPane();
+        jTable1 = new JTable();
+        jPanel3 = new JPanel();
+        btnThem = new JButton();
+        btnXoa = new JButton();
+        btnSua = new JButton();
+        btnLamMoi = new JButton();
 
-        setLayout(new java.awt.BorderLayout());
+        setLayout(new BorderLayout());
 
-        jPanel1.setLayout(new java.awt.BorderLayout());
+        jPanel1.setLayout(new BorderLayout());
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setFont(new Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel1.setText("Quản lí nhân viên");
-        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel1.add(jLabel1, java.awt.BorderLayout.CENTER);
+        jLabel1.setHorizontalTextPosition(SwingConstants.CENTER);
+        jPanel1.add(jLabel1,BorderLayout.CENTER);
 
         jLabel2.setText("Tìm kiếm");
         jPanel2.add(jLabel2);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã nhân viên", "Họ", "Tên", "Chức vụ", "Ngày sinh", "Số điện thoại", "Địa chỉ" }));
+        jComboBox1.setModel(new DefaultComboBoxModel<>(new String[] { "Mã nhân viên", "Họ", "Tên", "Chức vụ", "Số điện thoại", "Địa chỉ" }));
         jComboBox1.addActionListener(this::jComboBox1ActionPerformed);
         jPanel2.add(jComboBox1);
 
-        txtSearch.setPreferredSize(new java.awt.Dimension(360, 22));
+        txtSearch.setPreferredSize(new Dimension(360, 22));
         txtSearch.addActionListener(this::txtSearchActionPerformed);
         jPanel2.add(txtSearch);
 
-        jPanel1.add(jPanel2, java.awt.BorderLayout.PAGE_END);
+        jPanel1.add(jPanel2,BorderLayout.PAGE_END);
 
-        add(jPanel1, java.awt.BorderLayout.PAGE_START);
+        add(jPanel1,BorderLayout.PAGE_START);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Mã nhân viên", "Họ", "Tên", "Chức vụ", "Ngày sinh", "Số điện thoại", "Địa chỉ"
-            }
+        jTable1.setModel(new DefaultTableModel(
+                new Object [][] {
+                        {null, null, null, null, null, null, null},
+                        {null, null, null, null, null, null, null},
+                        {null, null, null, null, null, null, null},
+                        {null, null, null, null, null, null, null},
+                        {null, null, null, null, null, null, null}
+                },
+                new String [] {
+                        "Mã nhân viên", "Họ", "Tên", "Chức vụ", "Ngày sinh", "Số điện thoại", "Địa chỉ"
+                }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
-        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        jTable1.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
                 jTable1MouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 
-        add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        add(jScrollPane1,BorderLayout.CENTER);
 
-        btnThem.setText("Thêm");
-        btnThem.addActionListener(this::btnThemActionPerformed);
+        them();
         jPanel3.add(btnThem);
 
-        btnXoa.setText("Xóa");
+        xoa();
         btnXoa.setEnabled(false);
-        btnXoa.addActionListener(this::btnXoaActionPerformed);
         jPanel3.add(btnXoa);
 
-        btnSua.setText("Sửa");
+        sua();
         btnSua.setEnabled(false);
-        btnSua.addActionListener(this::btnSuaActionPerformed);
         jPanel3.add(btnSua);
 
-        btnLamMoi.setText("Làm mới");
+        lamMoi();
         jPanel3.add(btnLamMoi);
 
-        add(jPanel3, java.awt.BorderLayout.PAGE_END);
+        add(jPanel3, BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private JButton createBtn(String text, Color color){
+        JButton btn = new JButton(text);
+        btn.setBackground(color);
+        btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false);
+        btn.setFont(new Font("SansSerif", Font.BOLD, 13));
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR)); // in south panel
+
+        btn.setContentAreaFilled(true);
+        btn.setOpaque(true);
+        btn.setBorderPainted(false);
+
+        return btn;
+    }
+
+    private void them(){
+        btnThem = createBtn("Thêm", Color.GREEN);
+        btnThem.addActionListener(v -> {
+            if (!PhanQuyen.laQuanLy()) {
+                JOptionPane.showMessageDialog(this, "Bạn không có quyền thao tác với nhân viên.");
+                return;
+            }
+
+            NhanVienDialog dialog = new NhanVienDialog(
+                    null,
+                    true,
+                    ds,
+                    NhanVienDialog.Mode.ADD,
+                    null
+            );
+
+            dialog.setVisible(true);
+
+            loadNhanVienToTable(ds.layDanhSachNV());
+        });
+    }
+
+    private void sua(){
+        btnSua = createBtn("Thêm", Color.ORANGE);
+        btnSua.setEnabled(false);
+        btnSua.addActionListener(v -> {
+            if (!PhanQuyen.laQuanLy()) {
+                JOptionPane.showMessageDialog(this, "Bạn không có quyền thao tác với nhân viên.");
+                return;
+            }
+            int i = jTable1.getSelectedRow();
+
+            if (i >= 0) {
+                String maNV = jTable1.getValueAt(i, 0).toString();
+                NhanVienDTO nv = nvBUS.timNhanVienTheoMa(maNV);
+                System.err.println(nv.getMaNV());
+                NhanVienDialog dialog = new NhanVienDialog(
+                        null, true, ds,
+                        NhanVienDialog.Mode.EDIT,
+                        nv);
+
+                dialog.setVisible(true);
+                loadNhanVienToTable(ds.layDanhSachNV());
+            }
+        });
+    }
+
+    private void xoa(){
+        btnXoa = createBtn("Thêm", Color.RED);
+        btnXoa.setEnabled(false);
+        btnXoa.addActionListener(v -> {
+            if (!PhanQuyen.laQuanLy()) {
+                JOptionPane.showMessageDialog(this, "Bạn không có quyền xóa dữ liệu.");
+                return;
+            }
+            int i = jTable1.getSelectedRow();
+            int result = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa nhân viên này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+            if (result == JOptionPane.YES_OPTION && i >= 0) {
+                String maNV = jTable1.getValueAt(i, 0).toString();
+                NhanVienBUS nvBUS = new NhanVienBUS();
+                nvBUS.xoaNhanVien(maNV);
+                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+                model.removeRow(i);
+            }
+        });
+    }
+
+    private void lamMoi(){
+        btnLamMoi = createBtn("Thêm", Color.CYAN);
+        btnLamMoi.addActionListener(v -> {
+            loadNhanVienToTable(ds.layDanhSachNV());
+        });
+    }
+
+    private void jComboBox1ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
-    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+    private void txtSearchActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSearchActionPerformed
 
-    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {
-        if (!PhanQuyen.laQuanLy()) {
-            JOptionPane.showMessageDialog(this, "Bạn không có quyền thao tác với nhân viên.");
-            return;
-        }
-
-        NhanVienDialog dialog = new NhanVienDialog(
-                null,
-                true,
-                ds,
-                NhanVienDialog.Mode.ADD,
-                null
-        );
-
-        dialog.setVisible(true);
-
-        loadNhanVienToTable(ds.layDanhSachNV());
-    }                                        
-
-    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
-        if (!PhanQuyen.laQuanLy()) {
-            JOptionPane.showMessageDialog(this, "Bạn không có quyền xóa dữ liệu.");
-            return;
-        }
-        int i = jTable1.getSelectedRow();
-        int result = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa nhân viên này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
-        if (result == JOptionPane.YES_OPTION && i >= 0) {
-            String maNV = jTable1.getValueAt(i, 0).toString();
-            NhanVienBUS nvBUS = new NhanVienBUS();
-            nvBUS.xoaNhanVien(maNV);
-            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-            model.removeRow(i);
-        }
-
-    }//GEN-LAST:event_btnXoaActionPerformed
-
-    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
-        if (!PhanQuyen.laQuanLy()) {
-            JOptionPane.showMessageDialog(this, "Bạn không có quyền thao tác với nhân viên.");
-            return;
-        }
-        int i = jTable1.getSelectedRow();
-
-        if (i >= 0) {
-            String maNV = jTable1.getValueAt(i, 0).toString();
-            NhanVien nv = nvBUS.timNhanVienTheoMa(maNV);
-            System.err.println(nv.getMaNV());
-            NhanVienDialog dialog = new NhanVienDialog(
-                null, true, ds,
-                NhanVienDialog.Mode.EDIT,
-                nv);
-
-            dialog.setVisible(true);
-            loadNhanVienToTable(ds.layDanhSachNV());
-        }
-    }//GEN-LAST:event_btnSuaActionPerformed
-
-    private void jTable1MouseClicked(java.awt.event.MouseEvent evt){
+    private void jTable1MouseClicked(MouseEvent evt){
         if (PhanQuyen.laQuanLy()) {
             btnXoa.setEnabled(true);
             btnSua.setEnabled(true);
@@ -234,60 +260,58 @@ public class NhanVienPanel extends javax.swing.JPanel {
     }
 
     private void searchNhanVien() {
-    String keyword = txtSearch.getText().trim();
-    String selected = jComboBox1.getSelectedItem().toString();
+        String keyword = txtSearch.getText().trim();
+        String selected = jComboBox1.getSelectedItem().toString();
 
-    List<NhanVien> list;
+        List<NhanVienDTO> list;
 
-    if (keyword.isEmpty()) {
-        loadNhanVienToTable(ds.layDanhSachNV());
-        return;
-    }
-
-    if (selected.equals("Ngày sinh")) {
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate date = LocalDate.parse(keyword, formatter);
-
-            list = nvBUS.timNhanVienTheoNgaySinh(date);
-        } catch (Exception e) {
-            list = new ArrayList<>();
+        if (keyword.isEmpty()) {
+            loadNhanVienToTable(ds.layDanhSachNV());
+            return;
         }
-    } else {
-        String column = getColumnName(selected);
-        list = nvBUS.timNhanVien(column, keyword);
-    }
 
-    loadNhanVienToTable(list);
-}
+        if (selected.equals("Ngày sinh")) {
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate date = LocalDate.parse(keyword, formatter);
+
+                list = nvBUS.timNhanVienTheoNgaySinh(date);
+            } catch (Exception e) {
+                list = new ArrayList<>();
+            }
+        } else {
+            String column = getColumnName(selected);
+            list = nvBUS.timNhanVien(column, keyword);
+        }
+
+        loadNhanVienToTable(list);
+    }
 
     private String getColumnName(String selected) {
-
-    switch (selected) {
-        case "Mã nhân viên":
-            return "maNV";
-        case "Họ":
-            return "ho";
-        case "Tên":
-            return "ten";
-        case "Chức vụ":
-            return "chucVu";
-        case "Số điện thoại":
-            return "sdt";
-        case "Địa chỉ":
-            return "diaChi";
-        default:
-            return "maNV"; 
+        switch (selected) {
+            case "Mã nhân viên":
+                return "maNV";
+            case "Họ":
+                return "ho";
+            case "Tên":
+                return "ten";
+            case "Chức vụ":
+                return "chucVu";
+            case "Số điện thoại":
+                return "sdt";
+            case "Địa chỉ":
+                return "diaChi";
+            default:
+                return "maNV";
+        }
     }
-}
 
-    private void loadNhanVienToTable(List<NhanVien> list) {
-
+    private void loadNhanVienToTable(List<NhanVienDTO> list) {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0); // Xóa dữ liệu cũ trong bảng
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        for(NhanVien nv : list){
+        for(NhanVienDTO nv : list){
             Date date = java.sql.Date.valueOf(nv.getNgaySinh());
             String ngaySinhStr = "";
             if(date!=null){
@@ -296,31 +320,31 @@ public class NhanVienPanel extends javax.swing.JPanel {
             }
 
             model.addRow(new Object[]{
-                nv.getMaNV(),
-                nv.getHo(),
-                nv.getTen(),
-                nv.getChucVu(),
-                ngaySinhStr,
-                nv.getSdt(),
-                nv.getDiaChi()
+                    nv.getMaNV(),
+                    nv.getHo(),
+                    nv.getTen(),
+                    nv.getChucVu(),
+                    ngaySinhStr,
+                    nv.getSdt(),
+                    nv.getDiaChi()
             });
         }
     }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnLamMoi;
-    private javax.swing.JButton btnSua;
-    private javax.swing.JButton btnThem;
-    private javax.swing.JButton btnXoa;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField txtSearch;
+    private JButton btnLamMoi;
+    private JButton btnSua;
+    private JButton btnThem;
+    private JButton btnXoa;
+    private JComboBox<String> jComboBox1;
+    private JLabel jLabel1;
+    private JLabel jLabel2;
+    private JPanel jPanel1;
+    private JPanel jPanel2;
+    private JPanel jPanel3;
+    private JScrollPane jScrollPane1;
+    private JTable jTable1;
+    private JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }

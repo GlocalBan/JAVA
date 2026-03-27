@@ -1,32 +1,27 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
-package GUI.Panel;
+package org.example.gui.panel;
 
-import BUS.KHang_KHTourBUS;
-import DAO.KHang_KHTourDAO;
-import DAO.KhachHangDAO;
-import DTO.KHang_KHTour;
-import DTO.KhachHang;
-import GUI.Dialog.KHang_KHTourDialog;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.util.List;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
-import login.PhanQuyen;
-/**
- *
- * @author Admin
- */
-public class KHang_KHTourPanel extends javax.swing.JPanel {
+import org.example.bus.KHang_KHTourBUS;
+import org.example.dao.KHang_KHTourDAO;
+import org.example.dao.KhachHangDAO;
+import org.example.dto.KHang_KHTourDTO;
+import org.example.dto.KhachHangDTO;
+import org.example.gui.dialog.KHang_KHTourDialog;
+import org.example.login.PhanQuyen;
+
+public class KHang_KHTourPanel extends JPanel {
     KHang_KHTourDAO ds = new KHang_KHTourDAO();
     KhachHangDAO dsKH = new KhachHangDAO();
     KHang_KHTourBUS khangkhtBUS = new KHang_KHTourBUS();
     KHang_KHTourDialog khangkhtDialog;
-    /**
-     * Creates new form QLKHang_KHTour
-     */
+
     public KHang_KHTourPanel() {
         khangkhtBUS = new KHang_KHTourBUS();
         initComponents();
@@ -37,7 +32,7 @@ public class KHang_KHTourPanel extends javax.swing.JPanel {
 
             private void search() {
                 String keyword = txtSearch.getText().trim();
-                List<KHang_KHTour> list = khangkhtBUS.timKHang_KHTours(getColumnName(jComboBox2.getSelectedItem().toString()), keyword);
+                List<KHang_KHTourDTO> list = khangkhtBUS.timKHang_KHTours(getColumnName(jComboBox2.getSelectedItem().toString()), keyword);
                 loadKHang_KHTourToTable(list);
             }
 
@@ -56,7 +51,6 @@ public class KHang_KHTourPanel extends javax.swing.JPanel {
                 search();
             }
         });
-
         loadKHang_KHTourToTable(ds.layDanhSachKHang_KHTour());
     }
 
@@ -68,59 +62,58 @@ public class KHang_KHTourPanel extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        jPanel1 = new JPanel();
+        jLabel1 = new JLabel();
+        jPanel2 = new JPanel();
+        jLabel2 = new JLabel();
+        jComboBox2 = new JComboBox<>();
+        txtSearch = new JTextField();
+        jScrollPane2 = new JScrollPane();
+        jTable2 = new JTable();
+        jPanel3 = new JPanel();
+        btnThem = new JButton();
+        btnXoa = new JButton();
+        btnSua = new JButton();
+        btnLamMoi = new JButton();
 
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        txtSearch = new javax.swing.JTextField();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
-        jPanel3 = new javax.swing.JPanel();
-        btnThem = new javax.swing.JButton();
-        btnXoa = new javax.swing.JButton();
-        btnSua = new javax.swing.JButton();
-        btnLamMoi = new javax.swing.JButton();
+        setLayout(new BorderLayout());
 
-        setLayout(new java.awt.BorderLayout());
+        jPanel1.setLayout(new BorderLayout());
 
-        jPanel1.setLayout(new java.awt.BorderLayout());
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setFont(new Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel1.setText("Quản lí khách hàng - kế hoạch tour");
-        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel1.add(jLabel1, java.awt.BorderLayout.CENTER);
+        jLabel1.setHorizontalTextPosition(SwingConstants.CENTER);
+        jPanel1.add(jLabel1, BorderLayout.CENTER);
 
         jLabel2.setText("Tìm kiếm");
         jPanel2.add(jLabel2);
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã khách hàng", "Họ", "Tên", "Mã kế hoạch tour", "Giá vé" }));
+        jComboBox2.setModel(new DefaultComboBoxModel<>(new String[] { "Mã khách hàng", "Họ", "Tên", "Mã kế hoạch tour", "Giá vé" }));
         jComboBox2.addActionListener(this::jComboBox2ActionPerformed);
         jPanel2.add(jComboBox2);
 
-        txtSearch.setPreferredSize(new java.awt.Dimension(360, 22));
+        txtSearch.setPreferredSize(new Dimension(360, 22));
         jPanel2.add(txtSearch);
 
-        jPanel1.add(jPanel2, java.awt.BorderLayout.PAGE_END);
+        jPanel1.add(jPanel2, BorderLayout.PAGE_END);
 
-        add(jPanel1, java.awt.BorderLayout.PAGE_START);
+        add(jPanel1, BorderLayout.PAGE_START);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "Mã khách hàng", "Họ", "Tên khách hàng", "Mã kế hoạch tour", "Giá vé"
-            }
+        jTable2.setModel(new DefaultTableModel(
+                new Object [][] {
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null}
+                },
+                new String [] {
+                        "Mã khách hàng", "Họ", "Tên khách hàng", "Mã kế hoạch tour", "Giá vé"
+                }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Long.class
+                    String.class, String.class, String.class, String.class, Long.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -128,76 +121,101 @@ public class KHang_KHTourPanel extends javax.swing.JPanel {
             }
         });
         jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+        add(jScrollPane2, BorderLayout.CENTER);
 
-        add(jScrollPane2, java.awt.BorderLayout.CENTER);
-
-        btnThem.setText("Thêm");
-        btnThem.addActionListener(this::btnThemActionPerformed);
+        them();
         jPanel3.add(btnThem);
 
-        btnXoa.setText("Xóa");
-        btnXoa.setEnabled(false);
-        btnXoa.addActionListener(this::btnXoaActionPerformed);
+        xoa();
         jPanel3.add(btnXoa);
 
-        btnSua.setText("Sửa");
-        btnSua.setEnabled(false);
-        btnSua.addActionListener(this::btnSuaActionPerformed);
+        sua();
         jPanel3.add(btnSua);
 
-        btnLamMoi.setText("Làm mới");
+        lamMoi();
         jPanel3.add(btnLamMoi);
 
-        add(jPanel3, java.awt.BorderLayout.PAGE_END);
+        add(jPanel3, BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+    private void jComboBox2ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox2ActionPerformed
 
-    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
-        // TODO add your handling code here:
-        KHang_KHTourDialog khangkhtDialog = new KHang_KHTourDialog(null, true, ds, KHang_KHTourDialog.Mode.ADD, null);
-        khangkhtDialog.setVisible(true);
+    private JButton createBtn(String text, Color color){
+        JButton btn = new JButton(text);
+        btn.setBackground(color);
+        btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false);
+        btn.setFont(new Font("SansSerif", Font.BOLD, 13));
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR)); // in south panel
 
-        loadKHang_KHTourToTable(ds.layDanhSachKHang_KHTour());
-    }//GEN-LAST:event_btnThemActionPerformed
+        btn.setContentAreaFilled(true);
+        btn.setOpaque(true);
+        btn.setBorderPainted(false);
 
-    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
-        if (!PhanQuyen.laQuanLy()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Bạn không có quyền xóa dữ liệu.");
-            return;
-        }
-        int i = jTable2.getSelectedRow();
-        int result = javax.swing.JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa?", "Xác nhận", javax.swing.JOptionPane.YES_NO_OPTION);
-        if (result == javax.swing.JOptionPane.YES_OPTION && i >= 0) {
-            String maKHang = (String) jTable2.getValueAt(i, 0);
-            String maKHTour = (String) jTable2.getValueAt(i, 3);
-            KHang_KHTourBUS khangkhtBUS = new KHang_KHTourBUS();
-            khangkhtBUS.xoaKHang_KHTour(maKHTour, maKHang);
-            DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
-            model.removeRow(i);
-        }
-    }//GEN-LAST:event_btnXoaActionPerformed
+        return btn;
+    }
 
-    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
-        // TODO add your handling code here:
-        int i = jTable2.getSelectedRow();
+    private void them(){
+        btnThem = createBtn("Thêm", Color.GREEN);
+        btnThem.addActionListener(v -> {
+            khangkhtDialog = new KHang_KHTourDialog(null, true, ds, KHang_KHTourDialog.Mode.ADD, null);
+            khangkhtDialog.setVisible(true);
 
-        if (i >= 0) {
-            String maKHang = (String) jTable2.getValueAt(i, 0);
-            String maKHTour = (String) jTable2.getValueAt(i, 3);
-            KHang_KHTour khangkht = khangkhtBUS.timKiemKHang_KHTourTheoMaKHTour(maKHTour);
-            if (khangkht != null && khangkht.getMaKHang().equals(maKHang)) {
-                KHang_KHTourDialog khangkhtDialog = new KHang_KHTourDialog(null, true, ds, KHang_KHTourDialog.Mode.EDIT, khangkht);
-                khangkhtDialog.setVisible(true);
+            loadKHang_KHTourToTable(ds.layDanhSachKHang_KHTour());
+        });
+    }
 
-                loadKHang_KHTourToTable(ds.layDanhSachKHang_KHTour());
+    private void xoa(){
+        btnXoa = createBtn("Xóa", Color.RED);
+        btnSua.setEnabled(false);
+        btnXoa.addActionListener(v -> {
+            if (!PhanQuyen.laQuanLy()) {
+                JOptionPane.showMessageDialog(this, "Bạn không có quyền xóa dữ liệu.");
+                return;
             }
-        }
-    }//GEN-LAST:event_btnSuaActionPerformed
-    
-    private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
+            int i = jTable2.getSelectedRow();
+            int result = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+            if (result == JOptionPane.YES_OPTION && i >= 0) {
+                String maKHang = (String) jTable2.getValueAt(i, 0);
+                String maKHTour = (String) jTable2.getValueAt(i, 3);
+                KHang_KHTourBUS khangkhtBUS = new KHang_KHTourBUS();
+                khangkhtBUS.xoaKHang_KHTour(maKHTour, maKHang);
+                DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+                model.removeRow(i);
+            }
+        });
+    }
+
+    private void sua(){
+        btnSua = createBtn("Sửa", Color.ORANGE);
+        btnSua.setEnabled(false);
+        btnSua.addActionListener(v -> {
+            int i = jTable2.getSelectedRow();
+
+            if (i >= 0) {
+                String maKHang = (String) jTable2.getValueAt(i, 0);
+                String maKHTour = (String) jTable2.getValueAt(i, 3);
+                KHang_KHTourDTO khangkht = khangkhtBUS.timKiemKHang_KHTourTheoMaKHTour(maKHTour);
+                if (khangkht != null && khangkht.getMaKHang().equals(maKHang)) {
+                    khangkhtDialog = new KHang_KHTourDialog(null, true, ds, KHang_KHTourDialog.Mode.EDIT, khangkht);
+                    khangkhtDialog.setVisible(true);
+
+                    loadKHang_KHTourToTable(ds.layDanhSachKHang_KHTour());
+                }
+            }
+        });
+    }
+
+    private void lamMoi(){
+        btnLamMoi = createBtn("Làm mới", Color.BLUE);
+        btnLamMoi.addActionListener(v -> {
+            loadKHang_KHTourToTable(ds.layDanhSachKHang_KHTour());
+        });
+    }
+
+    private void jTable2MouseClicked(MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
         if (PhanQuyen.laQuanLy()) {
             btnXoa.setEnabled(true);
         }
@@ -207,14 +225,14 @@ public class KHang_KHTourPanel extends javax.swing.JPanel {
     private void searchKHang_KHTour() {
         String keyword = txtSearch.getText().trim();
         String selected = jComboBox2.getSelectedItem().toString();
-        List<KHang_KHTour> list;
-            if (keyword.isEmpty()) {
-                loadKHang_KHTourToTable(ds.layDanhSachKHang_KHTour());
-                return;
-            } else {
-                String column = getColumnName(selected);
-                list = khangkhtBUS.timKHang_KHTours(column, keyword);
-            }
+        List<KHang_KHTourDTO> list;
+        if (keyword.isEmpty()) {
+            loadKHang_KHTourToTable(ds.layDanhSachKHang_KHTour());
+            return;
+        } else {
+            String column = getColumnName(selected);
+            list = khangkhtBUS.timKHang_KHTours(column, keyword);
+        }
         loadKHang_KHTourToTable(list);
     }
 
@@ -235,11 +253,11 @@ public class KHang_KHTourPanel extends javax.swing.JPanel {
         }
     }
 
-    private void loadKHang_KHTourToTable(List<KHang_KHTour> khangkhtList) {
+    private void loadKHang_KHTourToTable(List<KHang_KHTourDTO> khangkhtList) {
         DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
         model.setRowCount(0);
-        for (KHang_KHTour kht : khangkhtList) {
-            for (KhachHang kh : dsKH.layDanhSachKHang()) {
+        for (KHang_KHTourDTO kht : khangkhtList) {
+            for (KhachHangDTO kh : dsKH.layDanhSachKHang()) {
                 if (kht.getMaKHang().equals(kh.getMaKH())) {
                     Object[] row = {kht.getMaKHang(), kh.getHo(), kh.getTen(), kht.getMaKHTour(), kht.getGiaVe()};
                     model.addRow(row);
@@ -249,21 +267,18 @@ public class KHang_KHTourPanel extends javax.swing.JPanel {
         }
     }
 
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnLamMoi;
-    private javax.swing.JButton btnSua;
-    private javax.swing.JButton btnThem;
-    private javax.swing.JButton btnXoa;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTextField txtSearch;
-    // End of variables declaration//GEN-END:variables
+    private JButton btnLamMoi;
+    private JButton btnSua;
+    private JButton btnThem;
+    private JButton btnXoa;
+    private JComboBox<String> jComboBox2;
+    private JLabel jLabel1;
+    private JLabel jLabel2;
+    private JPanel jPanel1;
+    private JPanel jPanel2;
+    private JPanel jPanel3;
+    private JScrollPane jScrollPane2;
+    private JTable jTable2;
+    private JTextField txtSearch;
 }
