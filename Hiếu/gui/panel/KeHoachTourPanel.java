@@ -1,7 +1,10 @@
 package org.example.gui.panel;
 
+import org.example.bus.NhanVienBUS;
 import org.example.bus._KeHoachTourBUS;
 import org.example.bus._TourBUS;
+import org.example.dao.NhanVienDAO;
+import org.example.dto.NhanVienDTO;
 import org.example.dto._KeHoachTourDTO;
 import org.example.dto._TourDTO;
 import org.example.gui.dialog._KeHoachTourDetailDialog;
@@ -27,6 +30,7 @@ public class _KeHoachTourPanel extends JPanel {
     private JScrollPane scrollPane;
 
     private _KeHoachTourBUS keHoachTourBUS;
+    private NhanVienBUS nhanVienBUS;
     private _TourBUS tourBUS;
     private JLabel jlbChonTour;
     private ArrayList<_KeHoachTourDTO> lsKeHoachTours;
@@ -37,6 +41,7 @@ public class _KeHoachTourPanel extends JPanel {
     public _KeHoachTourPanel(){
         keHoachTourBUS = new _KeHoachTourBUS();
         tourBUS = new _TourBUS();
+        nhanVienBUS = new NhanVienBUS();
         cbTour = new JComboBox<>();
         init();
 
@@ -73,6 +78,8 @@ public class _KeHoachTourPanel extends JPanel {
                 loadTable(selectedTour.getMaTour());
             }
         });
+
+        //northPanel add filterPanel
         northPanel.add(filterPanel, BorderLayout.CENTER);
 
         // init table kehoachtour
