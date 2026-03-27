@@ -1,22 +1,25 @@
 package org.example.gui.panel;
 
-import javax.swing.*;
-
-import javax.swing.table.DefaultTableModel;
-
+import java.awt.*;
+import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+
+import com.toedter.calendar.JDateChooser;
 import org.example.gui.dialog.DiaDiemDialog;
 import org.example.dao.*;
 import org.example.bus.*;
 import org.example.dto.*;
+import org.example.gui.helper.ExcelHelper;
 
-import org.example.helper.*;
-
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class DiaDiemPanel extends JPanel {
     private DefaultTableModel model;
     private DiaDiemBUS bus;
-    
+
     public DiaDiemPanel() {
         initComponents();
         bus=new DiaDiemBUS();
@@ -46,7 +49,6 @@ public class DiaDiemPanel extends JPanel {
         }
     }
 
-
     private void loadData(String ma){
         model.setRowCount(0);
 
@@ -58,114 +60,86 @@ public class DiaDiemPanel extends JPanel {
         }
     }
 
-
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pnlheader = new javax.swing.JPanel();
-        lbname = new javax.swing.JLabel();
-        pnlsearch = new javax.swing.JPanel();
-        lbtim = new javax.swing.JLabel();
-        cbtim = new javax.swing.JComboBox<>();
-        txttendd = new javax.swing.JTextField();
+        pnlheader = new JPanel();
+        lbname = new JLabel();
+        pnlsearch = new JPanel();
+        lbtim = new JLabel();
+        cbtim = new JComboBox<>();
+        txttendd = new JTextField();
         txtdate = new com.toedter.calendar.JDateChooser();
-        pnlfooter = new javax.swing.JPanel();
-        btnthem = new javax.swing.JButton();
-        btnxoa = new javax.swing.JButton();
-        btnsua = new javax.swing.JButton();
-        btnreset = new javax.swing.JButton();
-        btnxuat = new javax.swing.JButton();
-        pnltable = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tbldd = new javax.swing.JTable();
+        pnlfooter = new JPanel();
+        btnthem = new JButton();
+        btnxoa = new JButton();
+        btnsua = new JButton();
+        btnreset = new JButton();
+        btnxuat = new JButton();
+        pnltable = new JPanel();
+        jScrollPane2 = new JScrollPane();
+        tbldd = new JTable();
 
-        setLayout(new java.awt.BorderLayout());
+        setLayout(new BorderLayout());
 
-        pnlheader.setLayout(new java.awt.BorderLayout());
+        pnlheader.setLayout(new BorderLayout());
 
-        lbname.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        lbname.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbname.setFont(new Font("Arial", 0, 18)); // NOI18N
+        lbname.setHorizontalAlignment(SwingConstants.CENTER);
         lbname.setText("Quản lý địa điểm");
-        pnlheader.add(lbname, java.awt.BorderLayout.CENTER);
+        pnlheader.add(lbname, BorderLayout.CENTER);
 
         lbtim.setText("Tìm theo:");
         pnlsearch.add(lbtim);
 
-        cbtim.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tên địa điểm", "Địa chỉ" }));
-        cbtim.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+        cbtim.setModel(new DefaultComboBoxModel<>(new String[] { "Tên địa điểm", "Địa chỉ", "Quốc gia" }));
+        cbtim.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent evt) {
                 cbTimItemStateChanged(evt);
             }
         });
         pnlsearch.add(cbtim);
 
         txttendd.setColumns(20);
-        txttendd.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
+        txttendd.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent evt) {
                 txtTenDdKeyReleased(evt);
             }
         });
         pnlsearch.add(txttendd);
 
-        txtdate.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+        txtdate.addPropertyChangeListener(new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent evt) {
                 txtDatePropertyChange(evt);
             }
         });
         pnlsearch.add(txtdate);
 
-        pnlheader.add(pnlsearch, java.awt.BorderLayout.PAGE_END);
+        pnlheader.add(pnlsearch, BorderLayout.PAGE_END);
 
-        add(pnlheader, java.awt.BorderLayout.PAGE_START);
+        add(pnlheader, BorderLayout.PAGE_START);
 
-        btnthem.setText("Thêm");
-        btnthem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnthemActionPerformed(evt);
-            }
-        });
+        them();
         pnlfooter.add(btnthem);
 
-        btnxoa.setText("Xóa");
-        btnxoa.setEnabled(false);
-        btnxoa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnxoaActionPerformed(evt);
-            }
-        });
+        xoa();
         pnlfooter.add(btnxoa);
 
-        btnsua.setText("Sửa");
-        btnsua.setEnabled(false);
-        btnsua.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSuaActionPerformed(evt);
-            }
-        });
+        sua();
         pnlfooter.add(btnsua);
 
-        btnreset.setText("Làm mới");
-        btnreset.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnResetActionPerformed(evt);
-            }
-        });
+        lamMoi();
         pnlfooter.add(btnreset);
 
-        btnxuat.setText("Xuất excel");
-        btnxuat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnxuatActionPerformed(evt);
-            }
-        });
+        xuatExcel();
         pnlfooter.add(btnxuat);
 
-        add(pnlfooter, java.awt.BorderLayout.PAGE_END);
+        add(pnlfooter, BorderLayout.PAGE_END);
 
-        pnltable.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 10, 1, 10));
-        pnltable.setLayout(new java.awt.BorderLayout());
+        pnltable.setBorder(BorderFactory.createEmptyBorder(1, 10, 1, 10));
+        pnltable.setLayout(new BorderLayout());
 
-        tbldd.setModel(new javax.swing.table.DefaultTableModel(
+        tbldd.setModel(new DefaultTableModel(
                 new Object [][] {
                         {null, null, null},
                         {null, null, null},
@@ -177,81 +151,104 @@ public class DiaDiemPanel extends JPanel {
                 }
         ));
         tbldd.setPreferredSize(null);
-        tbldd.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        tbldd.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
                 tblDdMouseClicked(evt);
             }
         });
         jScrollPane2.setViewportView(tbldd);
 
-        pnltable.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+        pnltable.add(jScrollPane2, BorderLayout.CENTER);
 
-        add(pnltable, java.awt.BorderLayout.CENTER);
+        add(pnltable, BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnxuatActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-        ExcelHelper.xuatExcel(tbldd, this, "Danh sach hoa don");
+
+    private JButton createBtn(String text, Color color){
+        JButton btn = new JButton(text);
+        btn.setBackground(color);
+        btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));// Trong jpBtn panel
+
+        return btn;
     }
 
-    private void btnthemActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-        DiaDiemDialog ddd=new DiaDiemDialog();
-        ddd.setModal(true);
-        ddd.setVisible(true);
-        loadData();
-    }
-
-    private void btnxoaActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-        int row=tbldd.getSelectedRow();
-
-        if(row==-1){
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn địa điểm cần xóa");
-            return;
-        }
-        String tendd =model.getValueAt(row, 0).toString();
-        DiaDiemDTO dd=bus.timDiaDiem(tendd); if(dd==null){
-            JOptionPane.showMessageDialog(this, "Lỗi không tìm thấy");
-            return;
-        }
-        if(JOptionPane.showConfirmDialog(this, "Xóa địa điểm?","Xác nhận",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
-            if(bus.xoaDiaDiem(dd)){
-                JOptionPane.showMessageDialog(this, "Xóa thành công");
-                loadData();
-            }else{
-                JOptionPane.showMessageDialog(this, "Xóa thất bại");
-            }
-        }
-    }
-
-    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-        loadData();
-    }
-
-    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-        int row=tbldd.getSelectedRow();
-        if(row!=-1){
-            String ten=tbldd.getValueAt(row, 0).toString().trim();
-            DiaDiemDTO dd =bus.timDiaDiem(ten);
-            DiaDiemDialog ddd=new DiaDiemDialog(dd);
+    private void them(){
+        btnthem = createBtn("Thêm", Color.GREEN);
+        btnthem.addActionListener(v -> {
+            DiaDiemDialog ddd=new DiaDiemDialog();
             ddd.setModal(true);
             ddd.setVisible(true);
-        }
+            loadData();
+        });
     }
 
-    private void txtTenDdKeyReleased(java.awt.event.KeyEvent evt) {
+    private void sua(){
+        btnsua = createBtn("Sửa", Color.ORANGE);
+        btnxoa.setEnabled(false);
+        btnsua.addActionListener(v -> {
+            int row=tbldd.getSelectedRow();
+            if(row!=-1){
+                String ten=tbldd.getValueAt(row, 0).toString().trim();
+                DiaDiemDTO dd =bus.timDiaDiem(ten);
+                DiaDiemDialog ddd=new DiaDiemDialog(dd);
+                ddd.setModal(true);
+                ddd.setVisible(true);
+            }
+        });
+    }
+
+    private void xoa(){
+        btnxoa = createBtn("Xóa", Color.RED);
+        btnxoa.setEnabled(false);
+        btnxoa.addActionListener(v -> {
+            int row=tbldd.getSelectedRow();
+
+            if(row==-1){
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn địa điểm cần xóa");
+                return;
+            }
+            String tendd =model.getValueAt(row, 0).toString();
+            DiaDiemDTO dd=bus.timDiaDiem(tendd); if(dd==null){
+                JOptionPane.showMessageDialog(this, "Lỗi không tìm thấy");
+                return;
+            }
+            if(JOptionPane.showConfirmDialog(this, "Xóa địa điểm?","Xác nhận",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
+                if(bus.xoaDiaDiem(dd)){
+                    JOptionPane.showMessageDialog(this, "Xóa thành công");
+                    loadData();
+                }else{
+                    JOptionPane.showMessageDialog(this, "Xóa thất bại");
+                }
+            }
+        });
+    }
+
+    private void lamMoi(){
+        btnreset = createBtn("Làm mới", Color.BLUE);
+        btnreset.addActionListener(v -> {
+            loadData();
+        });
+    }
+
+    private void xuatExcel(){
+        btnxuat = createBtn("Xuất excel", Color.CYAN);
+        btnxuat.addActionListener(v -> {
+            ExcelHelper.xuatExcel(tbldd, this, "Danh sach hoa don");
+        });
+    }
+
+    private void txtTenDdKeyReleased(KeyEvent evt) {
         // TODO add your handling code here:
         String ten = txttendd.getText().trim();
         loadData( ten);
     }
 
-    private void cbTimItemStateChanged(java.awt.event.ItemEvent evt) {
+    private void cbTimItemStateChanged(ItemEvent evt) {
         // TODO add your handling code here:
         String chose=cbtim.getSelectedItem().toString().trim();
-        if(chose.equals("Địa chỉ")){
+        if(chose.equals("Ngày thực hiện")){
             txttendd.setVisible(false);
             txtdate.setVisible(true);
         }
@@ -261,7 +258,7 @@ public class DiaDiemPanel extends JPanel {
         }
     }
 
-    private void txtDatePropertyChange(java.beans.PropertyChangeEvent evt) {
+    private void txtDatePropertyChange(PropertyChangeEvent evt) {
         // TODO add your handling code here:
         if ("date".equals(evt.getPropertyName())) {
             java.util.Date ngay = txtdate.getDate();
@@ -273,7 +270,7 @@ public class DiaDiemPanel extends JPanel {
         }
     }
 
-    private void tblDdMouseClicked(java.awt.event.MouseEvent evt) {
+    private void tblDdMouseClicked(MouseEvent evt) {
         // TODO add your handling code here:
         int row=tbldd.getSelectedRow();
         if(row!=-1){
@@ -286,20 +283,19 @@ public class DiaDiemPanel extends JPanel {
         }
     }
 
-    private javax.swing.JButton btnreset;
-    private javax.swing.JButton btnsua;
-    private javax.swing.JButton btnthem;
-    private javax.swing.JButton btnxoa;
-    private javax.swing.JButton btnxuat;
-    private javax.swing.JComboBox<String> cbtim;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel lbname;
-    private javax.swing.JLabel lbtim;
-    private javax.swing.JPanel pnlfooter;
-    private javax.swing.JPanel pnlheader;
-    private javax.swing.JPanel pnlsearch;
-    private javax.swing.JPanel pnltable;
-    private javax.swing.JTable tbldd;
-    private com.toedter.calendar.JDateChooser txtdate;
-    private javax.swing.JTextField txttendd;
+    private JButton btnreset, btnsua, btnthem, btnxoa, btnxuat;
+
+    private JComboBox<String> cbtim;
+
+    private JScrollPane jScrollPane2;
+
+    private JLabel lbname, lbtim;
+
+    private JPanel pnlfooter, pnlheader, pnltable, pnlsearch;
+
+    private JTable tbldd;
+
+    private JDateChooser txtdate;
+
+    private JTextField txttendd;
 }

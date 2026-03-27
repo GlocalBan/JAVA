@@ -2,14 +2,17 @@
 package org.example.gui.panel;
 
 import org.example.gui.dialog.CTHoaDonDialog;
-import java.util.ArrayList;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-import org.example.dto.*;
-import org.example.helper.*;
-import org.example.bus.*;
 
-public class CTHoaDonPanel extends javax.swing.JPanel {
+import java.awt.event.*;
+import java.util.ArrayList;
+import org.example.dto.*;
+import org.example.bus.*;
+import org.example.gui.helper.ExcelHelper;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
+public class CTHoaDonPanel extends JPanel {
     private DefaultTableModel model;
     private CTHoaDonBUS bus;
     private int soluongcanxoa=0;
@@ -36,8 +39,8 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
         btnreset.setVisible(false);
         loadchitiet(mahd);
     }
-    
-        public CTHoaDonPanel(String mahd,int vedu) {
+
+    public CTHoaDonPanel(String mahd,int vedu) {
         initComponents();
         bus=new CTHoaDonBUS();
         lbname.setText("Chi tiết hóa đơn của hóa đơn: "+mahd);
@@ -49,7 +52,7 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
         btnxuat.setVisible(false);
         btnsua.setVisible(false);
         btnreset.setVisible(false);
-        
+
         if(vedu>0){
             this.soluongcanxoa=vedu;
             btnxoa.setVisible(true);
@@ -59,19 +62,19 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
         }
         loadchitiet(mahd);
     }
-    
+
     private void loaddata(){
         model.setRowCount(0);
         DefaultTableModel model=(DefaultTableModel) tblcthd.getModel();
         ArrayList<CTietHDDTO> ds= CTHoaDonBUS.getDs();
         for(CTietHDDTO cthd:ds){
             model.addRow(new Object[]{
-                cthd.getMaHD(),cthd.getMaKHDi(),String.format("%.0f", cthd.getGiaVe())
+                    cthd.getMaHD(),cthd.getMaKHDi(),String.format("%.0f", cthd.getGiaVe())
             });
         }
-       
+
     }
-    
+
     private void loaddata(ArrayList<CTietHDDTO> ds){
         model.setRowCount(0);
         String loai =cbtim.getSelectedItem().toString();
@@ -79,28 +82,28 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
         ds= bus.timNangcao(loai, key);
         for(CTietHDDTO cthd:ds){
             model.addRow(new Object[]{
-                cthd.getMaHD(),cthd.getMaKHDi(),String.format("%.0f", cthd.getGiaVe())
+                    cthd.getMaHD(),cthd.getMaKHDi(),String.format("%.0f", cthd.getGiaVe())
             });
         }
     }
-    
+
     private void loadchitiet(String mahd){
         DefaultTableModel model=(DefaultTableModel) tblcthd.getModel();
         this.model.setRowCount(0);
-        
+
         try{
             CTHoaDonBUS bus=new CTHoaDonBUS();
             ArrayList<CTietHDDTO> ds=bus.getDstheoma(mahd);
             if(ds!=null){
                 for(CTietHDDTO cthd:ds){
                     model.addRow(new Object[]{
-                        cthd.getMaHD(),cthd.getMaKHDi(),String.format("%.0f", cthd.getGiaVe())
+                            cthd.getMaHD(),cthd.getMaKHDi(),String.format("%.0f", cthd.getGiaVe())
                     });
                 }
             }
         }catch(Exception e){
-                    e.printStackTrace();
-                    JOptionPane.showMessageDialog(this, "Loi");
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Loi");
         }
     }
 
@@ -108,21 +111,21 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pnlheader = new javax.swing.JPanel();
-        lbname = new javax.swing.JLabel();
-        pnlsearch = new javax.swing.JPanel();
-        lbtim = new javax.swing.JLabel();
-        cbtim = new javax.swing.JComboBox<>();
-        txttim = new javax.swing.JTextField();
-        pnltable = new javax.swing.JPanel();
-        btnthem = new javax.swing.JButton();
-        btnxoa = new javax.swing.JButton();
-        btnsua = new javax.swing.JButton();
-        btnreset = new javax.swing.JButton();
-        btnxuat = new javax.swing.JButton();
-        pnlfooter = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblcthd = new javax.swing.JTable();
+        pnlheader = new JPanel();
+        lbname = new JLabel();
+        pnlsearch = new JPanel();
+        lbtim = new JLabel();
+        cbtim = new JComboBox<>();
+        txttim = new JTextField();
+        pnltable = new JPanel();
+        btnthem = new JButton();
+        btnxoa = new JButton();
+        btnsua = new JButton();
+        btnreset = new JButton();
+        btnxuat = new JButton();
+        pnlfooter = new JPanel();
+        jScrollPane1 = new JScrollPane();
+        tblcthd = new JTable();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -136,17 +139,17 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
         lbtim.setText("Tìm theo:");
         pnlsearch.add(lbtim);
 
-        cbtim.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã hóa đơn", "Mã khách hàng" }));
+        cbtim.setModel(new DefaultComboBoxModel<>(new String[] { "Mã hóa đơn", "Mã khách hàng" }));
         pnlsearch.add(cbtim);
 
         txttim.setColumns(20);
-        txttim.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        txttim.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 txttimActionPerformed(evt);
             }
         });
-        txttim.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
+        txttim.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent evt) {
                 txttimKeyReleased(evt);
             }
         });
@@ -157,8 +160,8 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
         add(pnlheader, java.awt.BorderLayout.PAGE_START);
 
         btnthem.setText("Thêm");
-        btnthem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnthem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 btnthemActionPerformed(evt);
             }
         });
@@ -166,8 +169,8 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
 
         btnxoa.setText("Xóa");
         btnxoa.setEnabled(false);
-        btnxoa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnxoa.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 btnxoaActionPerformed(evt);
             }
         });
@@ -175,24 +178,24 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
 
         btnsua.setText("Chỉnh sửa");
         btnsua.setEnabled(false);
-        btnsua.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnsua.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 btnsuaActionPerformed(evt);
             }
         });
         pnltable.add(btnsua);
 
         btnreset.setText("Làm mới");
-        btnreset.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnreset.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 btnresetActionPerformed(evt);
             }
         });
         pnltable.add(btnreset);
 
         btnxuat.setText("Xuất excel");
-        btnxuat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnxuat.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 btnxuatActionPerformed(evt);
             }
         });
@@ -203,27 +206,27 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
         pnlfooter.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 10, 1, 10));
         pnlfooter.setLayout(new java.awt.BorderLayout());
 
-        tblcthd.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "Mã hóa đơn", "Mã khách hàng", "Giá vé"
-            }
+        tblcthd.setModel(new DefaultTableModel(
+                new Object [][] {
+                        {null, null, null},
+                        {null, null, null},
+                        {null, null, null},
+                        {null, null, null}
+                },
+                new String [] {
+                        "Mã hóa đơn", "Mã khách hàng", "Giá vé"
+                }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                    false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        tblcthd.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        tblcthd.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
                 tblcthdMouseClicked(evt);
             }
         });
@@ -234,7 +237,7 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
         add(pnlfooter, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnthemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnthemActionPerformed
+    private void btnthemActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnthemActionPerformed
         // TODO add your handling code here:
         CTHoaDonDialog cthd=new CTHoaDonDialog();
         cthd.setModal(true);
@@ -242,7 +245,7 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
         loaddata();
     }//GEN-LAST:event_btnthemActionPerformed
 
-    private void btnxoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnxoaActionPerformed
+    private void btnxoaActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnxoaActionPerformed
         // TODO add your handling code here:
         int row=tblcthd.getSelectedRow();
 
@@ -250,10 +253,10 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn chi tiết cần xóa");
             return;
         }
-        
+
         String mahd =model.getValueAt(row, 0).toString();
         String makh =model.getValueAt(row, 1).toString();
-        
+
         if(JOptionPane.showConfirmDialog(this, "Xóa vé này?","Xác nhận",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
             if(bus.xoaCtietHd(mahd,makh)){
                 model.removeRow(row);
@@ -263,7 +266,7 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
                     soluongcanxoa--;
                     if(soluongcanxoa>0){
                         lbname.setText("Cần xóa thêm "+soluongcanxoa+" VÉ");
-                        
+
                     }else{
                         lbname.setText("Đã xóa đủ");
                         btnxoa.setVisible(false);
@@ -274,17 +277,17 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
         }
     }
 
-    private void btnresetActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnresetActionPerformed(ActionEvent evt) {
         // TODO add your handling code here:
         loaddata();
     }
 
-    private void btnxuatActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnxuatActionPerformed(ActionEvent evt) {
         // TODO add your handling code here:
         ExcelHelper.xuatExcel(tblcthd, this, "Danh sách chi tiết hóa đơn");
     }
 
-    private void btnsuaActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnsuaActionPerformed(ActionEvent evt) {
         // TODO add your handling code here:
         int row = tblcthd.getSelectedRow();
         if (row < 0) {
@@ -300,7 +303,7 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
         }
     }
 
-    private void txttimKeyReleased(java.awt.event.KeyEvent evt) {
+    private void txttimKeyReleased(KeyEvent evt) {
         // TODO add your handling code here:
         String tim=lbname.getText().trim();
         String loai=cbtim.getSelectedItem().toString().trim();
@@ -308,11 +311,11 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
 
     }
 
-    private void txttimActionPerformed(java.awt.event.ActionEvent evt) {
+    private void txttimActionPerformed(ActionEvent evt) {
         // TODO add your handling code here:
     }
 
-    private void tblcthdMouseClicked(java.awt.event.MouseEvent evt) {
+    private void tblcthdMouseClicked(MouseEvent evt) {
         // TODO add your handling code here:
         int row=tblcthd.getSelectedRow();
         if(row!=-1){
@@ -326,19 +329,19 @@ public class CTHoaDonPanel extends javax.swing.JPanel {
     }
 
 
-    private javax.swing.JButton btnreset;
-    private javax.swing.JButton btnsua;
-    private javax.swing.JButton btnthem;
-    private javax.swing.JButton btnxoa;
-    private javax.swing.JButton btnxuat;
-    private javax.swing.JComboBox<String> cbtim;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lbname;
-    private javax.swing.JLabel lbtim;
-    private javax.swing.JPanel pnlfooter;
-    private javax.swing.JPanel pnlheader;
-    private javax.swing.JPanel pnlsearch;
-    private javax.swing.JPanel pnltable;
-    private javax.swing.JTable tblcthd;
-    private javax.swing.JTextField txttim;
+    private JButton btnreset;
+    private JButton btnsua;
+    private JButton btnthem;
+    private JButton btnxoa;
+    private JButton btnxuat;
+    private JComboBox<String> cbtim;
+    private JScrollPane jScrollPane1;
+    private JLabel lbname;
+    private JLabel lbtim;
+    private JPanel pnlfooter;
+    private JPanel pnlheader;
+    private JPanel pnlsearch;
+    private JPanel pnltable;
+    private JTable tblcthd;
+    private JTextField txttim;
 }
