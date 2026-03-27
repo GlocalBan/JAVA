@@ -46,7 +46,6 @@ public class _LoaiTourPanel extends JPanel {
         lblTitle.setFont(new Font("Arial", Font.BOLD, 18));
         northPanel.add(lblTitle, BorderLayout.NORTH);
 
-
         // Search panel
         searchPanel = new JPanel();
 
