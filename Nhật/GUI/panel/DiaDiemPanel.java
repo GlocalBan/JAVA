@@ -35,7 +35,7 @@ public class DiaDiemPanel extends JPanel {
         if(ds==null) return;
         for(DiaDiemDTO dd: ds){
             model.addRow(new Object[]{
-                    dd.getTenDiaDiem(), dd.getdiachi(),dd.getQuocGia()});
+                    dd.getMaDiaDiem(), dd.getTenDiaDiem(), dd.getdiachi(),dd.getQuocGia()});
         }
     }
     private void loadData(){
@@ -45,7 +45,7 @@ public class DiaDiemPanel extends JPanel {
         if(ds==null) return;
         for(DiaDiemDTO dd: ds){
             model.addRow(new Object[]{
-                    dd.getTenDiaDiem(),dd.getdiachi(),dd.getQuocGia()});
+                    dd.getMaDiaDiem() ,dd.getTenDiaDiem(),dd.getdiachi(),dd.getQuocGia()});
         }
     }
 
@@ -56,13 +56,11 @@ public class DiaDiemPanel extends JPanel {
         if(ds==null) return;
         for(DiaDiemDTO dd: ds){
             model.addRow(new Object[]{
-                    dd.getTenDiaDiem(),dd.getdiachi(),dd.getQuocGia()});
+                    dd.getMaDiaDiem(), dd.getTenDiaDiem(),dd.getdiachi(),dd.getQuocGia()});
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         pnlheader = new JPanel();
         lbname = new JLabel();
         pnlsearch = new JPanel();
@@ -147,7 +145,7 @@ public class DiaDiemPanel extends JPanel {
                         {null, null, null}
                 },
                 new String [] {
-                        "Tên địa điểm", "Địa chỉ", "Quốc gia"
+                        "Mã địa điểm" ,"Tên địa điểm", "Địa chỉ", "Quốc gia"
                 }
         ));
         tbldd.setPreferredSize(null);
@@ -175,7 +173,7 @@ public class DiaDiemPanel extends JPanel {
     }
 
     private void them(){
-        btnthem = createBtn("Thêm", Color.GREEN);
+        btnthem = createBtn("Thêm", UIColors.ADD);
         btnthem.addActionListener(v -> {
             DiaDiemDialog ddd=new DiaDiemDialog();
             ddd.setModal(true);
@@ -185,7 +183,7 @@ public class DiaDiemPanel extends JPanel {
     }
 
     private void sua(){
-        btnsua = createBtn("Sửa", Color.ORANGE);
+        btnsua = createBtn("Sửa", UIColors.EDIT);
         btnxoa.setEnabled(false);
         btnsua.addActionListener(v -> {
             int row=tbldd.getSelectedRow();
@@ -200,7 +198,7 @@ public class DiaDiemPanel extends JPanel {
     }
 
     private void xoa(){
-        btnxoa = createBtn("Xóa", Color.RED);
+        btnxoa = createBtn("Xóa", UIColors.DELETE);
         btnxoa.setEnabled(false);
         btnxoa.addActionListener(v -> {
             int row=tbldd.getSelectedRow();
@@ -226,14 +224,14 @@ public class DiaDiemPanel extends JPanel {
     }
 
     private void lamMoi(){
-        btnreset = createBtn("Làm mới", Color.BLUE);
+        btnreset = createBtn("Làm mới", UIColors.REFRESH);
         btnreset.addActionListener(v -> {
             loadData();
         });
     }
 
     private void xuatExcel(){
-        btnxuat = createBtn("Xuất excel", Color.CYAN);
+        btnxuat = createBtn("Xuất excel", UIColors.EXPORT_EXCEL);
         btnxuat.addActionListener(v -> {
             ExcelHelper.xuatExcel(tbldd, this, "Danh sach hoa don");
         });

@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 public class _TourDAO {
     Connection c = _MyConnection.getConnection();
-    Statement st = null;
 
     public _TourDAO(){
         ArrayList<_TourDTO> lsTour = new ArrayList<>();
@@ -30,7 +29,8 @@ public class _TourDAO {
                         rs.getInt(5),
                         rs.getString(6),
                         rs.getString(7),
-                        rs.getString(8)
+                        rs.getString(8),
+                        rs.getString(9)
                 );
                 lsTour.add(t);
             }
@@ -42,8 +42,8 @@ public class _TourDAO {
 
     //add
     public boolean addTour(_TourDTO t){
-        String sql = "INSERT INTO tour (matour, ten, songay, dongia, socho, ddkhoihanh, imglink, maloaitour) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO tour (matour, ten, songay, dongia, socho, ddkhoihanh, imglink, maloaitour, madiadiem) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             PreparedStatement pst = c.prepareStatement(sql); // use PreparedStatement
@@ -56,6 +56,7 @@ public class _TourDAO {
             pst.setString(6, t.getDiaDiemKhoiHanh());
             pst.setString(7, t.getImgLink());
             pst.setString(8, t.getMaLoaiTour());
+            pst.setString(9, t.getMaDiaDiem());
 
             int rowAffected = pst.executeUpdate();
             return rowAffected > 0;
@@ -80,7 +81,7 @@ public class _TourDAO {
 
     // edit
     public boolean editTour(_TourDTO t) {
-        String sql = "UPDATE tour SET ten=?, songay=?, dongia=?, socho=?, ddkhoihanh=?, imglink=?, maloaitour=? WHERE matour=?";
+        String sql = "UPDATE tour SET ten=?, songay=?, dongia=?, socho=?, ddkhoihanh=?, imglink=?, maloaitour=?, madiadiem=? WHERE matour=?";
         try {
             PreparedStatement pst = c.prepareStatement(sql);
             pst.setString(1, t.getTen());
@@ -90,7 +91,8 @@ public class _TourDAO {
             pst.setString(5, t.getDiaDiemKhoiHanh());
             pst.setString(6, t.getImgLink());
             pst.setString(7, t.getMaLoaiTour());
-            pst.setString(8, t.getMaTour());
+            pst.setString(8, t.getMaDiaDiem());
+            pst.setString(9, t.getMaTour());
 
             return pst.executeUpdate() > 0;
         } catch (SQLException e) {

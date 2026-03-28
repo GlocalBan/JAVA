@@ -1,9 +1,12 @@
 package org.example.gui.dialog;
 
+import org.example.bus.DiaDiemBUS;
 import org.example.bus._LoaiTourBUS;
 import org.example.bus._TourBUS;
+import org.example.dto.DiaDiemDTO;
 import org.example.dto._LoaiTourDTO;
 import org.example.dto._TourDTO;
+import org.example.gui.panel.UIColors;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +15,7 @@ import java.util.ArrayList;
 
 public class _TourDiaLog extends JDialog {
     // label and txt
-    private JLabel jlbMaTour, jlbTen, jlbSoNgay, jlbDonGia, jlbSoCho, jlbDiaDiemKhoiHanh, jlbMaLoaiTour, jlbImgLink, lblPreview;
+    private JLabel jlbMaTour, jlbTen, jlbSoNgay, jlbDonGia, jlbSoCho, jlbDiaDiemKhoiHanh, jlbMaLoaiTour, jlbImgLink, jlbPreview, jlbMaDiaDiem;
     private JTextField txtMaTour, txtTen, txtSoNgay, txtDonGia, txtSoCho, txtDiaDiemKhoiHanh, txtImgLink;
 
     // define btn
@@ -28,13 +31,17 @@ public class _TourDiaLog extends JDialog {
     private _TourBUS tourBUS;
     private _TourDTO tourDTO;
     private _LoaiTourBUS loaiTourBUS;
+    private DiaDiemBUS diaDiemBUS;
     private JComboBox<_LoaiTourDTO> cbLoaiTours;
+    private JComboBox<DiaDiemDTO> cbDiaDiem;
 
     public _TourDiaLog(_TourBUS tourBUS, _TourDTO tourDTO){
         this.tourDTO = tourDTO;
         this.tourBUS = tourBUS;
         loaiTourBUS = new _LoaiTourBUS();
+        diaDiemBUS = new DiaDiemBUS();
         cbLoaiTours = new JComboBox<>();
+        cbDiaDiem = new JComboBox<>();
 
         setTitle(tourDTO == null ? "Thêm Tour" : "Sửa Tour");
         setSize(300, 360);
@@ -50,7 +57,7 @@ public class _TourDiaLog extends JDialog {
     private void init(){
         setLayout(new BorderLayout());
 
-        formPanel = new JPanel(new GridLayout(8, 2));
+        formPanel = new JPanel(new GridLayout(9, 2));
 
         // southPanel contain Buttons
         southPanel = new JPanel(new FlowLayout());
@@ -130,25 +137,56 @@ public class _TourDiaLog extends JDialog {
         chooseImage();
         imgPanel.add(chooseImageBtn, BorderLayout.EAST);
 
-        lblPreview = new JLabel();
-        lblPreview.setPreferredSize(new Dimension(120,80));
-        lblPreview.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        imgPanel.add(lblPreview, BorderLayout.CENTER);
-
+        jlbPreview = new JLabel();
+        jlbPreview.setPreferredSize(new Dimension(120,80));
+        jlbPreview.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        imgPanel.add(jlbPreview, BorderLayout.CENTER);
         formPanel.add(imgPanel);
+
+        // row maDiaDiem
+        jlbMaDiaDiem = new JLabel("Mã Địa điểm");
+        jlbMaDiaDiem.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
+        formPanel.add(jlbMaDiaDiem);
+
+        ArrayList<DiaDiemDTO> lsDiaDiem = DiaDiemBUS.ds;
+        diaDiemBUS.DocDs();
+        DefaultComboBoxModel<DiaDiemDTO> diaDiemModel = new DefaultComboBoxModel<>();
+        for(DiaDiemDTO dd : lsDiaDiem){
+            diaDiemModel.addElement(dd);
+        }
+        cbDiaDiem.setModel(diaDiemModel);
+        // set txt DiaDiemKhoiHanh when init
+        cbDiaDiem.addActionListener(e -> {
+            DiaDiemDTO selected = (DiaDiemDTO) cbDiaDiem.getSelectedItem();
+            if(selected != null){
+                txtDiaDiemKhoiHanh.setText(selected.getdiachi());
+            }
+        });
+        formPanel.add(cbDiaDiem);
 
         add(formPanel, BorderLayout.CENTER);
         add(southPanel, BorderLayout.SOUTH);
     }
 
     private void loadData(){
+        // load txt
         txtMaTour.setText(tourDTO.getMaTour());
         txtMaTour.setEnabled(false);
+
         txtTen.setText(tourDTO.getTen());
         txtSoNgay.setText(tourDTO.getSoNgay() + "");
         txtDonGia.setText(tourDTO.getDonGia() + "");
         txtSoCho.setText(tourDTO.getSoCho() + "");
-        txtDiaDiemKhoiHanh.setText(tourDTO.getDiaDiemKhoiHanh());
+
+        //field diaDiemKhoihanh
+        for(int i = 0; i < cbDiaDiem.getItemCount(); i++){
+            DiaDiemDTO dd = cbDiaDiem.getItemAt(i);
+            if(dd.getMaDiaDiem().equalsIgnoreCase(tourDTO.getMaDiaDiem())){
+                cbDiaDiem.setSelectedIndex(i);
+                txtDiaDiemKhoiHanh.setText(dd.getdiachi());
+                break;
+            }
+        }
 
         //field maLoaiTour
         for(int i = 0; i < cbLoaiTours.getItemCount(); i++){
@@ -171,7 +209,16 @@ public class _TourDiaLog extends JDialog {
                     80,
                     Image.SCALE_SMOOTH
             );
-            lblPreview.setIcon(new ImageIcon(img));
+            jlbPreview.setIcon(new ImageIcon(img));
+        }
+
+        //field maDiaDiem
+        for(int i = 0; i < cbDiaDiem.getItemCount(); i++){
+            DiaDiemDTO dd = cbDiaDiem.getItemAt(i);
+            if(dd.getMaDiaDiem().equalsIgnoreCase(tourDTO.getMaDiaDiem())){
+                cbDiaDiem.setSelectedIndex(i);
+                break;
+            }
         }
     }
 
@@ -186,9 +233,9 @@ public class _TourDiaLog extends JDialog {
     }
 
     private void save(){
-        saveBtn = createBtn("Lưu", Color.GREEN);
+        saveBtn = createBtn("Lưu", UIColors.SAVE);
         saveBtn.addActionListener(e -> {
-            if(isEmpty(txtMaTour, txtTen, txtSoNgay, txtDonGia, txtSoCho, txtDiaDiemKhoiHanh)){
+            if(isEmpty(txtMaTour, txtTen, txtSoNgay, txtDonGia, txtSoCho, txtDiaDiemKhoiHanh, txtImgLink)){
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin");
                 return;
             }
@@ -212,11 +259,13 @@ public class _TourDiaLog extends JDialog {
                 }else{
                     _LoaiTourDTO selectedLoaiTour = (_LoaiTourDTO) cbLoaiTours.getSelectedItem();
                     String maLoaiTour = selectedLoaiTour.getMaLoaiTour();
+                    DiaDiemDTO selectedLocation = (DiaDiemDTO) cbDiaDiem.getSelectedItem();
+                    String maDiaDiem = selectedLocation.getMaDiaDiem();
 
                     _TourDTO tourMoi = new _TourDTO(
                             txtMaTour.getText(), txtTen.getText(),
                             soNgay, donGia, soCho, txtDiaDiemKhoiHanh.getText(),
-                            txtImgLink.getText(), maLoaiTour
+                            txtImgLink.getText(), maLoaiTour, maDiaDiem
                     );
                     boolean result = tourBUS.addTour(tourMoi);
                     if (result){
@@ -239,6 +288,11 @@ public class _TourDiaLog extends JDialog {
                 String maLoaiTour = selectedLoaiTour.getMaLoaiTour();
                 tourDTO.setMaLoaiTour(maLoaiTour);
 
+                // field maLoaiTour
+                DiaDiemDTO selectedLocation = (DiaDiemDTO) cbDiaDiem.getSelectedItem();
+                String maDiaDiem = selectedLocation.getMaDiaDiem();
+                tourDTO.setMaDiaDiem(maDiaDiem);
+
                 boolean result = tourBUS.editTour(tourDTO);
                 if(result){
                     JOptionPane.showMessageDialog(this, "Chỉnh sửa thành công");
@@ -251,14 +305,14 @@ public class _TourDiaLog extends JDialog {
     }
 
     private void cancel(){
-        cancelBtn = createBtn("Hủy", Color.RED);
+        cancelBtn = createBtn("Hủy", UIColors.CANCEL);
         cancelBtn.addActionListener(e -> {
             dispose();
         });
     }
 
     private void chooseImage(){
-        chooseImageBtn = createBtn("Chọn", Color.CYAN);
+        chooseImageBtn = createBtn("Chọn", UIColors.CHOSE);
         chooseImageBtn.addActionListener(e -> {
             JFileChooser chooser = new JFileChooser();
             int result = chooser.showOpenDialog(this);
@@ -277,7 +331,7 @@ public class _TourDiaLog extends JDialog {
                         Image.SCALE_SMOOTH
                 );
 
-                lblPreview.setIcon(new ImageIcon(img));
+                jlbPreview.setIcon(new ImageIcon(img));
             }
         });
     }

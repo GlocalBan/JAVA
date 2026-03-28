@@ -5,31 +5,34 @@ public class _TourDTO {
     private String ten;
     private int soNgay;
     private long donGia;
-    private int soNguoi;
+    private int soCho;
     private String diaDiemKhoiHanh;
     private String imgLink;
     private String maLoaiTour;
+    private String maDiaDiem;
 
     public _TourDTO(){
         this.maTour = "";
         this.ten = "";
         this.soNgay = 0;
         this.donGia = 0;
-        this.soNguoi = 0;
+        this.soCho = 0;
         this.diaDiemKhoiHanh = "";
         this.imgLink = "";
         this.maLoaiTour = "";
+        this.maDiaDiem = "";
     }
 
-    public _TourDTO(String maTour, String ten, int soNgay, long donGia, int soNguoi, String diaDiemKhoiHanh, String imgLink,String maLoaiTour) {
+    public _TourDTO(String maTour, String ten, int soNgay, long donGia, int soCho, String diaDiemKhoiHanh, String imgLink,String maLoaiTour, String maDiaDiem) {
         this.maTour = maTour;
         this.ten = ten;
         this.soNgay = soNgay;
         this.donGia = donGia;
-        this.soNguoi = soNguoi;
+        this.soCho = soCho;
         this.diaDiemKhoiHanh = diaDiemKhoiHanh;
         this.imgLink = imgLink;
         this.maLoaiTour = maLoaiTour;
+        this.maDiaDiem = maDiaDiem;
     }
 
     public String getMaTour() {
@@ -65,11 +68,11 @@ public class _TourDTO {
     }
 
     public int getSoCho() {
-        return soNguoi;
+        return soCho;
     }
 
-    public void setSoCho(int soNguoi) {
-        this.soNguoi = soNguoi;
+    public void setSoCho(int soCho) {
+        this.soCho = soCho;
     }
 
     public String getDiaDiemKhoiHanh() {
@@ -93,6 +96,14 @@ public class _TourDTO {
     }
     public void setMaLoaiTour(String maLoaiTour) {
         this.maLoaiTour = maLoaiTour;
+    }
+
+    public String getMaDiaDiem() {
+        return maDiaDiem;
+    }
+
+    public void setMaDiaDiem(String maDiaDiem) {
+        this.maDiaDiem = maDiaDiem;
     }
 
     @Override

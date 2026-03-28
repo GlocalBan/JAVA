@@ -116,7 +116,7 @@ public class _TourPanel extends JPanel {
 
     private void initTable(){
         // columns of table
-        String[] columns = {"Mã tour", "Tên", "Số ngày", "Đơn giá", "Số chỗ", "Địa điểm khởi hành", "Mã loại tour"};
+        String[] columns = {"Mã tour", "Tên", "Số ngày", "Đơn giá", "Số chỗ", "Địa điểm khởi hành", "Mã loại tour", "Mã địa điểm"};
 
         tableModel = new DefaultTableModel(columns, 0);
         table = new JTable(tableModel);
@@ -154,7 +154,6 @@ public class _TourPanel extends JPanel {
             public boolean include(Entry<? extends DefaultTableModel, ? extends Object> entry) {
                 if(!keyWord.isEmpty()){
                     boolean found = false;
-
                     switch (searchType) {
                         case " Tên Tour":
                             found = entry.getStringValue(1).toLowerCase().contains(keyWord);
@@ -180,7 +179,7 @@ public class _TourPanel extends JPanel {
     }
 
     private void add(){
-        addBtn = createBtn("Thêm Tour", Color.GREEN);
+        addBtn = createBtn("Thêm Tour", UIColors.ADD);
         addBtn.addActionListener(e -> openDiaLog(null));
     }
 
@@ -191,7 +190,7 @@ public class _TourPanel extends JPanel {
     }
 
     private void delete(){
-        deleteBtn = createBtn("Xóa tour", Color.RED);
+        deleteBtn = createBtn("Xóa tour", UIColors.DELETE);
         deleteBtn.setEnabled(false);
         deleteBtn.addActionListener(e ->{
             int row = table.getSelectedRow();
@@ -214,7 +213,7 @@ public class _TourPanel extends JPanel {
     }
 
     private void edit(){
-        editBtn = createBtn("Chỉnh sửa", Color.ORANGE);
+        editBtn = createBtn("Chỉnh sửa", UIColors.EDIT);
         editBtn.setEnabled(false);
         editBtn.addActionListener(e -> {
             int row = table.getSelectedRow();
@@ -229,7 +228,7 @@ public class _TourPanel extends JPanel {
     }
 
     private void viewDetail(){
-        detailBtn = createBtn("Xem chi tiết", Color.BLUE);
+        detailBtn = createBtn("Xem chi tiết", UIColors.VIEW);
         detailBtn.setEnabled(false);
         detailBtn.addActionListener(e -> {
             int row = table.getSelectedRow();
@@ -246,7 +245,7 @@ public class _TourPanel extends JPanel {
     }
 
     private void refresh(){
-        refreshBtn = createBtn("Làm mới", Color.BLUE);
+        refreshBtn = createBtn("Làm mới", UIColors.REFRESH);
         refreshBtn.addActionListener(e -> {
             String keyWord = txtSearch.getText().trim().toLowerCase();
             ArrayList<_TourDTO> lsTour = tourBUS.search(keyWord);
@@ -265,7 +264,8 @@ public class _TourPanel extends JPanel {
                     t.getDonGia(),
                     t.getSoCho(),
                     t.getDiaDiemKhoiHanh(),
-                    t.getMaLoaiTour()
+                    t.getMaLoaiTour(),
+                    t.getMaDiaDiem()
             });
         }
     }
@@ -281,7 +281,8 @@ public class _TourPanel extends JPanel {
                     t.getDonGia(),
                     t.getSoCho(),
                     t.getDiaDiemKhoiHanh(),
-                    t.getMaLoaiTour()
+                    t.getMaLoaiTour(),
+                    t.getMaDiaDiem()
             });
         }
     }

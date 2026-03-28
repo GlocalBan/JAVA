@@ -1,32 +1,29 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package org.example.dto;
 
-import java.time.LocalDate;
-
-/**
- *
- * @author Nhat
- */
 public class DiaDiemDTO {
+    public String MaDiaDiem;
     public String TenDiaDiem;
     public String DiaChi;
     public String QuocGia;
 
-    public DiaDiemDTO(String TenDiaDiem, String DiaChi, String QuocGia) {
+    public DiaDiemDTO(String MaDiaDiem ,String TenDiaDiem, String DiaChi, String QuocGia) {
+        this.MaDiaDiem = MaDiaDiem;
         this.TenDiaDiem = TenDiaDiem;
         this.DiaChi = DiaChi;
         this.QuocGia = QuocGia;
     }
-    
+
     public DiaDiemDTO() {
+        this.MaDiaDiem = MaDiaDiem;
         this.TenDiaDiem = TenDiaDiem;
         this.DiaChi = DiaChi;
         this.QuocGia = QuocGia;
     }
-    
+
+    public String getMaDiaDiem() {
+        return MaDiaDiem;
+    }
+
     public String getTenDiaDiem() {
         return TenDiaDiem;
     }
@@ -37,6 +34,10 @@ public class DiaDiemDTO {
 
     public String getQuocGia() {
         return QuocGia;
+    }
+
+    public void setMaDiaDiem(String maDiaDiem) {
+        MaDiaDiem = maDiaDiem;
     }
 
     public void setTenDiaDiem(String TenDiaDiem) {
@@ -50,6 +51,9 @@ public class DiaDiemDTO {
     public void setQuocGia(String QuocGia) {
         this.QuocGia = QuocGia;
     }
-    
-    
+
+    @Override
+    public String toString(){
+        return MaDiaDiem + " - " + TenDiaDiem;
+    }
 }
