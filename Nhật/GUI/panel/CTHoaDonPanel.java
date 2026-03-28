@@ -3,6 +3,7 @@ package org.example.gui.panel;
 
 import org.example.gui.dialog.CTHoaDonDialog;
 
+import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import org.example.dto.*;
@@ -159,46 +160,19 @@ public class CTHoaDonPanel extends JPanel {
 
         add(pnlheader, java.awt.BorderLayout.PAGE_START);
 
-        btnthem.setText("Thêm");
-        btnthem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnthemActionPerformed(evt);
-            }
-        });
+        them();
         pnltable.add(btnthem);
 
-        btnxoa.setText("Xóa");
-        btnxoa.setEnabled(false);
-        btnxoa.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnxoaActionPerformed(evt);
-            }
-        });
+        xoa();
         pnltable.add(btnxoa);
 
-        btnsua.setText("Chỉnh sửa");
-        btnsua.setEnabled(false);
-        btnsua.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnsuaActionPerformed(evt);
-            }
-        });
+        sua();
         pnltable.add(btnsua);
 
-        btnreset.setText("Làm mới");
-        btnreset.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnresetActionPerformed(evt);
-            }
-        });
+        lamMoi();
         pnltable.add(btnreset);
 
-        btnxuat.setText("Xuất excel");
-        btnxuat.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnxuatActionPerformed(evt);
-            }
-        });
+        xuatExcel();
         pnltable.add(btnxuat);
 
         add(pnltable, java.awt.BorderLayout.PAGE_END);
@@ -237,70 +211,95 @@ public class CTHoaDonPanel extends JPanel {
         add(pnlfooter, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnthemActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnthemActionPerformed
-        // TODO add your handling code here:
-        CTHoaDonDialog cthd=new CTHoaDonDialog();
-        cthd.setModal(true);
-        cthd.setVisible(true);
-        loaddata();
-    }//GEN-LAST:event_btnthemActionPerformed
+    private JButton createBtn(String text, Color color){
+        JButton btn = new JButton(text);
+        btn.setBackground(color);
+        btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false);
+        btn.setFont(new Font("SansSerif", Font.BOLD, 13));
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-    private void btnxoaActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnxoaActionPerformed
-        // TODO add your handling code here:
-        int row=tblcthd.getSelectedRow();
+        btn.setContentAreaFilled(true);
+        btn.setOpaque(true);
+        btn.setBorderPainted(false);
 
-        if(row==-1){
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn chi tiết cần xóa");
-            return;
-        }
+        return btn;
+    }
 
-        String mahd =model.getValueAt(row, 0).toString();
-        String makh =model.getValueAt(row, 1).toString();
+    private void them(){
+        btnthem = createBtn("", UIColors.ADD);
+        btnthem.addActionListener(v -> {
+            CTHoaDonDialog cthd=new CTHoaDonDialog();
+            cthd.setModal(true);
+            cthd.setVisible(true);
+            loaddata();
+        });
+    }
 
-        if(JOptionPane.showConfirmDialog(this, "Xóa vé này?","Xác nhận",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
-            if(bus.xoaCtietHd(mahd,makh)){
-                model.removeRow(row);
-                JOptionPane.showMessageDialog(this, "Xóa thành công");
+    private void xoa(){
+        btnxoa = createBtn("", UIColors.DELETE);
+        btnxoa.addActionListener(v -> {
+            int row=tblcthd.getSelectedRow();
 
-                if(soluongcanxoa>0){
-                    soluongcanxoa--;
+            if(row==-1){
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn chi tiết cần xóa");
+                return;
+            }
+
+            String mahd =model.getValueAt(row, 0).toString();
+            String makh =model.getValueAt(row, 1).toString();
+
+            if(JOptionPane.showConfirmDialog(this, "Xóa vé này?","Xác nhận",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
+                if(bus.xoaCtietHd(mahd,makh)){
+                    model.removeRow(row);
+                    JOptionPane.showMessageDialog(this, "Xóa thành công");
+
                     if(soluongcanxoa>0){
-                        lbname.setText("Cần xóa thêm "+soluongcanxoa+" VÉ");
+                        soluongcanxoa--;
+                        if(soluongcanxoa>0){
+                            lbname.setText("Cần xóa thêm "+soluongcanxoa+" VÉ");
 
-                    }else{
-                        lbname.setText("Đã xóa đủ");
-                        btnxoa.setVisible(false);
+                        }else{
+                            lbname.setText("Đã xóa đủ");
+                            btnxoa.setVisible(false);
 
+                        }
                     }
                 }
             }
-        }
+        });
     }
 
-    private void btnresetActionPerformed(ActionEvent evt) {
-        // TODO add your handling code here:
-        loaddata();
+    private void sua(){
+        btnsua = createBtn("", UIColors.EDIT);
+        btnsua.addActionListener(v -> {
+            int row = tblcthd.getSelectedRow();
+            if (row < 0) {
+                return;
+            } else {
+                String mact = tblcthd.getValueAt(row, 0).toString().trim();
+                String makh = tblcthd.getValueAt(row, 1).toString().trim();
+                CTietHDDTO ct = bus.timCt(mact, makh);
+
+                CTHoaDonDialog ctpn = new CTHoaDonDialog(ct);
+                ctpn.setModal(true);
+                ctpn.setVisible(true);
+            }
+        });
     }
 
-    private void btnxuatActionPerformed(ActionEvent evt) {
-        // TODO add your handling code here:
-        ExcelHelper.xuatExcel(tblcthd, this, "Danh sách chi tiết hóa đơn");
+    private void lamMoi(){
+        btnreset = createBtn("", UIColors.REFRESH);
+        btnreset.addActionListener(v -> {
+            loaddata();
+        });
     }
 
-    private void btnsuaActionPerformed(ActionEvent evt) {
-        // TODO add your handling code here:
-        int row = tblcthd.getSelectedRow();
-        if (row < 0) {
-            return;
-        } else {
-            String mact = tblcthd.getValueAt(row, 0).toString().trim();
-            String makh = tblcthd.getValueAt(row, 1).toString().trim();
-            CTietHDDTO ct = bus.timCt(mact, makh);
-
-            CTHoaDonDialog ctpn = new CTHoaDonDialog(ct);
-            ctpn.setModal(true);
-            ctpn.setVisible(true);
-        }
+    private void xuatExcel(){
+        btnxuat = createBtn("", UIColors.EXPORT_EXCEL);
+        btnxuat.addActionListener(v -> {
+            ExcelHelper.xuatExcel(tblcthd, this, "Danh sách chi tiết hóa đơn");
+        });
     }
 
     private void txttimKeyReleased(KeyEvent evt) {
@@ -308,7 +307,6 @@ public class CTHoaDonPanel extends JPanel {
         String tim=lbname.getText().trim();
         String loai=cbtim.getSelectedItem().toString().trim();
         loaddata(bus.timNangcao(loai, tim));
-
     }
 
     private void txttimActionPerformed(ActionEvent evt) {

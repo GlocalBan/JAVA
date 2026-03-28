@@ -8,10 +8,10 @@ import org.example.dto.*;
 import org.example.gui.helper.DateHelper;
 import org.example.gui.panel.CTHoaDonPanel;
 import org.example.dao.*;
-import org.example.gui.panel.NhapCTHD;
+import org.example.gui.panel.UIColors;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.*;
+import java.awt.event.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -183,7 +183,7 @@ public class HoaDonDialog extends JDialog {
         btnluu = new JButton();
         txtsoluong = new JTextField();
         lbsoluong = new JLabel();
-        btnxoa = new JButton();
+        btnLamMoi = new JButton();
         lbngay = new JLabel();
         txtngay = new JDateChooser();
         cbmakht = new JComboBox<>();
@@ -200,62 +200,52 @@ public class HoaDonDialog extends JDialog {
 
         lbtongtien.setText("Tổng tiền");
 
-        txtmahd.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+        txtmahd.addInputMethodListener(new InputMethodListener() {
+            public void caretPositionChanged(InputMethodEvent evt) {
             }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+            public void inputMethodTextChanged(InputMethodEvent evt) {
                 txtmahdInputMethodTextChanged(evt);
             }
         });
-        txtmahd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        txtmahd.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 txtmahdActionPerformed(evt);
             }
         });
 
         txttongtien.setEditable(false);
-        txttongtien.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
+        txttongtien.addFocusListener(new FocusAdapter() {
+            public void focusLost(FocusEvent evt) {
                 txttongtienFocusLost(evt);
             }
         });
-        txttongtien.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        txttongtien.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 txttongtienActionPerformed(evt);
             }
         });
 
         lbmahd.setText("Mã hóa đơn");
 
-        btnluu.setText("Lưu");
-        btnluu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnluuActionPerformed(evt);
-            }
-        });
+        luu();
 
-        txtsoluong.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
+        txtsoluong.addFocusListener(new FocusAdapter() {
+            public void focusLost(FocusEvent evt) {
                 txtsoluongFocusLost(evt);
             }
         });
 
         lbsoluong.setText("Số lượng");
 
-        btnxoa.setText("Làm mới");
-        btnxoa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnxoaActionPerformed(evt);
-            }
-        });
+        lamMoi();
 
         lbngay.setText("Ngày");
 
         txtngay.setDateFormatString("dd/MM/yyyy");
 
         cbmakht.setEditable(true);
-        cbmakht.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        cbmakht.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 cbmakhtActionPerformed(evt);
             }
         });
@@ -295,7 +285,7 @@ public class HoaDonDialog extends JDialog {
                                                 .addGap(69, 69, 69)
                                                 .addComponent(btnluu, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(112, 112, 112)
-                                                .addComponent(btnxoa, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(btnLamMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(30, 30, 30)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -358,94 +348,112 @@ public class HoaDonDialog extends JDialog {
                                 .addGap(12, 12, 12)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(btnluu)
-                                        .addComponent(btnxoa)))
+                                        .addComponent(btnLamMoi)))
         );
-
         pack();
     }
 
-    private void txtmahdActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+    private JButton createBtn(String text, Color color){
+        JButton btn = new JButton(text);
+        btn.setBackground(color);
+        btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));// Trong jpBtn panel
+
+        return btn;
     }
 
-    private void txttongtienFocusLost(java.awt.event.FocusEvent evt) {
-        // TODO add your handling code here:
+    private void luu(){
+        btnluu = createBtn("Lưu", UIColors.SAVE);
+        btnluu.addActionListener(v -> {
+            try {
 
-    }
+                String ma = txtmahd.getText().trim();
+                String makh =cbmakh.getSelectedItem().toString().trim();
+                int newSl = Integer.parseInt(txtsoluong.getText().trim());
+                float tongTien = Float.parseFloat(txttongtien.getText().trim());
 
-    private void txttongtienActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void btnluuActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-        try {
-
-            String ma = txtmahd.getText().trim();
-            String makh =cbmakh.getSelectedItem().toString().trim();
-            int newSl = Integer.parseInt(txtsoluong.getText().trim());
-            float tongTien = Float.parseFloat(txttongtien.getText().trim());
-
-            if (ma.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Lỗi chưa nhập mã hóa đơn");
-                return;
-            }
-
-            HoaDonDTO kt = bus.timHd(ma);
-
-            if (kt != null) {
-                HoaDonDTO hd = new HoaDonDTO(ma, cbmakht.getSelectedItem().toString().trim(), cbmakh.getSelectedItem().toString().trim(), cbmanv.getSelectedItem().toString().trim(), kt.getNgay(),kt.getSoLuong(), kt.getTongTien());
-
-                if (bus.suaHoaDon(hd)) {
-                    if (newSl > this.soluong) {
-
-                        int canThem = newSl - this.soluong;
-                        JOptionPane.showMessageDialog(this, "Số lượng tăng. Vui lòng nhập thêm " + canThem + " vé.");
-                        NhapCTHD nhap = new NhapCTHD(null, true, ma, canThem);
-                        nhap.setVisible(true);
-
-                    } else if (newSl < this.soluong) {
-                        int veDu = this.soluong - newSl;
-                        JOptionPane.showMessageDialog(this, "Số lượng giảm. Vui lòng chọn " + veDu + " vé để xóa.");
-                        CTHoaDonPanel panelXoa = new CTHoaDonPanel(ma, veDu);
-                        JOptionPane.showConfirmDialog(null, panelXoa, "Xóa chi tiết thừa", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Cập nhật hóa đơn thành công!");
-                    }
-                    this.dispose();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Cập nhật thất bại!");
-                }
-
-            } else {
-                java.util.Date ngaydl = txtngay.getDate();
-
-                if (ngaydl == null) {
-                    JOptionPane.showMessageDialog(this, "Lỗi: Vui lòng chọn ngày lập hóa đơn!");
+                if (ma.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Lỗi chưa nhập mã hóa đơn");
                     return;
                 }
 
-                LocalDate ngay = DateHelper.toLocalDateFromUtil(ngaydl);
+                HoaDonDTO kt = bus.timHd(ma);
 
-                HoaDonDTO hdmoi = new HoaDonDTO(ma, cbmakht.getSelectedItem().toString().trim(), cbmakh.getSelectedItem().toString().trim(), cbmanv.getSelectedItem().toString().trim(), ngay, 0, 0.0f);
+                if (kt != null) {
+                    HoaDonDTO hd = new HoaDonDTO(ma, cbmakht.getSelectedItem().toString().trim(), cbmakh.getSelectedItem().toString().trim(), cbmanv.getSelectedItem().toString().trim(), kt.getNgay(),kt.getSoLuong(), kt.getTongTien());
 
-                if (bus.themHoaDon(hdmoi)) {
-                    JOptionPane.showMessageDialog(this, "Thêm thành công! Hãy nhập thông tin chi tiết.");
-                    NhapCTHD nhapCTHD = new NhapCTHD(null, true, ma, newSl);
-                    nhapCTHD.setVisible(true);
-                    this.dispose();
+                    if (bus.suaHoaDon(hd)) {
+                        if (newSl > this.soluong) {
+
+                            int canThem = newSl - this.soluong;
+                            JOptionPane.showMessageDialog(this, "Số lượng tăng. Vui lòng nhập thêm " + canThem + " vé.");
+                            NhapCTHD nhap = new NhapCTHD(null, true, ma, canThem);
+                            nhap.setVisible(true);
+
+                        } else if (newSl < this.soluong) {
+                            int veDu = this.soluong - newSl;
+                            JOptionPane.showMessageDialog(this, "Số lượng giảm. Vui lòng chọn " + veDu + " vé để xóa.");
+                            CTHoaDonPanel panelXoa = new CTHoaDonPanel(ma, veDu);
+                            JOptionPane.showConfirmDialog(null, panelXoa, "Xóa chi tiết thừa", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Cập nhật hóa đơn thành công!");
+                        }
+                        this.dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Cập nhật thất bại!");
+                    }
+
                 } else {
-                    JOptionPane.showMessageDialog(this, "Thêm thất bại!");
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Lỗi định dạng dữ liệu hoặc tính toán!");
-        }
-    }//GEN-LAST:event_btnluuActionPerformed
+                    java.util.Date ngaydl = txtngay.getDate();
 
-    private void txtsoluongFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtsoluongFocusLost
+                    if (ngaydl == null) {
+                        JOptionPane.showMessageDialog(this, "Lỗi: Vui lòng chọn ngày lập hóa đơn!");
+                        return;
+                    }
+
+                    LocalDate ngay = DateHelper.toLocalDateFromUtil(ngaydl);
+
+                    HoaDonDTO hdmoi = new HoaDonDTO(ma, cbmakht.getSelectedItem().toString().trim(), cbmakh.getSelectedItem().toString().trim(), cbmanv.getSelectedItem().toString().trim(), ngay, 0, 0.0f);
+
+                    if (bus.themHoaDon(hdmoi)) {
+                        JOptionPane.showMessageDialog(this, "Thêm thành công! Hãy nhập thông tin chi tiết.");
+                        NhapCTHD nhapCTHD = new NhapCTHD(null, true, ma, newSl);
+                        nhapCTHD.setVisible(true);
+                        this.dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Thêm thất bại!");
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Lỗi định dạng dữ liệu hoặc tính toán!");
+            }
+        });
+    }
+
+    private void lamMoi(){
+        btnLamMoi = createBtn("Làm mới", UIColors.REFRESH);
+        btnLamMoi.addActionListener(v -> {
+            resetField();
+        });
+    }
+
+    private void txtmahdActionPerformed(ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void txttongtienFocusLost(FocusEvent evt) {
+        // TODO add your handling code here:
+
+    }
+
+    private void txttongtienActionPerformed(ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void txtsoluongFocusLost(FocusEvent evt) {//GEN-FIRST:event_txtsoluongFocusLost
         // TODO add your handling code here:
         String makht = cbmakht.getSelectedItem() != null ? cbmakht.getSelectedItem().toString().trim() : "";        int sl=Integer.parseInt(txtsoluong.getText().trim());
         if(!makht.isEmpty()){
@@ -461,34 +469,22 @@ public class HoaDonDialog extends JDialog {
         }
     }
 
-    private void txtmahdInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_txtmahdInputMethodTextChanged
+    private void txtmahdInputMethodTextChanged(InputMethodEvent evt) {//GEN-FIRST:event_txtmahdInputMethodTextChanged
         // TODO add your handling code here:
 
     }
 
-    private void btnxoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnxoaActionPerformed
-        // TODO add your handling code here:
-        resetField();
-    }
-
-    private void cbmakhtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbmakhtActionPerformed
+    private void cbmakhtActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cbmakhtActionPerformed
         // TODO add your handling code here:
     }
 
-    private JButton btnluu;
-    private JButton btnxoa;
-    private JComboBox<String> cbmakh;
-    private JComboBox<String> cbmakht;
-    private JComboBox<String> cbmanv;
-    private JLabel lbmahd;
-    private JLabel lbmakh;
-    private JLabel lbmakht;
-    private JLabel lbmanv;
-    private JLabel lbngay;
-    private JLabel lbsoluong;
-    private JLabel lbtongtien;
-    private JTextField txtmahd;
+    private JButton btnluu, btnLamMoi;
+
+    private JComboBox<String> cbmakh, cbmakht, cbmanv;
+
+    private JLabel lbmahd, lbmakh, lbmakht, lbmanv, lbngay, lbsoluong, lbtongtien;
+
+    private JTextField txtmahd, txtsoluong, txttongtien;
+
     private JDateChooser txtngay;
-    private JTextField txtsoluong;
-    private JTextField txttongtien;
 }
