@@ -9,6 +9,7 @@ import org.example.dto.KHang_KHTourDTO;
 import org.example.dto.KhachHangDTO;
 import org.example.dto._KeHoachTourDTO;
 import org.example.gui.panel.KHang_KHTourPanel;
+import org.example.gui.panel.UIColors;
 
 import javax.swing.*;
 import java.awt.*;
@@ -269,7 +270,6 @@ public class KHang_KHTourDialog extends JDialog {
         pack();
     }
 
-
     private JButton createBtn(String text, Color color){
         JButton btn = new JButton(text);
         btn.setBackground(color);
@@ -280,7 +280,7 @@ public class KHang_KHTourDialog extends JDialog {
     }
 
     private void save(){
-        btnLuu = createBtn("Lưu",  Color.GREEN);
+        btnLuu = createBtn("Lưu",  UIColors.SAVE);
         btnLuu.addActionListener(v -> {
             String maKH = txtMaKH.getText().trim();
             String ho = txtHoKH.getText().trim();
@@ -308,7 +308,7 @@ public class KHang_KHTourDialog extends JDialog {
     }
 
     private void cancel(){
-        btnDong = createBtn("Đóng", Color.red);
+        btnDong = createBtn("Đóng", UIColors.CANCEL);
         btnDong.addActionListener(v -> {
             this.dispose();
         });

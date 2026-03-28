@@ -160,7 +160,7 @@ public class _LoaiTourPanel extends JPanel {
     }
 
     private void add(){
-        addBtn = createBtn("Thêm loại Tour", Color.GREEN);
+        addBtn = createBtn("Thêm loại Tour", UIColors.ADD);
         addBtn.addActionListener(e -> openDiaLog(null));
     }
 
@@ -171,7 +171,7 @@ public class _LoaiTourPanel extends JPanel {
     }
 
     private void delete(){
-        deleteBtn = createBtn("Xóa loại Tour", Color.RED);
+        deleteBtn = createBtn("Xóa loại Tour", UIColors.DELETE);
         deleteBtn.setEnabled(false);
         deleteBtn.addActionListener(e ->{
             int row = table.getSelectedRow();
@@ -194,7 +194,7 @@ public class _LoaiTourPanel extends JPanel {
     }
 
     private void edit(){
-        editBtn = createBtn("Chỉnh sửa", Color.ORANGE);
+        editBtn = createBtn("Chỉnh sửa", UIColors.EDIT);
         editBtn.setEnabled(false);
         editBtn.addActionListener(e -> {
             int row = table.getSelectedRow();
@@ -209,7 +209,7 @@ public class _LoaiTourPanel extends JPanel {
     }
 
     private void refresh(){
-        refreshBtn = createBtn("Làm mới", Color.BLUE);
+        refreshBtn = createBtn("Làm mới", UIColors.REFRESH);
         refreshBtn.addActionListener(e -> {
             String keyWord = txtSearch.getText().trim().toLowerCase();
             ArrayList<_LoaiTourDTO> lsCate = loaiTourBUS.search(keyWord);

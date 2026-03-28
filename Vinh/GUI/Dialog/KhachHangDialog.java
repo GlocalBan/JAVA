@@ -2,12 +2,15 @@
 package org.example.gui.dialog;
 
 
+import com.toedter.calendar.JDateChooser;
 import org.example.bus.KhachHangBUS;
 import org.example.dao.KhachHangDAO;
 import org.example.dto.KhachHangDTO;
 import org.example.gui.panel.KhachHangPanel;
+import org.example.gui.panel.UIColors;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.time.LocalDate;
 
@@ -57,7 +60,7 @@ public class KhachHangDialog extends JDialog {
         jLabel24 = new JLabel();
         txtDiaChiKH = new JTextField();
         btnLuu = new JButton();
-        btnDong = new JButton();
+        btnHuy = new JButton();
         jPanel26 = new JPanel();
         jLabel26 = new JLabel();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
@@ -207,11 +210,9 @@ public class KhachHangDialog extends JDialog {
                                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
-        btnLuu.setText("Lưu");
-        btnLuu.addActionListener(this::btnLuuActionPerformed);
-
-        btnDong.setText("Đóng");
-        btnDong.addActionListener(this::btnDongActionPerformed);
+        // define handle function
+        luu();
+        huy();
 
         jLabel26.setText("Ngày sinh:");
 
@@ -369,7 +370,7 @@ public class KhachHangDialog extends JDialog {
                                 .addGap(57, 57, 57)
                                 .addComponent(btnLuu)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnDong)
+                                .addComponent(btnHuy)
                                 .addGap(68, 68, 68))
         );
         layout.setVerticalGroup(
@@ -389,7 +390,7 @@ public class KhachHangDialog extends JDialog {
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(btnLuu)
-                                        .addComponent(btnDong))
+                                        .addComponent(btnHuy))
                                 .addGap(0, 33, Short.MAX_VALUE))
         );
 
@@ -408,30 +409,48 @@ public class KhachHangDialog extends JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDiaChiKHActionPerformed
 
-    private void btnLuuActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnLuuActionPerformed
-        // TODO add your handling code here:
-        String maKH = txtMaKH.getText().trim();
-        String ten = txtTenKH.getText().trim();
-        String diaChi = txtDiaChiKH.getText().trim();
-        LocalDate ngaySinh = jDateChooser1.getDate() != null ? jDateChooser1.getDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate() : null;
-        String ho = txtHoKH.getText().trim();
-        String sdt = txtSoDienThoaiKH.getText().trim();
+    private JButton createBtn(String text, Color color){
+        JButton btn = new JButton(text);
+        btn.setBackground(color);
+        btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));// Trong jpBtn panel
 
-        KhachHangBUS khachHangBUS = new KhachHangBUS();
-        if (mode == Mode.ADD) {
-            KhachHangDTO newKhachHang = new KhachHangDTO(maKH, ho, ten, diaChi, sdt, ngaySinh);
-            khachHangBUS.them(newKhachHang);
-        } else if (mode == Mode.EDIT && currentKhachHang != null) {
-            currentKhachHang.setHo(ho);
-            currentKhachHang.setTen(ten);
-            currentKhachHang.setDiaChi(diaChi);
-            currentKhachHang.setNgaySinh (ngaySinh);
-            currentKhachHang.setSdt(sdt);
-            khachHangBUS.suaKhachHang(currentKhachHang);
-        }
-        dispose(); // Đóng dialog sau khi lưu
-    }//GEN-LAST:event_btnLuuActionPerformed
+        return btn;
+    }
 
+    private void luu(){
+        btnLuu = createBtn("Lưu", UIColors.SAVE);
+        btnLuu.addActionListener(v -> {
+            String maKH = txtMaKH.getText().trim();
+            String ten = txtTenKH.getText().trim();
+            String diaChi = txtDiaChiKH.getText().trim();
+            LocalDate ngaySinh = jDateChooser1.getDate() != null ? jDateChooser1.getDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate() : null;
+            String ho = txtHoKH.getText().trim();
+            String sdt = txtSoDienThoaiKH.getText().trim();
+
+            KhachHangBUS khachHangBUS = new KhachHangBUS();
+            if (mode == Mode.ADD) {
+                KhachHangDTO newKhachHang = new KhachHangDTO(maKH, ho, ten, diaChi, sdt, ngaySinh);
+                khachHangBUS.them(newKhachHang);
+            } else if (mode == Mode.EDIT && currentKhachHang != null) {
+                currentKhachHang.setHo(ho);
+                currentKhachHang.setTen(ten);
+                currentKhachHang.setDiaChi(diaChi);
+                currentKhachHang.setNgaySinh (ngaySinh);
+                currentKhachHang.setSdt(sdt);
+                khachHangBUS.suaKhachHang(currentKhachHang);
+            }
+            dispose(); // Đóng dialog sau khi lưu
+        });
+    }
+
+    private void huy(){
+        btnHuy = createBtn("Hủy", UIColors.CANCEL);
+        btnHuy.addActionListener(v -> {
+            dispose();
+        });
+    }
     private void txtHoKHActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtHoKHActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtHoKHActionPerformed
@@ -440,9 +459,6 @@ public class KhachHangDialog extends JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSoDienThoaiKHActionPerformed
 
-    private void btnDongActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnDongActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnDongActionPerformed
 
     public void setKhachHangData(KhachHangDTO kh) {
         txtMaKH.setText(kh.getMaKH());
@@ -457,25 +473,14 @@ public class KhachHangDialog extends JDialog {
         txtSoDienThoaiKH.setText(kh.getSdt());
     }
 
-    private JButton btnDong;
-    private JButton btnLuu;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
-    private JLabel jLabel22;
-    private JLabel jLabel23;
-    private JLabel jLabel24;
-    private JLabel jLabel26;
-    private JLabel jLabel27;
-    private JLabel jLabel28;
-    private JPanel jPanel22;
-    private JPanel jPanel23;
-    private JPanel jPanel24;
-    private JPanel jPanel26;
-    private JPanel jPanel27;
-    private JPanel jPanel28;
-    private JTextField txtDiaChiKH;
-    private JTextField txtHoKH;
-    private JTextField txtMaKH;
-    private JTextField txtSoDienThoaiKH;
-    private JTextField txtTenKH;
-    // End of variables declaration//GEN-END:variables
+    // variables
+    private JButton btnHuy, btnLuu;
+
+    private JDateChooser jDateChooser1;
+
+    private JLabel jLabel22, jLabel23, jLabel24, jLabel26, jLabel27, jLabel28;
+
+    private JPanel jPanel22, jPanel23, jPanel24, jPanel26, jPanel27, jPanel28;
+
+    private JTextField txtDiaChiKH, txtHoKH, txtMaKH, txtSoDienThoaiKH, txtTenKH;
 }

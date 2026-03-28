@@ -6,14 +6,8 @@ import org.example.login.PhanQuyen;
 
 import java.awt.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
+
 import org.example.login.DangNhap;
 
 public class _MainFrame extends JFrame {
@@ -22,6 +16,13 @@ public class _MainFrame extends JFrame {
     private JPanel contentArea;
     private JButton activeButton;
     public _MainFrame(TaiKhoanDTO taiKhoanDangNhap) {
+        // Set favicon
+        try {
+            ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("logosgu.png"));
+            setIconImage(icon.getImage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         setTitle("Quản lý Tour du lịch");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 600);

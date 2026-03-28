@@ -3,6 +3,7 @@ package org.example.login;
 import org.example.dao.TaiKhoanDAO;
 import org.example.dto.TaiKhoanDTO;
 import org.example.gui._MainFrame;
+import org.example.gui.panel.UIColors;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -48,7 +49,7 @@ public class DangNhap extends JFrame {
             JLabel logoLabel = new JLabel(new ImageIcon(scaledImage));
             headerPanel.add(logoLabel);
         } catch (Exception e) {
-            // Fallback to emoji if logo not found
+            e.printStackTrace();
         }
 
         // title
@@ -120,7 +121,7 @@ public class DangNhap extends JFrame {
     }
 
     private void login(){
-        loginBtn = createBtn("Đăng nhập", Color.GREEN);
+        loginBtn = createBtn("Đăng nhập", UIColors.SAVE);
         loginBtn.addActionListener(v -> {
             String username = txtUsername.getText().trim();
             char[] passwordChars = txtPassword.getPassword();
@@ -146,7 +147,7 @@ public class DangNhap extends JFrame {
     }
 
     private void logout(){
-        logoutBtn = createBtn("Thoát", Color.RED);
+        logoutBtn = createBtn("Thoát", UIColors.CANCEL);
         logoutBtn.addActionListener(v -> {
             dispose();
         });

@@ -3,8 +3,6 @@ package org.example.gui.panel;
 import org.example.bus.NhanVienBUS;
 import org.example.bus._KeHoachTourBUS;
 import org.example.bus._TourBUS;
-import org.example.dao.NhanVienDAO;
-import org.example.dto.NhanVienDTO;
 import org.example.dto._KeHoachTourDTO;
 import org.example.dto._TourDTO;
 import org.example.gui.dialog._KeHoachTourDetailDialog;
@@ -159,7 +157,7 @@ public class _KeHoachTourPanel extends JPanel {
     }
 
     private void add(){
-        addBtn = createBtn("Thêm kế hoạch Tour", Color.GREEN);
+        addBtn = createBtn("Thêm kế hoạch Tour", UIColors.ADD);
         _KeHoachTourDTO keHoachTourDTO = null;
         addBtn.addActionListener(e -> openDiaLog(keHoachTourDTO)); // null là ở chế độ thêm, có đối tượng DTO là ở dạng sửa
     }
@@ -178,7 +176,7 @@ public class _KeHoachTourPanel extends JPanel {
     }
 
     private void delete(){
-        deleteBtn = createBtn("Xóa kế hoạch tour", Color.RED);
+        deleteBtn = createBtn("Xóa kế hoạch tour", UIColors.DELETE);
         deleteBtn.setEnabled(false);
         deleteBtn.addActionListener(e ->{
             int row = table.getSelectedRow();
@@ -202,7 +200,7 @@ public class _KeHoachTourPanel extends JPanel {
     }
 
     private void edit(){
-        editBtn = createBtn("Chỉnh sửa", Color.ORANGE);
+        editBtn = createBtn("Chỉnh sửa", UIColors.EDIT);
         editBtn.setEnabled(false);
         editBtn.addActionListener(e -> {
             int row = table.getSelectedRow();
@@ -217,7 +215,7 @@ public class _KeHoachTourPanel extends JPanel {
     }
 
     private void viewDetail(){
-        detailsBtn = createBtn("Xem chi tiết", Color.yellow);
+        detailsBtn = createBtn("Xem chi tiết", UIColors.VIEW);
         detailsBtn.setEnabled(false);
         detailsBtn.addActionListener(e -> {
             int row = table.getSelectedRow();
@@ -233,7 +231,7 @@ public class _KeHoachTourPanel extends JPanel {
     }
 
     private void refresh(){
-        refreshBtn = createBtn("Làm mới", Color.BLUE);
+        refreshBtn = createBtn("Làm mới", UIColors.REFRESH);
         refreshBtn.addActionListener(e -> {
             //load tours when press refresh
             toursModel = new DefaultComboBoxModel<>();

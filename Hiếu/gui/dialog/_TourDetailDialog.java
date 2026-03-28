@@ -3,6 +3,7 @@ package org.example.gui.dialog;
 import org.example.bus._LoaiTourBUS;
 import org.example.dto._LoaiTourDTO;
 import org.example.dto._TourDTO;
+import org.example.gui.panel.UIColors;
 
 import javax.swing.*;
 import java.awt.*;
@@ -159,7 +160,7 @@ public class _TourDetailDialog extends JDialog {
     }
 
     private void exit(){
-        exitBtn = createBtn("Thoát", Color.CYAN);
+        exitBtn = createBtn("Thoát", UIColors.CANCEL);
         exitBtn.addActionListener(e -> {
             dispose();
         });

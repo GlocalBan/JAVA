@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.example.bus.*;
 import org.example.dto.*;
+import org.example.gui.panel.UIColors;
 
 import javax.swing.*;
 
@@ -149,7 +150,6 @@ public class CTHoaDonDialog extends JDialog {
     private JLabel lbmakh;
     private JTextField txtgiave;
 
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -269,7 +269,7 @@ public class CTHoaDonDialog extends JDialog {
     }
 
     private void handleSave(){
-        btnluu = createBtn("Lưu", Color.GREEN);
+        btnluu = createBtn("Lưu", UIColors.SAVE);
         btnluu.addActionListener(v -> {
             try{
                 String ma=cbmahd.getSelectedItem().toString().trim();
@@ -310,7 +310,7 @@ public class CTHoaDonDialog extends JDialog {
     }
 
     private void handleRefresh(){
-        btnreset = createBtn("Làm mới", Color.BLUE);
+        btnreset = createBtn("Làm mới", UIColors.REFRESH);
         btnreset.addActionListener(v -> {
             resetField();
         });

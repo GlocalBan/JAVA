@@ -5,6 +5,7 @@ import org.example.bus._KeHoachTourBUS;
 import org.example.dto.NhanVienDTO;
 import org.example.dto._KeHoachTourDTO;
 import org.example.dto._TourDTO;
+import org.example.gui.panel.UIColors;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -185,7 +186,7 @@ public class _KeHoachTourDialog extends JDialog {
     }
 
     public void save(){
-        saveBtn = createBtn("Lưu", Color.GREEN);
+        saveBtn = createBtn("Lưu", UIColors.SAVE);
         saveBtn.addActionListener(e -> {
             if(isEmpty(txtMaKHTour, txtNgayKhoiHanh, txtNgayKetThuc, txtTongSoVe, txtTongChi, txtTongThu)){
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin");
@@ -258,7 +259,7 @@ public class _KeHoachTourDialog extends JDialog {
     }
 
     public void cancel(){
-        cancelBtn = createBtn("Hủy", Color.RED);
+        cancelBtn = createBtn("Hủy", UIColors.CANCEL);
         cancelBtn.addActionListener(e -> {
             dispose();
         });

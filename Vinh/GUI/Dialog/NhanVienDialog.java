@@ -4,8 +4,10 @@ import com.toedter.calendar.JDateChooser;
 import org.example.bus.NhanVienBUS;
 import org.example.dao.NhanVienDAO;
 import org.example.dto.NhanVienDTO;
+import org.example.gui.panel.UIColors;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.time.LocalDate;
 
@@ -67,7 +69,7 @@ public class NhanVienDialog extends JDialog {
         jLabel7 = new JLabel();
         txtDiaChi = new JTextField();
         btnLuu = new JButton();
-        btnDong = new JButton();
+        btnHuy = new JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -380,11 +382,9 @@ public class NhanVienDialog extends JDialog {
                                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
-        btnLuu.setText("Lưu");
-        btnLuu.addActionListener(this::btnLuuActionPerformed);
-
-        btnDong.setText("Đóng");
-        btnDong.addActionListener(this::btnDongActionPerformed);
+        // define handle funtion
+        luu();
+        huy();
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -400,7 +400,7 @@ public class NhanVienDialog extends JDialog {
                                 .addGap(80, 80, 80)
                                 .addComponent(btnLuu)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnDong)
+                                .addComponent(btnHuy)
                                 .addGap(88, 88, 88))
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
@@ -426,7 +426,7 @@ public class NhanVienDialog extends JDialog {
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(btnLuu)
-                                        .addComponent(btnDong))
+                                        .addComponent(btnHuy))
                                 .addGap(0, 27, Short.MAX_VALUE))
         );
 
@@ -441,32 +441,51 @@ public class NhanVienDialog extends JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtHoNVActionPerformed
 
-    private void btnLuuActionPerformed(ActionEvent evt) {
-
-        String maNV = txtMaNV.getText().trim();
-        String ho = txtHoNV.getText().trim();
-        String ten = txtTenNV.getText().trim();
-        String chucVu = txtChucVu.getText().trim();
-        LocalDate ngaySinh = jDateChooser1.getDate() != null ? jDateChooser1.getDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate() : null;
-        String sdt = txtSoDienThoai.getText().trim();
-        String diaChi = txtDiaChi.getText().trim();
-
-        NhanVienBUS nvBUS = new NhanVienBUS();
-        if (mode == Mode.ADD) {
-            NhanVienDTO newNV = new NhanVienDTO(maNV, chucVu, ho, ten, diaChi, sdt, ngaySinh);
-            nvBUS.them(newNV);
-        } else if (mode == Mode.EDIT && currentNhanVien != null) {
-            currentNhanVien.setHo(ho);
-            currentNhanVien.setTen(ten);
-            currentNhanVien.setChucVu(chucVu);
-            currentNhanVien.setNgaySinh(ngaySinh);
-            currentNhanVien.setSdt(sdt);
-            currentNhanVien.setDiaChi(diaChi);
-            nvBUS.suaNhanVien(currentNhanVien);
-        }
-
-        dispose(); // đóng dialog sau khi lưu
+    private JButton createBtn(String text, Color color){
+        JButton btn = new JButton(text);
+        btn.setBackground(color);
+        btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));// Trong jpBtn panel
+        return btn;
     }
+
+    private void luu(){
+        btnLuu = createBtn("Lưu", UIColors.SAVE);
+        btnLuu.addActionListener(v -> {
+            String maNV = txtMaNV.getText().trim();
+            String ho = txtHoNV.getText().trim();
+            String ten = txtTenNV.getText().trim();
+            String chucVu = txtChucVu.getText().trim();
+            LocalDate ngaySinh = jDateChooser1.getDate() != null ? jDateChooser1.getDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate() : null;
+            String sdt = txtSoDienThoai.getText().trim();
+            String diaChi = txtDiaChi.getText().trim();
+
+            NhanVienBUS nvBUS = new NhanVienBUS();
+            if (mode == Mode.ADD) {
+                NhanVienDTO newNV = new NhanVienDTO(maNV, chucVu, ho, ten, diaChi, sdt, ngaySinh);
+                nvBUS.them(newNV);
+            } else if (mode == Mode.EDIT && currentNhanVien != null) {
+                currentNhanVien.setHo(ho);
+                currentNhanVien.setTen(ten);
+                currentNhanVien.setChucVu(chucVu);
+                currentNhanVien.setNgaySinh(ngaySinh);
+                currentNhanVien.setSdt(sdt);
+                currentNhanVien.setDiaChi(diaChi);
+                nvBUS.suaNhanVien(currentNhanVien);
+            }
+
+            dispose(); // đóng dialog sau khi lưu
+        });
+    }
+
+    private void huy(){
+        btnHuy = createBtn("Hủy", UIColors.CANCEL);
+        btnHuy.addActionListener(v -> {
+            dispose();
+        });
+    }
+
 
     private void txtChucVuActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtChucVuActionPerformed
         // TODO add your handling code here:
@@ -484,11 +503,6 @@ public class NhanVienDialog extends JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMaNVActionPerformed
 
-    private void btnDongActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnDongActionPerformed
-        // TODO add your handling code here:
-        dispose();
-    }//GEN-LAST:event_btnDongActionPerformed
-
     public void setNhanVienData(NhanVienDTO nv) {
         txtMaNV.setText(nv.getMaNV());
         txtHoNV.setText(nv.getHo());
@@ -503,8 +517,7 @@ public class NhanVienDialog extends JDialog {
         txtDiaChi.setText(nv.getDiaChi());
     }
 
-
-    private JButton btnDong;
+    private JButton btnHuy;
     private JButton btnLuu;
     private JDateChooser jDateChooser1;
     private JLabel jLabel1;

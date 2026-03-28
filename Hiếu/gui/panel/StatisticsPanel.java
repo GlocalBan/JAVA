@@ -277,7 +277,6 @@ public class _StatisticsPanel extends JPanel {
         return panel;
     }
     private void xuatThongke() {
-
         try {
 
             // 1. Chuẩn bị dữ liệu (Lấy năm đang chọn trên ComboBox)
@@ -289,15 +288,11 @@ public class _StatisticsPanel extends JPanel {
             float totalIncomeYear = 0;
             float totalCostYear=0;
 
-
-
             // 2. Tạo một JTable
 
             String[] columnNames = {"Tháng", "Doanh Thu (VNĐ)", "Chi Phí (VNĐ)", "Lợi Nhuận (VNĐ)"};
 
             javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(columnNames, 0);
-
-
 
             // Đổ dữ liệu 12 tháng vào model
 

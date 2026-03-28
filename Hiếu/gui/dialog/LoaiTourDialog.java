@@ -2,6 +2,7 @@ package org.example.gui.dialog;
 
 import org.example.bus._LoaiTourBUS;
 import org.example.dto._LoaiTourDTO;
+import org.example.gui.panel.UIColors;
 
 import javax.swing.*;
 import java.awt.*;
@@ -101,7 +102,7 @@ public class _LoaiTourDialog extends JDialog{
     }
 
     public void save(){
-        saveBtn = createBtn("Lưu", Color.GREEN);
+        saveBtn = createBtn("Lưu", UIColors.SAVE);
         saveBtn.addActionListener(e -> {
             if(txtMaLoaiTour.getText().trim().isEmpty() || txtTheLoai.getText().trim().isEmpty()){
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin");
@@ -134,7 +135,7 @@ public class _LoaiTourDialog extends JDialog{
     }
 
     public void cancel(){
-        cancelBtn = createBtn("Hủy", Color.RED);
+        cancelBtn = createBtn("Hủy", UIColors.CANCEL);
         cancelBtn.addActionListener(e -> {
             dispose();
         });

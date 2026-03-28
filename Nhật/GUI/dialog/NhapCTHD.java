@@ -12,6 +12,7 @@ import org.example.bus.HoaDonBUS;
 import org.example.bus.KhachHangBUS;
 import org.example.dto.*;
 import org.example.dto.CTietHDDTO;
+import org.example.gui.panel.UIColors;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -112,12 +113,8 @@ public class NhapCTHD extends JDialog {
         });
         jScrollPane1.setViewportView(tblnhapct);
 
-        btnluu.setText("Lưu");
-        btnluu.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnluuActionPerformed(evt);
-            }
-        });
+        // define handle funtion
+        luu();
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -146,40 +143,52 @@ public class NhapCTHD extends JDialog {
         pack();
     }
 
-    private void btnluuActionPerformed(ActionEvent evt) {
-        // TODO add your handling code here:
-        DefaultTableModel model=(DefaultTableModel) tblnhapct.getModel();
+    private JButton createBtn(String text, Color color){
+        JButton btn = new JButton(text);
+        btn.setBackground(color);
+        btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));// Trong jpBtn panel
+        return btn;
+    }
 
-        if(tblnhapct.isEditing()){
-            tblnhapct.getCellEditor().stopCellEditing();
-        }
+    private void luu(){
+        btnluu = createBtn("Lưu", UIColors.SAVE);
+        btnluu.addActionListener(v -> {
+            DefaultTableModel model=(DefaultTableModel) tblnhapct.getModel();
 
-        boolean loi=false;
-        String mahd =model.getValueAt(0, 0).toString().trim();
-
-        bus.capNhatSoluong(soluong,hdbus.timHd(mahd).getMaKHTour());
-        for(int i=0;i<soluong;i++){
-            mahd =model.getValueAt(i, 0).toString().trim();
-            String makh =model.getValueAt(i, 1).toString().trim();
-            float giave= Float.parseFloat(model.getValueAt(i, 2).toString().trim());
-            CTietHDDTO cthd=new CTietHDDTO(mahd,makh,giave);
-            if(!bus.themCTietHd(cthd)){
-                loi=true;
-                break;
+            if(tblnhapct.isEditing()){
+                tblnhapct.getCellEditor().stopCellEditing();
             }
-        }
-        if(!loi){
-            JOptionPane.showMessageDialog(this, "Lưu thành công");
-            this.dispose();
-        }else{
-            JOptionPane.showMessageDialog(this, "Lỗi");
-        }
+
+            boolean loi=false;
+            String mahd =model.getValueAt(0, 0).toString().trim();
+
+            bus.capNhatSoluong(soluong,hdbus.timHd(mahd).getMaKHTour());
+            for(int i=0;i<soluong;i++){
+                mahd =model.getValueAt(i, 0).toString().trim();
+                String makh =model.getValueAt(i, 1).toString().trim();
+                float giave= Float.parseFloat(model.getValueAt(i, 2).toString().trim());
+                CTietHDDTO cthd=new CTietHDDTO(mahd,makh,giave);
+                if(!bus.themCTietHd(cthd)){
+                    loi=true;
+                    break;
+                }
+            }
+            if(!loi){
+                JOptionPane.showMessageDialog(this, "Lưu thành công");
+                this.dispose();
+            }else{
+                JOptionPane.showMessageDialog(this, "Lỗi");
+            }
+        });
     }
 
     private void tblnhapctKeyPressed(KeyEvent evt) {
         // TODO add your handling code here:
     }
 
+    // variables
     private JButton btnluu;
     private JScrollPane jScrollPane1;
     private JTable tblnhapct;

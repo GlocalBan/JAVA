@@ -2,6 +2,7 @@ package org.example.gui.dialog;
 
 import org.example.bus._CTietKHTourBUS;
 import org.example.dto._CTietKHTourDTO;
+import org.example.gui.panel.UIColors;
 
 import javax.swing.*;
 import java.awt.*;
@@ -141,7 +142,7 @@ public class _CTietKHTourDialog extends JDialog {
     }
 
     private void save(){
-        saveBtn = createBtn("Lưu", Color.GREEN);
+        saveBtn = createBtn("Lưu", UIColors.SAVE);
         saveBtn.addActionListener(e -> {
             if(isEmpty(txtMaCTietKHTour, txtNgayThucHien, txtTongChi, txtTienO, txtTienAn, txtTongChi, txtTienDiLai, txtDiemDi, txtDiemDen)){
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin");
@@ -196,7 +197,7 @@ public class _CTietKHTourDialog extends JDialog {
     }
 
     private void cancel(){
-        cancelBtn = createBtn("Hủy", Color.RED);
+        cancelBtn = createBtn("Hủy", UIColors.CANCEL);
         cancelBtn.addActionListener(e -> {
             dispose();
         });

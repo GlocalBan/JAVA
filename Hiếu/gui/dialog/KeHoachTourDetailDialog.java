@@ -2,6 +2,7 @@ package org.example.gui.dialog;
 
 import org.example.bus._CTietKHTourBUS;
 import org.example.dto._CTietKHTourDTO;
+import org.example.gui.panel.UIColors;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -137,7 +138,7 @@ public class _KeHoachTourDetailDialog extends JDialog {
 
     // edit button
     private void edit(){
-        editBtn = createBtn("Chỉnh sửa", Color.ORANGE);
+        editBtn = createBtn("Chỉnh sửa", UIColors.EDIT);
         editBtn.setEnabled(false);
         editBtn.addActionListener(e -> {
             int row = table.getSelectedRow();
@@ -153,7 +154,7 @@ public class _KeHoachTourDetailDialog extends JDialog {
 
     // refresh button
     private void refresh(){
-        refreshBtn = createBtn("Làm mới", Color.BLUE);
+        refreshBtn = createBtn("Làm mới", UIColors.SAVE);
         refreshBtn.addActionListener(e -> {
             loadTable(maKHTour);
         });

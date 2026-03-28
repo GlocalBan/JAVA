@@ -61,7 +61,6 @@ public class HoaDonPanel extends JPanel {
         }
     }
 
-
     private void initComponents() {
         pnlheader = new JPanel();
         lbname = new JLabel();
@@ -213,7 +212,7 @@ public class HoaDonPanel extends JPanel {
     }
 
     private void them(){
-        btnthem = createBtn("Thêm", Color.GREEN);
+        btnthem = createBtn("Thêm", UIColors.ADD);
         btnthem.addActionListener(v -> {
             HoaDonDialog hdd=new org.example.gui.dialog.HoaDonDialog();
             hdd.setModal(true);
@@ -223,7 +222,7 @@ public class HoaDonPanel extends JPanel {
     }
 
     private void xoa(){
-        btnxoa = createBtn("Xóa", Color.RED);
+        btnxoa = createBtn("Xóa", UIColors.DELETE);
         btnxoa.addActionListener(v -> {
             try{
                 int row =tblhoadon.getSelectedRow();
@@ -253,7 +252,7 @@ public class HoaDonPanel extends JPanel {
     }
 
     private void sua(){
-        btnsua = createBtn("Chỉnh sửa", Color.ORANGE);
+        btnsua = createBtn("Chỉnh sửa", UIColors.EDIT);
         btnsua.addActionListener(v -> {
 
             int row =tblhoadon.getSelectedRow();
@@ -275,7 +274,7 @@ public class HoaDonPanel extends JPanel {
     }
 
     private void xemChiTiet(){
-        btnchitiet = createBtn("Xem chi tiết", Color.BLUE);
+        btnchitiet = createBtn("Xem chi tiết", UIColors.VIEW);
         btnchitiet.addActionListener(v -> {
             int row=tblhoadon.getSelectedRow();
             String ma =tblhoadon.getValueAt(row, 0).toString().trim();
@@ -289,14 +288,14 @@ public class HoaDonPanel extends JPanel {
     }
 
     private void lamMoi(){
-        btnreset = createBtn("Làm mới", Color.CYAN);
+        btnreset = createBtn("Làm mới", UIColors.REFRESH);
         btnreset.addActionListener(v -> {
             loadData();
         });
     }
 
     private void xuatExcel(){
-        btnxuat = createBtn("Xuất excel", Color.GREEN);
+        btnxuat = createBtn("Xuất excel", UIColors.EXPORT_EXCEL);
         btnxuat.addActionListener(v -> {
             ExcelHelper.xuatExcel(tblhoadon, this, "Danh sách hóa đơn");
         });

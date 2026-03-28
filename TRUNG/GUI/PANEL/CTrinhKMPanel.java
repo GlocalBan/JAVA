@@ -82,9 +82,7 @@ public class CTrinhKMPanel extends JPanel {
         });
     }
 
-
     @SuppressWarnings("unchecked")
-
     private void initComponents() {
         jPanel1 = new JPanel();
         jLabel1 = new JLabel();
@@ -215,7 +213,7 @@ public class CTrinhKMPanel extends JPanel {
     }
 
     private void them(){
-        btnAdd = createBtn("Thêm", Color.GREEN);
+        btnAdd = createBtn("Thêm", UIColors.ADD);
         btnAdd.addActionListener(v -> {
             CTrinhKMDialog dialog=new CTrinhKMDialog(bus);
             dialog.setModal(true);
@@ -225,7 +223,7 @@ public class CTrinhKMPanel extends JPanel {
     }
 
     private void xoa(){
-        btnDel = createBtn("Xóa", Color.GREEN);
+        btnDel = createBtn("Xóa", UIColors.DELETE);
         btnDel.addActionListener(v -> {
             try{
                 int row = tblKM.getSelectedRow();
@@ -253,7 +251,7 @@ public class CTrinhKMPanel extends JPanel {
     }
 
     private void sua(){
-        btnEdit = createBtn("Chỉnh sửa", Color.GREEN);
+        btnEdit = createBtn("Chỉnh sửa", UIColors.EDIT);
         btnEdit.addActionListener(v -> {
             int row = tblKM.getSelectedRow();
             if (row >= 0) {
@@ -274,19 +272,18 @@ public class CTrinhKMPanel extends JPanel {
     }
 
     private void lamMoi(){
-        btnLoad = createBtn("Làm mới", Color.GREEN);
+        btnLoad = createBtn("Làm mới", UIColors.REFRESH);
         btnLoad.addActionListener(v -> {
             loadData();
         });
     }
 
     private void xuatExcel(){
-        btnXuat = createBtn("Xuất excel", Color.GREEN);
+        btnXuat = createBtn("Xuất excel", UIColors.EXPORT_EXCEL);
         btnXuat.addActionListener(v -> {
             ExcelHelper.xuatExcel(tblKM, this, "Danh sách khuyến mãi");
         });
     }
-
 
     private void tblKMMouseClicked(MouseEvent evt) {
         int row = tblKM.rowAtPoint(evt.getPoint());
@@ -351,20 +348,19 @@ public class CTrinhKMPanel extends JPanel {
     }//GEN-LAST:event_txtSearchActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private JButton btnAdd;
-    private JButton btnDel;
-    private JButton btnEdit;
-    private JButton btnLoad;
-    private JButton btnXuat;
+    private JButton btnAdd, btnDel, btnEdit, btnLoad, btnXuat;
+
     private JComboBox<String> cbbKM;
+
     private Box.Filler filler1;
-    private JLabel jLabel1;
-    private JLabel jLabel2;
-    private JLabel jLabel3;
-    private JPanel jPanel1;
-    private JPanel jPanel2;
-    private JPanel jPanel3;
+
+    private JLabel jLabel1, jLabel2, jLabel3;
+
+    private JPanel jPanel1, jPanel2, jPanel3;
+
     private JScrollPane jScrollPane1;
+
     private JTable tblKM;
+
     private JTextField txtSearch;
 }

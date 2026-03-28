@@ -8,6 +8,7 @@ import org.example.dto.KMHDDTO;
 import org.example.dto.KMTourDTO;
 import org.example.dto._TourDTO;
 import org.example.gui.helper.DateHelper;
+import org.example.gui.panel.UIColors;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -216,7 +217,7 @@ public class CTrinhKMDialog extends JDialog {
     }
 
     private void handleSave(){
-        btnLuu = createBtn("Lưu", Color.GREEN);
+        btnLuu = createBtn("Lưu", UIColors.SAVE);
         btnLuu.addActionListener(v -> {
             try {
                 String ma = txtMaCTKM.getText().trim();
@@ -285,14 +286,14 @@ public class CTrinhKMDialog extends JDialog {
     }
 
     private void handleReset(){
-        btnReset = createBtn("Làm mới", Color.BLUE);
+        btnReset = createBtn("Làm mới", UIColors.REFRESH);
         btnReset.addActionListener(v -> {
             resetForm();
         });
     }
 
     private void handleCancel(){
-        btnHuy = createBtn("Hủy", Color.RED);
+        btnHuy = createBtn("Hủy", UIColors.CANCEL);
         btnHuy.addActionListener(v -> {
             setVisible(false);
             dispose();
@@ -584,7 +585,6 @@ public class CTrinhKMDialog extends JDialog {
     }
 
     public void setSelectedTour(ArrayList<String> dsTour){
-
         for(int i=0;i<tblTour.getRowCount();i++){
 
             String maTour = tblTour.getValueAt(i,1).toString();

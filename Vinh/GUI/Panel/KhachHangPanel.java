@@ -166,7 +166,7 @@ public class KhachHangPanel extends JPanel {
     }
 
     private void them(){
-        btnThem = createBtn("Thêm", Color.GREEN);
+        btnThem = createBtn("Thêm", UIColors.ADD);
         btnThem.addActionListener(v -> {
             KhachHangDialog dialog = new KhachHangDialog(null, true, ds, KhachHangDialog.Mode.ADD, null);
             dialog.setVisible(true);
@@ -175,7 +175,7 @@ public class KhachHangPanel extends JPanel {
         });
     }
     private void sua(){
-        btnSua = createBtn("Sửa", Color.ORANGE);
+        btnSua = createBtn("Sửa", UIColors.EDIT);
         btnSua.setEnabled(false);
         btnSua.addActionListener(v -> {
             int i = jTable1.getSelectedRow();
@@ -191,7 +191,7 @@ public class KhachHangPanel extends JPanel {
         });
     }
     private void xoa(){
-        btnXoa = createBtn("Xóa", Color.RED);
+        btnXoa = createBtn("Xóa", UIColors.DELETE);
         btnSua.setEnabled(false);
         btnXoa.addActionListener(v -> {
             if (!PhanQuyen.laQuanLy()) {
@@ -210,7 +210,7 @@ public class KhachHangPanel extends JPanel {
         });
     }
     private void lamMoi(){
-        btnLamMoi = createBtn("Làm mới", Color.CYAN);
+        btnLamMoi = createBtn("Làm mới", UIColors.REFRESH);
         btnLamMoi.addActionListener(v -> {
             loadKhachHangToTable(ds.layDanhSachKHang());
         });
