@@ -1,6 +1,7 @@
-package DAO;
+package org.example.dao;
 
-import DTO.NhanVien;
+import org.example.dto.NhanVienDTO;
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -13,12 +14,12 @@ import java.util.List;
 public class NhanVienDAO {
     private final TaiKhoanDAO taiKhoanDAO = new TaiKhoanDAO();
 
-    public ArrayList<NhanVien> layDanhSachNV() {
+    public ArrayList<NhanVienDTO> layDanhSachNV() {
 
-        ArrayList<NhanVien> dsNV = new ArrayList<>();
+        ArrayList<NhanVienDTO> dsNV = new ArrayList<>();
         String sql = "SELECT * FROM NhanVien";
 
-        try (Connection conn = KetNoiCSDL.getConnection();
+        try (Connection conn = _MyConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
@@ -33,11 +34,11 @@ public class NhanVienDAO {
         return dsNV;
     }
 
-    public boolean themNhanVien(NhanVien nv) {
+    public boolean themNhanVien(NhanVienDTO nv) {
 
         String sql = "INSERT INTO NhanVien (MaNV, ChucVu, Ho, Ten, DiaChi, SDT, NgaySinh) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection conn = KetNoiCSDL.getConnection();
+        try (Connection conn = _MyConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, nv.getMaNV());
@@ -60,11 +61,11 @@ public class NhanVienDAO {
         }
     }
 
-    public NhanVien timNhanVienTheoMa(String maNV) {
+    public NhanVienDTO timNhanVienTheoMa(String maNV) {
 
         String sql = "SELECT * FROM NhanVien WHERE MaNV = ?";
 
-        try (Connection conn = KetNoiCSDL.getConnection();
+        try (Connection conn = _MyConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, maNV);
@@ -80,57 +81,33 @@ public class NhanVienDAO {
         return null;
     }
 
-    public List<NhanVien> timNhanVienTheoNgaySinh(LocalDate date) {
-    List<NhanVien> list = new ArrayList<>();
+    public List<NhanVienDTO> timNhanVien(String column, String keyword) {
+        List<NhanVienDTO> list = new ArrayList<>();
 
-    String sql = "SELECT * FROM NhanVien WHERE DATE(ngaySinh) = ?";
+        String sql = "SELECT * FROM NhanVien WHERE " + column + " LIKE ?";
 
-    try (Connection con = KetNoiCSDL.getConnection();
-         PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection con = _MyConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
-        ps.setDate(1, java.sql.Date.valueOf(date));
+            ps.setString(1, "%" + keyword + "%");
 
-        ResultSet rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
-        while (rs.next()) {
-            list.add(mapToNhanVien(rs));
+            while (rs.next()) {
+                list.add(mapToNhanVien(rs));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-    } catch (Exception e) {
-        e.printStackTrace();
+        return list;
     }
 
-    return list;
-}
-
-    public List<NhanVien> timNhanVien(String column, String keyword) {
-    List<NhanVien> list = new ArrayList<>();
-
-    String sql = "SELECT * FROM NhanVien WHERE " + column + " LIKE ?";
-
-    try (Connection con = KetNoiCSDL.getConnection();
-         PreparedStatement ps = con.prepareStatement(sql)) {
-
-        ps.setString(1, "%" + keyword + "%");
-
-        ResultSet rs = ps.executeQuery();
-
-        while (rs.next()) {
-            list.add(mapToNhanVien(rs));
-        }
-
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-
-    return list;
-}
-
-    public boolean capNhatNhanVien(NhanVien nv) {
-
+    public boolean capNhatNhanVien(NhanVienDTO nv) {
         String sql = "UPDATE NhanVien SET ChucVu = ?, Ho = ?, Ten = ?, DiaChi = ?, SDT = ?, NgaySinh = ? WHERE MaNV = ?";
 
-        try (Connection conn = KetNoiCSDL.getConnection();
+        try (Connection conn = _MyConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, nv.getChucVu());
@@ -153,7 +130,7 @@ public class NhanVienDAO {
 
         String sql = "DELETE FROM NhanVien WHERE MaNV = ?";
 
-        try (Connection conn = KetNoiCSDL.getConnection();
+        try (Connection conn = _MyConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, maNV);
@@ -165,10 +142,10 @@ public class NhanVienDAO {
         }
     }
 
-    public boolean suaNhanVien(NhanVien nv) {
+    public boolean suaNhanVien(NhanVienDTO nv) {
         String sql = "UPDATE NhanVien SET ChucVu = ?, Ho = ?, Ten = ?, DiaChi = ?, SDT = ?, NgaySinh = ? WHERE MaNV = ?";
 
-        try (Connection conn = KetNoiCSDL.getConnection();
+        try (Connection conn = _MyConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, nv.getChucVu());
@@ -187,8 +164,7 @@ public class NhanVienDAO {
         }
     }
 
-    private NhanVien mapToNhanVien(ResultSet rs) throws SQLException {
-
+    private NhanVienDTO mapToNhanVien(ResultSet rs) throws SQLException {
         String maNV = rs.getString("MaNV");
         String chucVu = rs.getString("ChucVu");
         String ho = rs.getString("Ho");
@@ -197,6 +173,6 @@ public class NhanVienDAO {
         String sdt = rs.getString("SDT");
         LocalDate ngaySinh = rs.getDate("NgaySinh").toLocalDate();
 
-        return new NhanVien(maNV, chucVu, ho, ten, diaChi, sdt, ngaySinh);
+        return new NhanVienDTO(maNV, chucVu, ho, ten, diaChi, sdt, ngaySinh);
     }
 }

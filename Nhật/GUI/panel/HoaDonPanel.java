@@ -1,6 +1,7 @@
 
 package org.example.gui.panel;
 
+import com.toedter.calendar.JDateChooser;
 import org.example.dto.*;
 import org.example.bus.*;
 import org.example.gui.dialog.*;
@@ -10,6 +11,7 @@ import org.example.gui.helper.ExcelHelper;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -34,29 +36,31 @@ public class HoaDonPanel extends JPanel {
         if(ds==null) return;
         for(HoaDonDTO hd: ds){
             model.addRow(new Object[]{
-                    hd.getMaHD(),hd.getMaKHTour(),hd.getMaKHDat(),hd.getMaNV(), DateHelper.toString(hd.getNgay()),hd.getSoLuong(),String.format("%.0f",hd.getTongTien())
+                    hd.getMaHD(),hd.getMaKHTour(),hd.getMaKHDat(),hd.getMaNV(), DateHelper.toString(hd.getNgay()),hd.getSoLuong(), hd.getMaKM(),String.format("%.0f",hd.getTongTien())
             });
         }
     }
-    private void loadData(java.util.Date ngay){
+    private void loadData(Date ngay){
         model.setRowCount(0);
         bus.docDs();
+
         ArrayList<HoaDonDTO> ds =bus.getHDtheongay(ngay);
         if(ds==null) return;
         for(HoaDonDTO hd: ds){
             model.addRow(new Object[]{
-                    hd.getMaHD(),hd.getMaKHTour(),hd.getMaKHDat(),hd.getMaNV(),DateHelper.toString(hd.getNgay()),hd.getSoLuong(),String.format("%.0f",hd.getTongTien())
+                    hd.getMaHD(),hd.getMaKHTour(),hd.getMaKHDat(),hd.getMaNV(),DateHelper.toString(hd.getNgay()),hd.getSoLuong(),hd.getMaKM(),String.format("%.0f",hd.getTongTien())
             });
         }
     }
     private void loadData(String loai,String key){
         model.setRowCount(0);
         bus.docDs();
+
         ArrayList<HoaDonDTO> ds =bus.timNangcao(loai, key);
         if(ds==null) return;
         for(HoaDonDTO hd: ds){
             model.addRow(new Object[]{
-                    hd.getMaHD(),hd.getMaKHTour(),hd.getMaKHDat(),hd.getMaNV(),DateHelper.toString(hd.getNgay()),hd.getSoLuong(),hd.getTongTien()
+                    hd.getMaHD(),hd.getMaKHTour(),hd.getMaKHDat(),hd.getMaNV(),DateHelper.toString(hd.getNgay()),hd.getSoLuong(), hd.getMaKM(),hd.getTongTien()
             });
         }
     }
@@ -134,11 +138,9 @@ public class HoaDonPanel extends JPanel {
         pnlfooter.add(btnthem);
 
         xoa();
-        btnxoa.setEnabled(false);
         pnlfooter.add(btnxoa);
 
         sua();
-        btnsua.setEnabled(false);
         pnlfooter.add(btnsua);
 
         xemChiTiet();
@@ -161,11 +163,11 @@ public class HoaDonPanel extends JPanel {
 
                 },
                 new String [] {
-                        "Mã hóa đơn", "Mã kế hoạch tour", "Mã khách hàng đặt", "Mã nhân viên", "Ngày", "Số lượng", "Tổng tiền"
+                        "Mã hóa đơn", "Mã kế hoạch tour", "Mã khách hàng đặt", "Mã nhân viên", "Ngày", "Số lượng", "Khuyến mãi","Tổng tiền"
                 }
         ) {
             boolean[] canEdit = new boolean [] {
-                    false, false, false, false, false, false, false
+                    false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -188,6 +190,7 @@ public class HoaDonPanel extends JPanel {
             tblhoadon.getColumnModel().getColumn(3).setPreferredWidth(120);
             tblhoadon.getColumnModel().getColumn(4).setPreferredWidth(120);
             tblhoadon.getColumnModel().getColumn(5).setPreferredWidth(120);
+            tblhoadon.getColumnModel().getColumn(6).setPreferredWidth(120);
             tblhoadon.getColumnModel().getColumn(6).setPreferredWidth(120);
         }
 
@@ -214,7 +217,8 @@ public class HoaDonPanel extends JPanel {
     private void them(){
         btnthem = createBtn("Thêm", UIColors.ADD);
         btnthem.addActionListener(v -> {
-            HoaDonDialog hdd=new org.example.gui.dialog.HoaDonDialog();
+            HoaDonDialog hdd=new HoaDonDialog();
+
             hdd.setModal(true);
             hdd.setVisible(true);
             loadData();
@@ -223,6 +227,7 @@ public class HoaDonPanel extends JPanel {
 
     private void xoa(){
         btnxoa = createBtn("Xóa", UIColors.DELETE);
+        btnxoa.setEnabled(false);
         btnxoa.addActionListener(v -> {
             try{
                 int row =tblhoadon.getSelectedRow();
@@ -253,6 +258,7 @@ public class HoaDonPanel extends JPanel {
 
     private void sua(){
         btnsua = createBtn("Chỉnh sửa", UIColors.EDIT);
+        btnsua.setEnabled(false);
         btnsua.addActionListener(v -> {
 
             int row =tblhoadon.getSelectedRow();
@@ -351,21 +357,17 @@ public class HoaDonPanel extends JPanel {
         }
     }
 
-    private JButton btnchitiet;
-    private JButton btnreset;
-    private JButton btnsua;
-    private JButton btnthem;
-    private JButton btnxoa;
-    private JButton btnxuat;
+    private JButton btnchitiet, btnreset, btnsua, btnthem, btnxoa, btnxuat;
+
     private JComboBox<String> cbtim;
+
     private JScrollPane jScrollPane1;
-    private JLabel lbname;
-    private JLabel lbtim;
-    private JPanel pnlfooter;
-    private JPanel pnlheader;
-    private JPanel pnlsearch;
-    private JPanel pnltable;
+
+    private JLabel lbname, lbtim;
+    private JPanel pnlfooter, pnlheader, pnlsearch, pnltable;
+
     private JTable tblhoadon;
-    private com.toedter.calendar.JDateChooser txtday;
+
+    private JDateChooser txtday;
     private JTextField txttim;
 }

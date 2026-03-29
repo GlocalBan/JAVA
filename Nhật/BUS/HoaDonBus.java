@@ -123,18 +123,7 @@ public class HoaDonBUS {
         return ds;
     }
 
-    public LocalDate layngay(String mahd){
-        if(mahd.isEmpty()){
-            return null;
-        }
-        if(ds==null){
-            dao.getDsHoaDon();
-        }
-        return dao.layNgay(mahd);
-    }
-
     public ArrayList<HoaDonDTO> getHDtheongay(Date ngay){
-
         if(ngay==null){
             return ds;
         }

@@ -12,6 +12,7 @@ import java.util.*;
 public class CTrinhKMBUS {
     public ArrayList<CTrinhKMDTO> dsCTrinhKM;
     private CTrinhKMDAO dao;
+
     public CTrinhKMBUS() {
         if (dsCTrinhKM == null) {
             dao = new CTrinhKMDAO();

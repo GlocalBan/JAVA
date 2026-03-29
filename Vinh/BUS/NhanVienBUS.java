@@ -1,38 +1,31 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package BUS;
-import DTO.NhanVien;
+package org.example.bus;
 import java.util.ArrayList;
+import org.example.dao.NhanVienDAO;
+import org.example.dto.NhanVienDTO;
 import java.util.List;
 
-import DAO.NhanVienDAO;
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-/**
- *
- * @author Admin
- */
+
 public class NhanVienBUS {
-    static ArrayList<NhanVien> dsNV;
-    static NhanVienDAO dataNV = new NhanVienDAO();
+    public static ArrayList<NhanVienDTO> dsNV;
+    public static NhanVienDAO dataNV = new NhanVienDAO();
     public NhanVienBUS() {
         if (dsNV == null) {
             dsNV = dataNV.layDanhSachNV();
         }
     }
+
     public void docDSNV() {
         if (dsNV == null) {
-            dsNV = new ArrayList<NhanVien>();
+            dsNV = new ArrayList<NhanVienDTO>();
         }
         dsNV = dataNV.layDanhSachNV();
     }
-    public void them(NhanVien nv) {
+    public void them(NhanVienDTO nv) {
         try{
             if (dsNV == null) {
-                dsNV = new ArrayList<NhanVien>();
+                dsNV = new ArrayList<NhanVienDTO>();
             }
             if (nv == null) {
                 return;
@@ -40,13 +33,13 @@ public class NhanVienBUS {
             if (nv.getMaNV() == null || nv.getMaNV().isEmpty()) {
                 return;
             }
-            for (NhanVien existingNV : dsNV) {
+            for (NhanVienDTO existingNV : dsNV) {
                 if (existingNV.getMaNV().equals(nv.getMaNV())) {
                     return;
                 }
             }
-            boolean success = dataNV.themNhanVien(nv);
-            if (success && dsNV != null) {
+            dataNV.themNhanVien(nv);
+            if (dsNV != null) {
                 dsNV.add(nv);
             }
         } catch (Exception e) {
@@ -64,12 +57,12 @@ public class NhanVienBUS {
             e.printStackTrace();
         }
     }
-    
-    public NhanVien timNhanVienTheoMa(String maNV) {
+
+    public NhanVienDTO timNhanVienTheoMa(String maNV) {
         if (dsNV == null) {
             return null;
         }
-        for (NhanVien nv : dsNV) {
+        for (NhanVienDTO nv : dsNV) {
             if (nv.getMaNV().equals(maNV)) {
                 dataNV.timNhanVienTheoMa(maNV);
                 return nv;
@@ -78,24 +71,12 @@ public class NhanVienBUS {
         return null;
     }
 
-    public List<NhanVien> timNhanVienTheoNgaySinh(LocalDate date) {
-        return dataNV.timNhanVienTheoNgaySinh(date);
+
+    public List<NhanVienDTO> timNhanVien(String type, String keyword) {
+        return dataNV.timNhanVien(type, keyword);
     }
 
-    public List<NhanVien> timNhanVien(String type, String keyword) {
-    if (type.equals("Ngày sinh")) {
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate date = LocalDate.parse(keyword, formatter);
-            return dataNV.timNhanVienTheoNgaySinh(date);
-        } catch (Exception e) {
-            return new ArrayList<>();
-        }
-    }
-    return dataNV.timNhanVien(type, keyword);
-}
-    
-    public boolean suaNhanVien(NhanVien nv) {
+    public boolean suaNhanVien(NhanVienDTO nv) {
         try {
             if (dsNV == null) {
                 return false;

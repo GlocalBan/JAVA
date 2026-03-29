@@ -253,34 +253,6 @@ public class NhanVienPanel extends JPanel {
         }
     }
 
-    private void searchNhanVien() {
-        String keyword = txtSearch.getText().trim();
-        String selected = jComboBox1.getSelectedItem().toString();
-
-        List<NhanVienDTO> list;
-
-        if (keyword.isEmpty()) {
-            loadNhanVienToTable(ds.layDanhSachNV());
-            return;
-        }
-
-        if (selected.equals("Ngày sinh")) {
-            try {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                LocalDate date = LocalDate.parse(keyword, formatter);
-
-                list = nvBUS.timNhanVienTheoNgaySinh(date);
-            } catch (Exception e) {
-                list = new ArrayList<>();
-            }
-        } else {
-            String column = getColumnName(selected);
-            list = nvBUS.timNhanVien(column, keyword);
-        }
-
-        loadNhanVienToTable(list);
-    }
-
     private String getColumnName(String selected) {
         switch (selected) {
             case "Mã nhân viên":

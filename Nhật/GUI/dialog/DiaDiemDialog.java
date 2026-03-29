@@ -191,6 +191,7 @@ public class DiaDiemDialog extends JDialog {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(this, "Lỗi");
             }
+            dispose();
         });
     }
 

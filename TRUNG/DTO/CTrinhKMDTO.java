@@ -1,16 +1,16 @@
-package DTO;
+package org.example.dto;
+
 import java.time.LocalDate;
-import java.util.*;
 
 public class CTrinhKMDTO {
-    public static Scanner sc = new Scanner(System.in);
     private String maKM;
     private String tenKM;
     private LocalDate ngayBD;
     private LocalDate ngayKT;
-    private boolean HinhThucKM;
+    private boolean hinhThucKM;
     private float ChietKhau;
     private String GhiChu;
+
     public CTrinhKMDTO() {
     }
 
@@ -19,7 +19,7 @@ public class CTrinhKMDTO {
         this.tenKM = tenKM;
         this.ngayBD = ngayBD;
         this.ngayKT = ngayKT;
-        this.HinhThucKM = hinhThucKM;
+        this.hinhThucKM = hinhThucKM;
         this.ChietKhau = chietKhau;
         this.GhiChu = ghiChu;
     }
@@ -57,11 +57,11 @@ public class CTrinhKMDTO {
     }
 
     public boolean getHinhThucKM() {
-        return HinhThucKM;
+        return hinhThucKM;
     }
 
     public void setHinhThucKM(boolean hinhThucKM) {
-        HinhThucKM = hinhThucKM;
+        hinhThucKM = hinhThucKM;
     }
 
     public String getGhiChu() {
@@ -80,4 +80,8 @@ public class CTrinhKMDTO {
         ChietKhau = chietKhau;
     }
 
+    @Override
+    public String toString(){
+        return maKM + " - Giảm" + ChietKhau + "%";
+    }
 }

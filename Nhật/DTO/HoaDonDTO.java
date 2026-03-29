@@ -1,34 +1,26 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
 package org.example.dto;
+
 import java.time.LocalDate;
 import java.util.*;
-/**
- *
- * @author Nhat
- */
 public class HoaDonDTO {
-    public static Scanner sc = new Scanner(System.in);
-    /**
-     * @param args the command line arguments
-     */
+
     private String MaHD;
     private String MaKHTour;
     private String MaKHDat;
     private String MaNV;
     private LocalDate ngay;
-    private int soluong;
+    private int soLuong;
+    private String maKM;
     private float TongTien;
-    
-    public HoaDonDTO(String MaHD, String MaKHTour, String MaKHDat, String MaNV,LocalDate ngay,int soluong, float TongTien) {
+
+    public HoaDonDTO(String MaHD, String MaKHTour, String MaKHDat, String MaNV, LocalDate ngay, int soLuong, String maKM, float TongTien) {
         this.MaHD = MaHD;
         this.MaKHTour = MaKHTour;
         this.MaKHDat = MaKHDat;
         this.MaNV = MaNV;
         this.ngay=ngay;
-        this.soluong=soluong;
+        this.soLuong=soLuong;
+        this.maKM = maKM;
         this.TongTien = TongTien;
     }
 
@@ -40,20 +32,12 @@ public class HoaDonDTO {
         return ngay;
     }
 
-    public static void setSc(Scanner sc) {
-        HoaDonDTO.sc = sc;
+    public void setSoLuong(int soLuong) {
+        this.soLuong = soLuong;
     }
 
-    public void setSoluong(int soluong) {
-        this.soluong = soluong;
-    }
-
-    public static Scanner getSc() {
-        return sc;
-    }
-
-    public int getSoluong() {
-        return soluong;
+    public int getSoLuong() {
+        return soLuong;
     }
 
     public String getMaHD() {
@@ -95,9 +79,12 @@ public class HoaDonDTO {
     public void setTongTien(float TongTien) {
         this.TongTien = TongTien;
     }
-    
-    public void TinhTien(){
-        
+
+    public void setMaKM(String maKM) {
+        this.maKM = maKM;
     }
-   
+
+    public String getMaKM() {
+        return maKM;
+    }
 }

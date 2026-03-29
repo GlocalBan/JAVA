@@ -6,7 +6,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.example.bus.KhachHangBUS;
@@ -225,32 +224,6 @@ public class KhachHangPanel extends JPanel {
             btnXoa.setEnabled(true);
         }
         btnSua.setEnabled(true);
-    }
-
-    private void searchKhachHang() {
-        String keyword = txtSearch.getText().trim();
-        String selected = jComboBox1.getSelectedItem().toString();
-
-        List<KhachHangDTO> list;
-
-        if (keyword.isEmpty()) {
-            loadKhachHangToTable(ds.layDanhSachKHang());
-            return;
-        }
-
-        if (selected.equals("Ngày sinh")) {
-            try {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                LocalDate date = LocalDate.parse(keyword, formatter);
-                list = khachHangBUS.timKhachHangTheoNgaySinh(date);
-            } catch (Exception e) {
-                list = new ArrayList<>();
-            }
-        } else {
-            String column = getColumnName(selected);
-            list = khachHangBUS.timKhachHang(column, keyword);
-        }
-        loadKhachHangToTable(list);
     }
 
     private String getColumnName(String selected) {

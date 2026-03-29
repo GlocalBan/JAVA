@@ -5,7 +5,6 @@ import org.example.dto.KhachHangDTO;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDate;
 
 public class KhachHangBUS {
     public static ArrayList<KhachHangDTO> dsKH;
@@ -53,7 +52,6 @@ public class KhachHangBUS {
         }
     }
     public KhachHangDTO timKiemKH(String maKH){
-
         for (KhachHangDTO kh : dsKH) {
             if (kh.getMaKH().equals(maKH)) {
                 return dataKH.timKhachHangTheoMa(maKH);
@@ -62,22 +60,8 @@ public class KhachHangBUS {
         return null;
     }
 
-    public List<KhachHangDTO> timKhachHangTheoNgaySinh(LocalDate date){
-        return dataKH.timKhachHangTheoNgaySinh(date);
-    }
-
     public List<KhachHangDTO> timKhachHang(String column, String keyword) {
-        if (column.equals("Ngày sinh")){
-            try {
-                LocalDate date = LocalDate.parse(keyword);
-                return dataKH.timKhachHangTheoNgaySinh(date);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return new ArrayList<>();
-            }
-        } else {
-            return dataKH.timKhachHang(column, keyword);
-        }
+        return dataKH.timKhachHang(column, keyword);
     }
 
     public boolean suaKhachHang(KhachHangDTO khang) {

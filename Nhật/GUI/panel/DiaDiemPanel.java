@@ -149,13 +149,21 @@ public class DiaDiemPanel extends JPanel {
                 }
         ));
         tbldd.setPreferredSize(null);
+        tbldd.addMouseListener(new MouseAdapter() { // when click row of table
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (tbldd.getSelectedRow() != -1) {
+                    btnxoa.setEnabled(true);
+                    btnsua.setEnabled(true);
+                }
+            }
+        });
         jScrollPane2.setViewportView(tbldd);
 
         pnltable.add(jScrollPane2, BorderLayout.CENTER);
 
         add(pnltable, BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
-
 
     private JButton createBtn(String text, Color color){
         JButton btn = new JButton(text);
@@ -179,7 +187,7 @@ public class DiaDiemPanel extends JPanel {
 
     private void sua(){
         btnsua = createBtn("Sửa", UIColors.EDIT);
-        btnxoa.setEnabled(false);
+        btnsua.setEnabled(false);
         btnsua.addActionListener(v -> {
             int row=tbldd.getSelectedRow();
             if(row!=-1){
@@ -200,25 +208,24 @@ public class DiaDiemPanel extends JPanel {
         btnxoa.setEnabled(false);
         btnxoa.addActionListener(v -> {
             int row=tbldd.getSelectedRow();
-
-            if(row==-1){
-                JOptionPane.showMessageDialog(this, "Vui lòng chọn địa điểm cần xóa");
-                return;
-            }
-            String maDiaDiem =model.getValueAt(row, 0).toString();
-            DiaDiemDTO dd=bus.timDiaDiemTheoMa(maDiaDiem); if(dd==null){
-                JOptionPane.showMessageDialog(this, "Lỗi không tìm thấy");
-                return;
-            }
-            if(JOptionPane.showConfirmDialog(this, "Xóa địa điểm?","Xác nhận",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
-                if(bus.xoaDiaDiem(dd)){
-                    JOptionPane.showMessageDialog(this, "Xóa thành công");
-                    loadData();
-                }else{
-                    JOptionPane.showMessageDialog(this, "Xóa thất bại");
+            if(row != -1){
+                String maDiaDiem =model.getValueAt(row, 0).toString();
+                DiaDiemDTO dd=bus.timDiaDiemTheoMa(maDiaDiem); if(dd==null){
+                    JOptionPane.showMessageDialog(this, "Lỗi không tìm thấy");
+                    return;
                 }
+                if(JOptionPane.showConfirmDialog(this, "Xóa địa điểm?","Xác nhận",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
+                    if(bus.xoaDiaDiem(dd)){
+                        JOptionPane.showMessageDialog(this, "Xóa thành công");
+                        loadData();
+                    }else{
+                        JOptionPane.showMessageDialog(this, "Xóa thất bại");
+                    }
+                }
+                loadData();
+            }else{ // row == -1
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn địa điểm cần xóa");
             }
-            loadData();
         });
     }
 

@@ -1,9 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package DAO;
-import DTO.KhachHang;
+package org.example.dao;
+
+import org.example.dto.KhachHangDTO;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -12,19 +9,16 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-/**
- *
- * @author Admin
- */
+
 public class KhachHangDAO {
-    public ArrayList<KhachHang> layDanhSachKHang() {
-        ArrayList<KhachHang> dsKH = new ArrayList<>();
+    public ArrayList<KhachHangDTO> layDanhSachKHang() {
+        ArrayList<KhachHangDTO> dsKH = new ArrayList<>();
         String sql = "SELECT * FROM KhachHang";
-        try (Connection conn = KetNoiCSDL.getConnection();
+        try (Connection conn = _MyConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
             while (rs.next()) {
-                KhachHang khang = mapToKhachHang(rs);
+                KhachHangDTO khang = mapToKhachHang(rs);
                 dsKH.add(khang);
             }
         } catch (SQLException e) {
@@ -33,9 +27,9 @@ public class KhachHangDAO {
         return dsKH;
     }
 
-    public boolean themKhachHang(KhachHang khang) {
+    public boolean themKhachHang(KhachHangDTO khang) {
         String sql = "INSERT INTO KhachHang (MaKH, Ho, Ten, DiaChi, SDT, NgaySinh) VALUES (?, ?, ?, ?, ?, ?)";
-        try (Connection conn = KetNoiCSDL.getConnection();
+        try (Connection conn = _MyConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, khang.getMaKH());
             pstmt.setString(2, khang.getHo());
@@ -50,13 +44,14 @@ public class KhachHangDAO {
         }
     }
 
-    public KhachHang timKhachHangTheoMa(String maKH) {
+    public KhachHangDTO timKhachHangTheoMa(String maKH) {
         String sql = "SELECT * FROM KhachHang WHERE MaKH = ?";
-        try (Connection conn = KetNoiCSDL.getConnection();
+        try (Connection conn = _MyConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, maKH);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
+//                    System.out.println("chay toi dao");
                     return mapToKhachHang(rs);
                 }
             }
@@ -65,28 +60,11 @@ public class KhachHangDAO {
         }
         return null;
     }
-    
-    public List<KhachHang> timKhachHangTheoNgaySinh(LocalDate date) {
-        List<KhachHang> list = new ArrayList<>();
-        String sql = "SELECT * FROM KhachHang WHERE NgaySinh = ?";
-        try (Connection conn = KetNoiCSDL.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setDate(1, Date.valueOf(date));
-            try (ResultSet rs = pstmt.executeQuery()) {
-                while (rs.next()) {
-                    list.add(mapToKhachHang(rs));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
 
-    public List<KhachHang> timKhachHang(String column, String keyword) {
-        List<KhachHang> list = new ArrayList<>();
+    public List<KhachHangDTO> timKhachHang(String column, String keyword) {
+        List<KhachHangDTO> list = new ArrayList<>();
         String sql = "SELECT * FROM KhachHang WHERE " + column + " LIKE ?";
-        try (Connection conn = KetNoiCSDL.getConnection();
+        try (Connection conn = _MyConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, "%" + keyword + "%");
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -102,7 +80,7 @@ public class KhachHangDAO {
 
     public boolean xoaKhachHang(String maKH) {
         String sql = "DELETE FROM KhachHang WHERE MaKH = ?";
-        try (Connection conn = KetNoiCSDL.getConnection();
+        try (Connection conn = _MyConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, maKH);
             return pstmt.executeUpdate() > 0;
@@ -112,9 +90,9 @@ public class KhachHangDAO {
         }
     }
 
-    public boolean suaKhachHang(KhachHang khang) {
+    public boolean suaKhachHang(KhachHangDTO khang) {
         String sql = "UPDATE KhachHang SET Ho = ?, Ten = ?, DiaChi = ?, SDT = ?, NgaySinh = ? WHERE MaKH = ?";
-        try (Connection conn = KetNoiCSDL.getConnection();
+        try (Connection conn = _MyConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, khang.getHo());
             pstmt.setString(2, khang.getTen());
@@ -129,19 +107,20 @@ public class KhachHangDAO {
         }
     }
 
-    private KhachHang mapToKhachHang(ResultSet rs) throws SQLException {
+    private KhachHangDTO mapToKhachHang(ResultSet rs) throws SQLException {
         String maKH = rs.getString("MaKH");
         String ho = rs.getString("Ho");
         String ten = rs.getString("Ten");
         String diaChi = rs.getString("DiaChi");
         String sdt = rs.getString("SDT");
         LocalDate ngaySinh = rs.getDate("NgaySinh").toLocalDate();
-        return new KhachHang(maKH, ho, ten, diaChi, sdt, ngaySinh);
+
+        return new KhachHangDTO(maKH, ho, ten, diaChi, sdt, ngaySinh);
     }
 
-    public boolean capNhatKhachHang(KhachHang khang) {
+    public boolean capNhatKhachHang(KhachHangDTO khang) {
         String sql = "UPDATE KhachHang SET Ho = ?, Ten = ?, DiaChi = ?, SDT = ?, NgaySinh = ? WHERE MaKH = ?";
-        try (Connection conn = KetNoiCSDL.getConnection();
+        try (Connection conn = _MyConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, khang.getHo());
             pstmt.setString(2, khang.getTen());
