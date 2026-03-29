@@ -1,4 +1,4 @@
-package org.example.dto;
+package DTO;
 
 import java.time.LocalDate;
 
@@ -61,7 +61,7 @@ public class CTrinhKMDTO {
     }
 
     public void setHinhThucKM(boolean hinhThucKM) {
-        hinhThucKM = hinhThucKM;
+        this.hinhThucKM = hinhThucKM;
     }
 
     public String getGhiChu() {
