@@ -40,6 +40,7 @@ public class _LoaiTourDialog extends JDialog{
         txtMaLoaiTour.setText(loaiTourDTO.getMaLoaiTour());
         txtMaLoaiTour.setEnabled(false);
         txtTheLoai.setText(loaiTourDTO.getTheLoai());
+        txtMoTa.setText(loaiTourDTO.getMoTa());
     }
 
     public void init(){
@@ -98,6 +99,7 @@ public class _LoaiTourDialog extends JDialog{
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));// Trong jpBtn panel
+
         return btn;
     }
 
