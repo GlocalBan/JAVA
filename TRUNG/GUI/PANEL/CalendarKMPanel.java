@@ -87,22 +87,75 @@ public class CalendarKMPanel extends JPanel {
         });
 
         btnNextKM.addActionListener(e -> {
+
             if(filteredList.isEmpty()) return;
 
-            currentIndex++;
-            if(currentIndex >= filteredList.size()){
-                currentIndex = 0;
+            // Luôn sort trước
+            filteredList.sort((a, b) -> a.getNgayBD().compareTo(b.getNgayBD()));
+
+            // Nếu chưa chọn gì -> tìm theo Today
+            if(currentIndex == -1){
+                LocalDate today = LocalDate.now();
+                CTrinhKMDTO nextKM = null;
+
+                for(CTrinhKMDTO km : filteredList){
+                    if(km.getNgayBD().isAfter(today)){
+                        if(nextKM == null || km.getNgayBD().isBefore(nextKM.getNgayBD())){
+                            nextKM = km;
+                        }
+                    }
+                }
+
+                // nếu không có -> quay về đầu
+                if(nextKM == null){
+                    currentIndex = 0;
+                } else {
+                    currentIndex = filteredList.indexOf(nextKM);
+                }
+            } 
+            // Nếu đã có vị trí -> đi tiếp
+            else {
+                currentIndex++;
+                if(currentIndex >= filteredList.size()){
+                    currentIndex = 0; // vòng lại
+                }
             }
 
             jumpToKM(filteredList.get(currentIndex));
         });
 
         btnPrevKM.addActionListener(e -> {
+
             if(filteredList.isEmpty()) return;
 
-            currentIndex--;
-            if(currentIndex < 0){
-                currentIndex = filteredList.size() - 1;
+            // Sort
+            filteredList.sort((a, b) -> a.getNgayBD().compareTo(b.getNgayBD()));
+
+            // Nếu chưa chọn → theo Today
+            if(currentIndex == -1){
+                LocalDate today = LocalDate.now();
+                CTrinhKMDTO prevKM = null;
+
+                for(CTrinhKMDTO km : filteredList){
+                    if(km.getNgayKT().isBefore(today)){
+                        if(prevKM == null || km.getNgayKT().isAfter(prevKM.getNgayKT())){
+                            prevKM = km;
+                        }
+                    }
+                }
+
+                if(prevKM == null){
+                    currentIndex = filteredList.size() - 1;
+                } else {
+                    currentIndex = filteredList.indexOf(prevKM);
+                }
+            } 
+            // Nếu đã có vị trí → đi lùi
+            else {
+                currentIndex--;
+                if(currentIndex < 0){
+                    currentIndex = filteredList.size() - 1;
+                }
             }
 
             jumpToKM(filteredList.get(currentIndex));
