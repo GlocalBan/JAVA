@@ -48,7 +48,6 @@ public class _MainFrame extends JFrame {
                     {"Tour", "Tour"},
                     {"Loại Tour", "LoaiTour"},
                     {"Kế Hoạch Tour", "KeHoachTour"},
-                    {"Khách hàng - Kế hoạch Tour", "KHang_KHTour"},
                     {"Hóa đơn", "HoaDon"},
                     {"Địa điểm", "DiaDiem"},
                     {"Nhân viên", "NhanVien"},
@@ -62,7 +61,6 @@ public class _MainFrame extends JFrame {
                     {"Tour", "Tour"},
                     {"Loại Tour", "LoaiTour"},
                     {"Kế Hoạch Tour", "KeHoachTour"},
-                    {"Khách hàng - Kế hoạch Tour", "KHang_KHTour"},
                     {"Hóa đơn", "HoaDon"},
                     {"Địa điểm", "DiaDiem"},
                     {"Khách hàng", "KhachHang"},
@@ -94,7 +92,6 @@ public class _MainFrame extends JFrame {
         contentArea.add(new _TourPanel(), "Tour");
         contentArea.add(new _LoaiTourPanel(), "LoaiTour");
         contentArea.add(new _KeHoachTourPanel(), "KeHoachTour");
-        contentArea.add(new KHang_KHTourPanel(), "KHang_KHTour");
         contentArea.add(new HoaDonPanel(), "HoaDon");
         contentArea.add(new DiaDiemPanel(), "DiaDiem");
         contentArea.add(new NhanVienPanel(), "NhanVien");
