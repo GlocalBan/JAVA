@@ -75,80 +75,80 @@ public class CTietHDDAO {
         return null;
     }
 
-    public boolean themCtietHD(CTietHDDTO ct) {
-
-        String sqlInsertCT = "INSERT INTO cthoadon(mahd, makhang, giave) VALUES(?,?,?)";
-
-
+    public boolean themCtietHD(CTietHDDTO ct){
+        String sqlcheck = "Select * from cthoadon where mahd=? and makhang=?";
+        String sqlUpdateCT = "Update cthoadon set giave = giave + ? where mahd=? and makhang=?";
+        String sqlinsert = "Insert into cthoadon(mahd,makhang,giave) Values(?,?,?)";
         String sqlUpdateHD = "UPDATE hoadon SET soluong = soluong + 1, tongtien = tongtien + ? WHERE mahd = ?";
-
-        String sqlUpdateKHT = "UPDATE kehoachtour SET tongthu = tongthu + ? " +
-                "WHERE makhtour = (SELECT makhtour FROM hoadon WHERE mahd = ?)";
 
         Connection conn = null;
         try {
             conn = _MyConnection.getConnection();
             conn.setAutoCommit(false);
 
+            boolean daTonTai = false;
 
-            try (PreparedStatement psCT = conn.prepareStatement(sqlInsertCT)) {
-                psCT.setString(1, ct.getMaHD());
-                psCT.setString(2, ct.getMaKHDi());
-                psCT.setFloat(3, ct.getGiaVe());
-                if (psCT.executeUpdate() <= 0) {
-                    conn.rollback();
-                    return false;
+            try (PreparedStatement ps = conn.prepareStatement(sqlcheck)) {
+                ps.setString(1, ct.getMaHD());
+                ps.setString(2, ct.getMaKHDi());
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    daTonTai = true;
                 }
             }
 
-
-            try (PreparedStatement psHD = conn.prepareStatement(sqlUpdateHD)) {
-                psHD.setFloat(1, ct.getGiaVe());
-                psHD.setString(2, ct.getMaHD());
-                if (psHD.executeUpdate() <= 0) {
-                    conn.rollback();
-                    return false;
+            if (daTonTai) {
+                try (PreparedStatement ps = conn.prepareStatement(sqlUpdateCT)) {
+                    ps.setFloat(1, ct.getGiaVe());
+                    ps.setString(2, ct.getMaHD());
+                    ps.setString(3, ct.getMaKHDi());
+                    if (ps.executeUpdate() <= 0) {
+                        conn.rollback();
+                        return false;
+                    }
+                }
+            } else {
+                try (PreparedStatement ps = conn.prepareStatement(sqlinsert)) {
+                    ps.setString(1, ct.getMaHD());
+                    ps.setString(2, ct.getMaKHDi());
+                    ps.setFloat(3, ct.getGiaVe());
+                    if (ps.executeUpdate() <= 0) {
+                        conn.rollback();
+                        return false;
+                    }
                 }
             }
 
+            try (PreparedStatement ps = conn.prepareStatement(sqlUpdateHD)) {
+                ps.setFloat(1, ct.getGiaVe());
+                ps.setString(2, ct.getMaHD());
 
-            try (PreparedStatement psKHT = conn.prepareStatement(sqlUpdateKHT)) {
-                psKHT.setFloat(1, ct.getGiaVe());
-                psKHT.setString(2, ct.getMaHD());
-                if (psKHT.executeUpdate() <= 0) {
+                if (ps.executeUpdate() > 0) {
+                    conn.commit();
+                    return true;
+                } else {
                     conn.rollback();
-                    return false;
                 }
             }
-
-            conn.commit();
-            return true;
 
         } catch (SQLException e) {
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-            }
+            if (conn != null) try { conn.rollback(); } catch (SQLException ex) {}
             e.printStackTrace();
         } finally {
             if (conn != null) {
                 try {
                     conn.setAutoCommit(true);
                     conn.close();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
+                } catch (SQLException ex) {}
             }
         }
         return false;
     }
     public boolean xoaCtietHd(String mahd, String makh) {
-        String sqlXoa = "DELETE FROM cthoadon WHERE mahd=? AND makhang=? LIMIT 1";
+        float giaVeGoc = laygia(mahd);
 
-        float giaVe = laygia(mahd);
+        float giaHienTai = 0;
+        String sqlCheck = "SELECT giave FROM cthoadon WHERE mahd=? AND makhang=?";
 
         String sqlUpdateHD = "UPDATE hoadon SET soluong = soluong - 1, tongtien = tongtien - ? WHERE mahd = ?";
 
@@ -163,22 +163,42 @@ public class CTietHDDAO {
             conn = _MyConnection.getConnection();
             conn.setAutoCommit(false);
 
-            try (PreparedStatement ps = conn.prepareStatement(sqlXoa)) {
+            try (PreparedStatement ps = conn.prepareStatement(sqlCheck)) {
                 ps.setString(1, mahd);
                 ps.setString(2, makh);
-                if(ps.executeUpdate() == 0) { conn.rollback(); return false; }
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    giaHienTai = rs.getFloat("giave");
+                } else {
+                    return false;
+                }
             }
 
+            if (giaHienTai > giaVeGoc) {
+                String sqlTruTienCT = "UPDATE cthoadon SET giave = giave - ? WHERE mahd=? AND makhang=?";
+                try (PreparedStatement ps = conn.prepareStatement(sqlTruTienCT)) {
+                    ps.setFloat(1, giaVeGoc);
+                    ps.setString(2, mahd);
+                    ps.setString(3, makh);
+                    ps.executeUpdate();
+                }
+            } else {
+                String sqlDelete = "DELETE FROM cthoadon WHERE mahd=? AND makhang=?";
+                try (PreparedStatement ps = conn.prepareStatement(sqlDelete)) {
+                    ps.setString(1, mahd);
+                    ps.setString(2, makh);
+                    ps.executeUpdate();
+                }
+            }
 
             try (PreparedStatement ps = conn.prepareStatement(sqlUpdateHD)) {
-                ps.setFloat(1, giaVe);
+                ps.setFloat(1, giaVeGoc);
                 ps.setString(2, mahd);
                 ps.executeUpdate();
             }
 
-
             try (PreparedStatement ps = conn.prepareStatement(sqlUpdateKHT)) {
-                ps.setFloat(1, giaVe);
+                ps.setFloat(1, giaVeGoc);
                 ps.setString(2, mahd);
                 ps.executeUpdate();
             }
@@ -190,6 +210,7 @@ public class CTietHDDAO {
 
             conn.commit();
             return true;
+
         } catch (SQLException e) {
             if (conn != null) try { conn.rollback(); } catch (SQLException ex) {}
             e.printStackTrace();
