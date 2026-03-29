@@ -12,6 +12,7 @@ public class CTHoaDonBUS {
     public CTHoaDonBUS(){
         if(ds==null){
             dao=new CTietHDDAO();
+            khtdao=new _KeHoachTourDAO();
             ds=dao.getDs();
         }
     }
