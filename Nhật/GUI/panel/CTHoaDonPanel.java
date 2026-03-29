@@ -237,7 +237,7 @@ public class CTHoaDonPanel extends JPanel {
     }
 
     private void xoa(){
-        btnxoa = createBtn("", UIColors.DELETE);
+        btnxoa = createBtn("Xóa", UIColors.DELETE);
         btnxoa.addActionListener(v -> {
             int row=tblcthd.getSelectedRow();
 
