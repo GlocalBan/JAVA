@@ -1,14 +1,14 @@
-package org.example.gui.dialog;
+package GUI.dialog;
 
 import com.toedter.calendar.JDateChooser;
-import org.example.bus.CTrinhKMBUS;
-import org.example.dao._TourDAO;
-import org.example.dto.CTrinhKMDTO;
-import org.example.dto.KMHDDTO;
-import org.example.dto.KMTourDTO;
-import org.example.dto._TourDTO;
-import org.example.gui.helper.DateHelper;
-import org.example.gui.panel.UIColors;
+import BUS.CTrinhKMBUS;
+import DAO._TourDAO;
+import DTO.CTrinhKMDTO;
+import DTO.KMHDDTO;
+import DTO.KMTourDTO;
+import DTO._TourDTO;
+import Helper.DateHelper;
+import GUI.panel.UIColors;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -305,7 +305,6 @@ public class CTrinhKMDialog extends JDialog {
         txtTenctkm.setText("");
         txtNgayBD.setDate(new Date());
         txtNgayKT.setDate(new Date());
-        rdoHd.setSelected(true);
         txtChietkhau.setText("");
         txtGhichu.setText("");
     }
