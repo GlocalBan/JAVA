@@ -77,8 +77,13 @@ public class CTietHDDAO {
 
     public boolean themCtietHD(CTietHDDTO ct) {
 
-        String sqlinsert = "Insert into cthoadon(mahd,makhang,giave) Values(?,?,?)";
+        String sqlInsertCT = "INSERT INTO cthoadon(mahd, makhang, giave) VALUES(?,?,?)";
+
+
         String sqlUpdateHD = "UPDATE hoadon SET soluong = soluong + 1, tongtien = tongtien + ? WHERE mahd = ?";
+
+        String sqlUpdateKHT = "UPDATE kehoachtour SET tongthu = tongthu + ? " +
+                "WHERE makhtour = (SELECT makhtour FROM hoadon WHERE mahd = ?)";
 
         Connection conn = null;
         try {
@@ -86,73 +91,101 @@ public class CTietHDDAO {
             conn.setAutoCommit(false);
 
 
-            try (PreparedStatement ps = conn.prepareStatement(sqlinsert)) {
-                ps.setString(1, ct.getMaHD());
-                ps.setString(2, ct.getMaKHDi());
-                ps.setFloat(3, ct.getGiaVe());
-                if (ps.executeUpdate() <= 0) {
+            try (PreparedStatement psCT = conn.prepareStatement(sqlInsertCT)) {
+                psCT.setString(1, ct.getMaHD());
+                psCT.setString(2, ct.getMaKHDi());
+                psCT.setFloat(3, ct.getGiaVe());
+                if (psCT.executeUpdate() <= 0) {
                     conn.rollback();
                     return false;
                 }
             }
 
 
-            try (PreparedStatement ps = conn.prepareStatement(sqlUpdateHD)) {
-                ps.setFloat(1, ct.getGiaVe());
-                ps.setString(2, ct.getMaHD());
-                if (ps.executeUpdate() > 0) {
-                    conn.commit();
-                    return true;
-                } else {
+            try (PreparedStatement psHD = conn.prepareStatement(sqlUpdateHD)) {
+                psHD.setFloat(1, ct.getGiaVe());
+                psHD.setString(2, ct.getMaHD());
+                if (psHD.executeUpdate() <= 0) {
                     conn.rollback();
+                    return false;
                 }
             }
+
+
+            try (PreparedStatement psKHT = conn.prepareStatement(sqlUpdateKHT)) {
+                psKHT.setFloat(1, ct.getGiaVe());
+                psKHT.setString(2, ct.getMaHD());
+                if (psKHT.executeUpdate() <= 0) {
+                    conn.rollback();
+                    return false;
+                }
+            }
+
+            conn.commit();
+            return true;
+
         } catch (SQLException e) {
-            if (conn != null) try { conn.rollback(); } catch (SQLException ex) {}
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
             e.printStackTrace();
         } finally {
             if (conn != null) {
-                try { conn.setAutoCommit(true); conn.close(); } catch (SQLException ex) {}
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
         }
         return false;
     }
-
     public boolean xoaCtietHd(String mahd, String makh) {
-
         String sqlXoa = "DELETE FROM cthoadon WHERE mahd=? AND makhang=? LIMIT 1";
 
+        float giaVe = laygia(mahd);
 
-        String sqlUpdateHD = "UPDATE hoadon SET soluong = soluong - 1, "
-                + "tongtien = tongtien - (SELECT t.dongia FROM kehoachtour k JOIN tour t ON k.matour = t.matour WHERE k.makhtour = (SELECT makhtour FROM hoadon WHERE mahd=?)) "
-                + "WHERE mahd=?";
+        String sqlUpdateHD = "UPDATE hoadon SET soluong = soluong - 1, tongtien = tongtien - ? WHERE mahd = ?";
 
-        String sqlHoanVe = "UPDATE kehoachtour SET tongsove = tongsove + 1 "
-                + "WHERE makhtour = (SELECT makhtour FROM hoadon WHERE mahd=?)";
+        String sqlUpdateKHT = "UPDATE kehoachtour SET tongthu = tongthu - ? " +
+                "WHERE makhtour = (SELECT makhtour FROM hoadon WHERE mahd = ?)";
+
+        String sqlHoanVe = "UPDATE kehoachtour SET tongsove = tongsove + 1 " +
+                "WHERE makhtour = (SELECT makhtour FROM hoadon WHERE mahd = ?)";
 
         Connection conn = null;
         try {
             conn = _MyConnection.getConnection();
             conn.setAutoCommit(false);
 
-            try (PreparedStatement psXoa = conn.prepareStatement(sqlXoa)) {
-                psXoa.setString(1, mahd);
-                psXoa.setString(2, makh);
-                if(psXoa.executeUpdate() == 0) {
-                    conn.rollback();
-                    return false;
-                }
+            try (PreparedStatement ps = conn.prepareStatement(sqlXoa)) {
+                ps.setString(1, mahd);
+                ps.setString(2, makh);
+                if(ps.executeUpdate() == 0) { conn.rollback(); return false; }
             }
 
-            try (PreparedStatement psUp = conn.prepareStatement(sqlUpdateHD)) {
-                psUp.setString(1, mahd);
-                psUp.setString(2, mahd);
-                psUp.executeUpdate();
+
+            try (PreparedStatement ps = conn.prepareStatement(sqlUpdateHD)) {
+                ps.setFloat(1, giaVe);
+                ps.setString(2, mahd);
+                ps.executeUpdate();
             }
 
-            try (PreparedStatement psHoan = conn.prepareStatement(sqlHoanVe)) {
-                psHoan.setString(1, mahd);
-                psHoan.executeUpdate();
+
+            try (PreparedStatement ps = conn.prepareStatement(sqlUpdateKHT)) {
+                ps.setFloat(1, giaVe);
+                ps.setString(2, mahd);
+                ps.executeUpdate();
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement(sqlHoanVe)) {
+                ps.setString(1, mahd);
+                ps.executeUpdate();
             }
 
             conn.commit();
@@ -160,12 +193,10 @@ public class CTietHDDAO {
         } catch (SQLException e) {
             if (conn != null) try { conn.rollback(); } catch (SQLException ex) {}
             e.printStackTrace();
+            return false;
         } finally {
-            if (conn != null) {
-                try { conn.setAutoCommit(true); conn.close(); } catch (SQLException ex) {}
-            }
+            if (conn != null) try { conn.setAutoCommit(true); conn.close(); } catch (SQLException e) {}
         }
-        return false;
     }
      public float laygia(String mahd){
         float gia=0;
