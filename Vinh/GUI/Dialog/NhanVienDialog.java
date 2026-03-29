@@ -28,7 +28,6 @@ public class NhanVienDialog extends JDialog {
         this.mode = mode;
         this.currentNhanVien = nv;
 
-
         initComponents();
         this.setLocationRelativeTo(null); // set location after init
 
@@ -475,6 +474,7 @@ public class NhanVienDialog extends JDialog {
                 nvBUS.suaNhanVien(currentNhanVien);
             }
 
+            JOptionPane.showMessageDialog(this, "Đã lưu");
             dispose(); // đóng dialog sau khi lưu
         });
     }
@@ -485,7 +485,6 @@ public class NhanVienDialog extends JDialog {
             dispose();
         });
     }
-
 
     private void txtChucVuActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtChucVuActionPerformed
         // TODO add your handling code here:
@@ -517,27 +516,13 @@ public class NhanVienDialog extends JDialog {
         txtDiaChi.setText(nv.getDiaChi());
     }
 
-    private JButton btnHuy;
-    private JButton btnLuu;
+    private JButton btnHuy, btnLuu;
+
     private JDateChooser jDateChooser1;
-    private JLabel jLabel1;
-    private JLabel jLabel2;
-    private JLabel jLabel3;
-    private JLabel jLabel4;
-    private JLabel jLabel5;
-    private JLabel jLabel6;
-    private JLabel jLabel7;
-    private JPanel jPanel1;
-    private JPanel jPanel2;
-    private JPanel jPanel3;
-    private JPanel jPanel4;
-    private JPanel jPanel5;
-    private JPanel jPanel6;
-    private JPanel jPanel7;
-    private JTextField txtChucVu;
-    private JTextField txtDiaChi;
-    private JTextField txtHoNV;
-    private JTextField txtMaNV;
-    private JTextField txtSoDienThoai;
-    private JTextField txtTenNV;
+
+    private JLabel jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6, jLabel7;
+
+    private JPanel jPanel1, jPanel2, jPanel3, jPanel4, jPanel5, jPanel6, jPanel7;
+
+    private JTextField txtChucVu, txtDiaChi, txtHoNV, txtMaNV, txtSoDienThoai, txtTenNV;
 }

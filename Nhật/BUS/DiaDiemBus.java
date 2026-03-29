@@ -24,27 +24,23 @@ public class DiaDiemBUS {
 
     public boolean timDiaDiem(DiaDiemDTO dd){
         for(DiaDiemDTO d:ds){
-            if(d.getTenDiaDiem().equals(dd.getTenDiaDiem())){
+            if(d.getMaDiaDiem().equals(dd.getMaDiaDiem())){
                 return true;
             }
-
         }
         return false;
     }
 
-    public DiaDiemDTO timDiaDiem(String tendd){
-        if(tendd.trim().isEmpty()){
-            return null;
+    public DiaDiemDTO timDiaDiemTheoMa(String maDiaDiem){
+        for(DiaDiemDTO dd : ds){
+            if(dd.MaDiaDiem.trim().equalsIgnoreCase(maDiaDiem))
+                return dd;
         }
-        return dao.TimDiaDiem(tendd);
+        return null;
     }
 
     public boolean themDiaDiem(DiaDiemDTO dd){
         if(timDiaDiem(dd)){
-            return false;
-        }
-
-        if(dao.TimDiaDiem(dd.getTenDiaDiem())!=null){
             return false;
         }
 
@@ -57,35 +53,20 @@ public class DiaDiemBUS {
         if(timDiaDiem(dd)!=true){
             return false;
         }
-        if(dao.TimDiaDiem(dd.getTenDiaDiem())!=null){
-            dao.xoaDiaDiem(dd);
-        }
+
         ds.remove(dd);
+        dao.xoaDiaDiem(dd);
         return true;
     }
 
-    public boolean suaDiaDiem(DiaDiemDTO dd,String tendd){
-        if(timDiaDiem(dd)!=true){
-            return false;
-        }
-        if(dao.TimDiaDiem(dd.getTenDiaDiem())!=null){
-            dao.suaDiaDiem(dd,tendd);
-        }
+    public boolean suaDiaDiem(DiaDiemDTO dd,String maDiaDiem){
         for(int i=0;i<ds.size();i++){
-            if(ds.get(i).getTenDiaDiem().equals(dd.getTenDiaDiem())){
+            if(ds.get(i).getMaDiaDiem().equals(maDiaDiem)){
                 ds.set(i, dd);
             }
         }
-        return true;
-    }
 
-    public ArrayList<DiaDiemDTO> timdd(String tendd){
-        tendd=tendd.trim();
-
-        if(tendd.isEmpty()){
-            return dao.getDs();
-        }
-        return dao.timdd(tendd);
+        return dao.suaDiaDiem(dd);
     }
 
     public ArrayList<DiaDiemDTO> getDstheongay(java.util.Date ngay){

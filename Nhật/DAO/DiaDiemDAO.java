@@ -28,21 +28,6 @@ public class DiaDiemDAO {
         return ds;
     }
 
-    public DiaDiemDTO TimDiaDiem(String tendd){
-        String sql = "Select * from DiaDiem where TenDiaDiem=?";
-        try(Connection conn= _MyConnection.getConnection();
-            PreparedStatement ps=conn.prepareStatement(sql)){
-            ps.setNString(1, tendd.trim());
-            ResultSet rs=ps.executeQuery();
-            if(rs.next()){
-                return maptoDiaDiem(rs);
-            }
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public DiaDiemDTO maptoDiaDiem(ResultSet rs) throws SQLException{
         String madiadiem = rs.getString("MaDiaDiem");
         String tendd = rs.getString("TenDiaDiem");
@@ -82,39 +67,20 @@ public class DiaDiemDAO {
         return false;
     }
 
-    public boolean suaDiaDiem(DiaDiemDTO dd,String tendd){
-        String sql ="Update DiaDiem set MaDiaDiem=?, TenDiaDiem=?,DiaChi=?,QuocGia=? where Tendiadiem=?";
+    public boolean suaDiaDiem(DiaDiemDTO dd){
+        String sql ="Update DiaDiem set tendiadiem=?, DiaChi=?,QuocGia=? where madiadiem=?";
 
         try(Connection conn= _MyConnection.getConnection();
             PreparedStatement ps=conn.prepareStatement(sql)){
-            ps.setNString(1, dd.getMaDiaDiem());
-            ps.setNString(2,dd.getTenDiaDiem());
-            ps.setNString(3,dd.getdiachi());
-            ps.setNString(4,dd.getQuocGia());
+            ps.setNString(1, dd.getTenDiaDiem());
+            ps.setNString(2,dd.getdiachi());
+            ps.setNString(3,dd.getQuocGia());
+            ps.setNString(4,dd.getMaDiaDiem());
             return ps.executeUpdate()>0;
         }catch(SQLException e){
             e.printStackTrace();
         }
         return false;
-    }
-
-    public ArrayList<DiaDiemDTO> timdd(String tendd){
-        ArrayList<DiaDiemDTO> ds=new ArrayList<>();
-        String sql ="Select * from Diadiem where tendiadiem like ?";
-        try(Connection conn= _MyConnection.getConnection();
-            PreparedStatement ps=conn.prepareStatement(sql)){
-            ps.setString(1, "%" + tendd + "%");
-            ResultSet rs=ps.executeQuery();
-            while(rs.next()){
-                DiaDiemDTO dd=maptoDiaDiem(rs);
-                ds.add(dd);
-            }
-        }
-        catch(SQLException e){
-            e.printStackTrace();
-            return null;
-        }
-        return ds;
     }
 
     public ArrayList<DiaDiemDTO> getDstheongay(Date ngay){

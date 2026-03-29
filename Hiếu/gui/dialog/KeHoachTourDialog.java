@@ -4,7 +4,6 @@ import org.example.bus.NhanVienBUS;
 import org.example.bus._KeHoachTourBUS;
 import org.example.dto.NhanVienDTO;
 import org.example.dto._KeHoachTourDTO;
-import org.example.dto._TourDTO;
 import org.example.gui.panel.UIColors;
 
 import javax.swing.*;
@@ -153,8 +152,10 @@ public class _KeHoachTourDialog extends JDialog {
 
     private void loadData () {
         txtMaKHTour.setText(keHoachTourDTO.getMaKHTour());
-        txtNgayKhoiHanh.setText(keHoachTourDTO.getNgayKhoiHanh().toString());
-        txtNgayKetThuc.setText(keHoachTourDTO.getNgayKetThuc().toString());
+
+        txtNgayKhoiHanh.setText(formatter.format(keHoachTourDTO.getNgayKhoiHanh()));
+        txtNgayKetThuc.setText(formatter.format(keHoachTourDTO.getNgayKetThuc()));
+
         txtTongSoVe.setText(keHoachTourDTO.getTongSoVe() + "");
         txtTongChi.setText(keHoachTourDTO.getTongChi() + "");
         txtTongThu.setText(keHoachTourDTO.getTongThu() + "");
@@ -242,6 +243,7 @@ public class _KeHoachTourDialog extends JDialog {
                         JOptionPane.showMessageDialog(this, error);
                     }
                 }
+                dispose();
             }else{
                 keHoachTourDTO.setMaKHTour(txtMaKHTour.getText());
                 keHoachTourDTO.setNgayKhoiHanh(LocalDate.parse(txtNgayKhoiHanh.getText(), formatter));
@@ -254,6 +256,8 @@ public class _KeHoachTourDialog extends JDialog {
                 keHoachTourDTO.setMaNVHD(selectedStaff.getMaNV());
 
                 keHoachTourBUS.editKeHoachTour(keHoachTourDTO); // edit by keHoachTourBus
+                JOptionPane.showMessageDialog(this, "Đã chỉnh sửa ");
+                dispose();
             }
         });
     }

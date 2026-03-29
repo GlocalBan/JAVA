@@ -25,7 +25,6 @@ public class NhanVienPanel extends JPanel {
 
     NhanVienDAO ds = new NhanVienDAO();
     NhanVienBUS nvBUS = new NhanVienBUS();
-    NhanVienDialog NVdialog;
     public NhanVienPanel() {
         nvBUS = new NhanVienBUS();
         initComponents();
@@ -188,7 +187,7 @@ public class NhanVienPanel extends JPanel {
     }
 
     private void sua(){
-        btnSua = createBtn("Thêm", UIColors.EDIT);
+        btnSua = createBtn("Sửa", UIColors.EDIT);
         btnSua.setEnabled(false);
         btnSua.addActionListener(v -> {
             if (!PhanQuyen.laQuanLy()) {
@@ -213,7 +212,7 @@ public class NhanVienPanel extends JPanel {
     }
 
     private void xoa(){
-        btnXoa = createBtn("Thêm", UIColors.DELETE);
+        btnXoa = createBtn("Xóa", UIColors.DELETE);
         btnXoa.setEnabled(false);
         btnXoa.addActionListener(v -> {
             if (!PhanQuyen.laQuanLy()) {
@@ -233,7 +232,7 @@ public class NhanVienPanel extends JPanel {
     }
 
     private void lamMoi(){
-        btnLamMoi = createBtn("Thêm", UIColors.REFRESH);
+        btnLamMoi = createBtn("Làm mới", UIColors.REFRESH);
         btnLamMoi.addActionListener(v -> {
             loadNhanVienToTable(ds.layDanhSachNV());
         });
@@ -304,7 +303,6 @@ public class NhanVienPanel extends JPanel {
     private void loadNhanVienToTable(List<NhanVienDTO> list) {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0); // Xóa dữ liệu cũ trong bảng
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         for(NhanVienDTO nv : list){
             Date date = java.sql.Date.valueOf(nv.getNgaySinh());
@@ -340,4 +338,7 @@ public class NhanVienPanel extends JPanel {
     private JTable jTable1;
 
     private JTextField txtSearch;
+
+    //formatter
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 }

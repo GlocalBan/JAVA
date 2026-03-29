@@ -11,8 +11,9 @@ import java.awt.event.ActionListener;
 
 public class DiaDiemDialog extends JDialog {
     private DiaDiemBUS bus;
+    private DiaDiemDTO dd;
     private boolean sua=false;
-    private String tenDiaDiemCu = "";
+    private String maDiaDiemCu = "";
 
     public DiaDiemDialog() {
         this.bus=new DiaDiemBUS();
@@ -22,11 +23,18 @@ public class DiaDiemDialog extends JDialog {
     }
     public DiaDiemDialog(DiaDiemDTO dd) {
         this.bus=new DiaDiemBUS();
+        this.dd = dd;
+
         initComponents();
+
         this.setTitle("Sửa địa điểm");
         this.setLocationRelativeTo(null);
+
         this.sua= true;
-        this.tenDiaDiemCu=dd.getTenDiaDiem();
+        this.maDiaDiemCu=dd.getMaDiaDiem();
+        //load data if sua
+        txtmadiadiem.setText(dd.getMaDiaDiem());
+        txtmadiadiem.setEnabled(false);
         txttendd.setText(dd.getTenDiaDiem());
         txtdiachi.setText(dd.getdiachi());
         txtquocgia.setText(dd.getQuocGia());
@@ -138,6 +146,7 @@ public class DiaDiemDialog extends JDialog {
         btnluu = createBtn("Lưu", UIColors.SAVE);
         btnluu.addActionListener(v -> {
             try{
+                // them dia diem
                 String maDiaDiem = txtmadiadiem.getText().trim();
                 if(maDiaDiem.isEmpty()){
                     JOptionPane.showMessageDialog(this, "Lỗi");
@@ -154,18 +163,20 @@ public class DiaDiemDialog extends JDialog {
                     return;
                 }
                 String quocgia=txtquocgia.getText().trim();
+
                 DiaDiemDTO dd=new DiaDiemDTO(maDiaDiem, ten, diachi, quocgia);
 
+                //sua dia diem
                 if(sua){
-                    if(bus.suaDiaDiem(dd,tenDiaDiemCu)){
+                    if(bus.suaDiaDiem(dd,maDiaDiemCu)){
                         JOptionPane.showMessageDialog(this, "Cập nhật thành công");
                         this.dispose();
                     }else{
                         JOptionPane.showMessageDialog(this, "Cập nhật thất bại");
                     }
                 }else{
-                    if(bus.timDiaDiem(ten)!=null){
-                        JOptionPane.showMessageDialog(this, "Lỗi tên địa điểm đã tồn tại");
+                    if(bus.timDiaDiemTheoMa(maDiaDiem)!=null){
+                        JOptionPane.showMessageDialog(this, "Lỗi mã địa điểm đã tồn tại");
                         return;
                     }
 

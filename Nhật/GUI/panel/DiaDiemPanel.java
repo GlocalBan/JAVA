@@ -52,7 +52,7 @@ public class DiaDiemPanel extends JPanel {
     private void loadData(String ma){
         model.setRowCount(0);
 
-        ArrayList<DiaDiemDTO> ds = bus.timdd(ma);
+        ArrayList<DiaDiemDTO> ds = DiaDiemBUS.ds;
         if(ds==null) return;
         for(DiaDiemDTO dd: ds){
             model.addRow(new Object[]{
@@ -149,11 +149,6 @@ public class DiaDiemPanel extends JPanel {
                 }
         ));
         tbldd.setPreferredSize(null);
-        tbldd.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent evt) {
-                tblDdMouseClicked(evt);
-            }
-        });
         jScrollPane2.setViewportView(tbldd);
 
         pnltable.add(jScrollPane2, BorderLayout.CENTER);
@@ -188,11 +183,14 @@ public class DiaDiemPanel extends JPanel {
         btnsua.addActionListener(v -> {
             int row=tbldd.getSelectedRow();
             if(row!=-1){
-                String ten=tbldd.getValueAt(row, 0).toString().trim();
-                DiaDiemDTO dd =bus.timDiaDiem(ten);
+                String maDiaDiem = tbldd.getValueAt(row, 0).toString().trim();
+                DiaDiemDTO dd =bus.timDiaDiemTheoMa(maDiaDiem);
+
                 DiaDiemDialog ddd=new DiaDiemDialog(dd);
                 ddd.setModal(true);
                 ddd.setVisible(true);
+
+                loadData();
             }
         });
     }
@@ -207,8 +205,8 @@ public class DiaDiemPanel extends JPanel {
                 JOptionPane.showMessageDialog(this, "Vui lòng chọn địa điểm cần xóa");
                 return;
             }
-            String tendd =model.getValueAt(row, 0).toString();
-            DiaDiemDTO dd=bus.timDiaDiem(tendd); if(dd==null){
+            String maDiaDiem =model.getValueAt(row, 0).toString();
+            DiaDiemDTO dd=bus.timDiaDiemTheoMa(maDiaDiem); if(dd==null){
                 JOptionPane.showMessageDialog(this, "Lỗi không tìm thấy");
                 return;
             }
@@ -220,6 +218,7 @@ public class DiaDiemPanel extends JPanel {
                     JOptionPane.showMessageDialog(this, "Xóa thất bại");
                 }
             }
+            loadData();
         });
     }
 
@@ -268,19 +267,7 @@ public class DiaDiemPanel extends JPanel {
         }
     }
 
-    private void tblDdMouseClicked(MouseEvent evt) {
-        // TODO add your handling code here:
-        int row=tbldd.getSelectedRow();
-        if(row!=-1){
-            btnsua.setEnabled(true);
-            btnxoa.setEnabled(true);
-            int cf=JOptionPane.showConfirmDialog(this, "Bạn có muốn xuất Excel dòng này không?");
-            if(cf==JOptionPane.YES_OPTION){
-                ExcelHelper.xuatExcel1Dong(tbldd, row, btnreset, "Địa điểm");
-            }
-        }
-    }
-
+    // define variables
     private JButton btnreset, btnsua, btnthem, btnxoa, btnxuat;
 
     private JComboBox<String> cbtim;
